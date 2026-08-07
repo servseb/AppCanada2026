@@ -1,123 +1,543 @@
-<kimi-widget type="html">
-<div id="app" style="font-family: var(--kimi-font-sans, sans-serif); max-width: 720px; margin: 0 auto; padding: 16px;">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🇨🇦 Road Trip Québec 2026 — Suivi de voyage</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍁</text></svg>">
   <style>
-    :root { --accent: var(--kimi-color-accent, #2563eb); --pos: var(--kimi-color-positive, #16a34a); --warn: var(--kimi-color-warning, #f59e0b); --danger: var(--kimi-color-danger, #ef4444); --text1: var(--kimi-color-text-primary, #111); --text2: var(--kimi-color-text-secondary, #555); --text3: var(--kimi-color-text-tertiary, #888); --border: var(--kimi-color-border, #e5e5e5); --surface: var(--kimi-color-surface, #f8f8f8); --surface-raised: var(--kimi-color-surface-raised, #fff); --tfast: var(--t-fast, 150ms); }
-    * { box-sizing: border-box; }
-    .hero { text-align: center; margin-bottom: 20px; }
-    .hero h1 { font-size: 22px; font-weight: 500; margin: 0 0 4px; color: var(--text1); }
-    .hero p { font-size: 13px; color: var(--text3); margin: 0; }
-    .stats-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-    .stat-card { flex: 1; min-width: 140px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: center; transition: transform var(--tfast); }
-    .stat-card:hover { transform: translateY(-2px); }
-    .stat-value { font-size: 28px; font-weight: 500; color: var(--text1); line-height: 1; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
-    .stat-label { font-size: 12px; color: var(--text3); }
-    .stat-bar-bg { height: 6px; background: var(--border); border-radius: 3px; margin-top: 10px; overflow: hidden; }
-    .stat-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease-out; }
-    .progress-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
-    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .progress-header h3 { font-size: 15px; font-weight: 500; margin: 0; color: var(--text1); }
-    .progress-header span { font-size: 13px; color: var(--text3); }
-    .progress-track { display: flex; gap: 4px; margin-bottom: 12px; }
-    .progress-dot { flex: 1; height: 8px; border-radius: 4px; background: var(--border); transition: background 0.3s; cursor: pointer; position: relative; }
+    :root {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text1: #1d1d1f;
+      --text2: #424245;
+      --text3: #86868b;
+      --border: #d2d2d7;
+      --accent: #0071e3;
+      --accent-light: #e8f4fd;
+      --pos: #34c759;
+      --pos-light: #e6f9ec;
+      --warn: #ff9500;
+      --warn-light: #fff4e5;
+      --danger: #ff3b30;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-hover: 0 4px 12px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --card: #1c1c1e;
+        --text1: #f5f5f7;
+        --text2: #aeaeb2;
+        --text3: #636366;
+        --border: #38383a;
+        --accent: #0a84ff;
+        --accent-light: rgba(10,132,255,0.15);
+        --pos: #30d158;
+        --pos-light: rgba(48,209,88,0.15);
+        --warn: #ff9f0a;
+        --warn-light: rgba(255,159,10,0.15);
+        --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+        --shadow-hover: 0 4px 12px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3);
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text1);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 20px 16px; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--pos));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 15px;
+      color: var(--text3);
+    }
+    .hero .dates {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 6px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 14px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 8px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat-icon.points { background: var(--pos-light); color: var(--pos); }
+    .stat-icon.km { background: var(--accent-light); color: var(--accent); }
+    .stat-icon.budget { background: var(--warn-light); color: var(--warn); }
+    .stat-icon svg { width: 18px; height: 18px; }
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text1);
+      line-height: 1;
+      margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text3);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stat-bar-fill.points { background: var(--pos); }
+    .stat-bar-fill.km { background: var(--accent); }
+    .stat-bar-fill.budget { background: var(--warn); }
+
+    /* Progress timeline */
+    .progress-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .progress-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .progress-header span {
+      font-size: 13px;
+      color: var(--text3);
+      font-weight: 500;
+    }
+    .progress-track {
+      display: flex;
+      gap: 3px;
+    }
+    .progress-dot {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
     .progress-dot.done { background: var(--pos); }
-    .progress-dot.current { background: var(--accent); animation: pulse 1.5s infinite; }
-    .progress-dot:hover::after { content: attr(data-day); position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); font-size: 10px; background: var(--text1); color: #fff; padding: 2px 6px; border-radius: 4px; white-space: nowrap; pointer-events: none; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
-    .day-card { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; transition: all var(--tfast); }
-    .day-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-    .day-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
-    .day-title { font-size: 17px; font-weight: 500; color: var(--text1); margin: 0 0 2px; }
-    .day-sub { font-size: 12px; color: var(--text3); }
-    .day-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
-    .badge-montreal { background: color-mix(in srgb, var(--kimi-chart-1) 12%, transparent); color: var(--kimi-chart-1); }
-    .badge-outaouais { background: color-mix(in srgb, var(--kimi-chart-2) 12%, transparent); color: var(--kimi-chart-2); }
-    .badge-quebec { background: color-mix(in srgb, var(--kimi-chart-3) 12%, transparent); color: var(--kimi-chart-3); }
-    .badge-charlevoix { background: color-mix(in srgb, var(--kimi-chart-4) 12%, transparent); color: var(--kimi-chart-4); }
-    .badge-tadoussac { background: color-mix(in srgb, var(--kimi-chart-5) 12%, transparent); color: var(--kimi-chart-5); }
-    .activity-list { list-style: none; padding: 0; margin: 0 0 16px; }
-    .activity-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: background var(--tfast); }
+    .progress-dot.current {
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .progress-dot:hover {
+      transform: scaleY(1.8);
+    }
+    .progress-dot:hover::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      background: var(--text1);
+      color: var(--bg);
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      font-weight: 500;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Navigation */
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text2);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow);
+    }
+    .nav-btn:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .nav-btn:active {
+      transform: translateY(0);
+    }
+    .nav-btn.active {
+      background: var(--text1);
+      color: var(--bg);
+      border-color: var(--text1);
+    }
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .nav-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Day card */
+    .day-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+      transition: all var(--transition);
+      animation: slideUp 0.4s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .day-card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+    .day-header-left { flex: 1; min-width: 0; }
+    .day-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text1);
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+    .day-sub {
+      font-size: 13px;
+      color: var(--text3);
+      line-height: 1.5;
+    }
+    .day-badge {
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-montreal { background: #e8f4fd; color: #0071e3; }
+    .badge-outaouais { background: #fce8e8; color: #c0392b; }
+    .badge-ottawa { background: #f0e6ff; color: #8e44ad; }
+    .badge-estrie { background: #e6f9ec; color: #27ae60; }
+    .badge-mauricie { background: #fff8e6; color: #f39c12; }
+    .badge-centre { background: #e6f2ff; color: #2980b9; }
+    .badge-quebec { background: #ffe6f0; color: #c2185b; }
+    .badge-charlevoix { background: #e6fff0; color: #16a085; }
+    .badge-tadoussac { background: #e6f0ff; color: #2c3e50; }
+    .badge-laurentides { background: #f0e6ff; color: #6c3483; }
+    @media (prefers-color-scheme: dark) {
+      .badge-montreal { background: rgba(0,113,227,0.2); color: #0a84ff; }
+      .badge-outaouais { background: rgba(192,57,43,0.2); color: #ff6b6b; }
+      .badge-ottawa { background: rgba(142,68,173,0.2); color: #bb8fce; }
+      .badge-estrie { background: rgba(39,174,96,0.2); color: #58d68d; }
+      .badge-mauricie { background: rgba(243,156,18,0.2); color: #f5b041; }
+      .badge-centre { background: rgba(41,128,185,0.2); color: #5dade2; }
+      .badge-quebec { background: rgba(194,24,89,0.2); color: #f48fb1; }
+      .badge-charlevoix { background: rgba(22,160,133,0.2); color: #76d7c4; }
+      .badge-tadoussac { background: rgba(44,62,80,0.2); color: #aab7b8; }
+      .badge-laurentides { background: rgba(108,52,131,0.2); color: #af7ac5; }
+    }
+
+    .activity-list { list-style: none; margin-bottom: 16px; }
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all var(--transition);
+      border-radius: 8px;
+      margin: 0 -8px;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
     .activity-item:last-child { border-bottom: none; }
-    .activity-item:hover { background: color-mix(in srgb, var(--surface) 50%, transparent); }
-    .checkbox { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: all var(--tfast); }
-    .activity-item.done .checkbox { background: var(--pos); border-color: var(--pos); }
-    .activity-item.done .activity-text { text-decoration: line-through; color: var(--text3); }
-    .activity-text { font-size: 14px; color: var(--text2); line-height: 1.5; flex: 1; }
-    .activity-icon { width: 18px; height: 18px; color: var(--text3); flex-shrink: 0; margin-top: 2px; }
-    .day-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text3); }
-    .day-footer svg { width: 14px; height: 14px; vertical-align: middle; margin-right: 4px; }
-    .nav-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-    .nav-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 13px; cursor: pointer; transition: all var(--tfast); display: flex; align-items: center; gap: 6px; }
-    .nav-btn:hover { background: var(--surface-raised); color: var(--text1); }
-    .nav-btn.active { background: var(--text1); color: #fff; border-color: var(--text1); }
-    .score-flash { position: fixed; top: 20px; right: 20px; background: var(--pos); color: #fff; padding: 10px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; }
-    .score-flash.show { opacity: 1; transform: translateY(0); }
-    .resto-chip { display: inline-flex; align-items: center; gap: 4px; background: color-mix(in srgb, var(--warn) 10%, transparent); color: var(--warn); padding: 3px 10px; border-radius: 20px; font-size: 11px; margin-top: 8px; }
-    .resto-chip svg { width: 12px; height: 12px; }
-    .hidden { display: none; }
-    .confetti { position: fixed; pointer-events: none; width: 8px; height: 8px; border-radius: 50%; animation: confetti-fall 1s ease-out forwards; z-index: 99; }
-    @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100px) rotate(360deg); opacity: 0; } }
+    .activity-item:hover { background: var(--bg); }
+    .activity-item.done .activity-text {
+      text-decoration: line-through;
+      color: var(--text3);
+    }
+    .activity-item.done .checkbox {
+      background: var(--pos);
+      border-color: var(--pos);
+    }
+    .checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all var(--transition);
+      background: var(--card);
+    }
+    .activity-text {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.5;
+      flex: 1;
+      transition: color var(--transition);
+    }
+
+    .resto-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--warn-light);
+      color: var(--warn);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .resto-chip svg { width: 14px; height: 14px; }
+
+    .day-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text3);
+      font-weight: 500;
+    }
+    .day-footer-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .day-footer svg { width: 15px; height: 15px; }
+
+    /* Flash notification */
+    .flash {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--pos);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(52,199,89,0.3);
+      opacity: 0;
+      transform: translateY(-16px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      z-index: 1000;
+    }
+    .flash.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: confetti-fall 0.9s ease-out forwards;
+      z-index: 999;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translateY(120px) rotate(720deg) scale(0.3); opacity: 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 22px; }
+      .day-card { padding: 18px; }
+      .day-header { flex-direction: column; }
+      .day-badge { align-self: flex-start; }
+      .nav-btn { padding: 8px 12px; font-size: 13px; }
+    }
   </style>
-  <div class="hero">
-    <h1>🇨🇦 Road Trip Canada 2026</h1>
-    <p>11 août — 29 août · Famille · 2 495 km à parcourir</p>
+<base target="_blank">
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>🇨🇦 Road Trip Québec 2026</h1>
+      <p>Suivez votre aventure jour par jour</p>
+      <div class="dates">📅 11 août — 29 août · 👨‍👩‍👦‍👦 Famille · 🚗 2 495 km</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon points">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="stat-value" id="scoreVal">0</div>
+        <div class="stat-label">Points de vacances</div>
+        <div class="stat-bar"><div class="stat-bar-fill points" id="scoreBar" style="width:0%"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon km">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="stat-value" id="kmVal">0</div>
+        <div class="stat-label">km parcourus</div>
+        <div class="stat-bar"><div class="stat-bar-fill km" id="kmBar" style="width:0%"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon budget">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="stat-value" id="budgetVal">0</div>
+        <div class="stat-label">$ dépensés</div>
+        <div class="stat-bar"><div class="stat-bar-fill budget" id="budgetBar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <h3>📍 Progression du voyage</h3>
+        <span id="progressText">Jour 1 / 19</span>
+      </div>
+      <div class="progress-track" id="progressTrack"></div>
+    </div>
+
+    <div class="nav-bar" id="navBar"></div>
+
+    <div id="daysContainer"></div>
   </div>
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-value" id="scoreVal">0</div>
-      <div class="stat-label">Points de vacances</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="scoreBar" style="width:0%; background: var(--pos);"></div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="kmVal">0</div>
-      <div class="stat-label">km parcourus / 2 495</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="kmBar" style="width:0%; background: var(--accent);"></div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="budgetVal">0</div>
-      <div class="stat-label">$ dépensés / ~3 500$</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="budgetBar" style="width:0%; background: var(--warn);"></div></div>
-    </div>
-  </div>
-  <div class="progress-section">
-    <div class="progress-header">
-      <h3>Progression du voyage</h3>
-      <span id="progressText">Jour 1 / 19</span>
-    </div>
-    <div class="progress-track" id="progressTrack"></div>
-  </div>
-  <div class="nav-bar" id="navBar"></div>
-  <div id="daysContainer"></div>
-  <div class="score-flash" id="scoreFlash">+10 points ! 🎉</div>
+
+  <div class="flash" id="flash">+10 points ! 🎉</div>
+
   <script>
     const days = [
-      { date: "11 août", jour: "Jour 1", region: "montreal", title: "Arrivée à Montréal", km: 15, budget: 150, badge: "Montréal", desc: "Récupération voiture, installation maison rue Parthenais. Soirée découverte Rosemont.", activities: ["Récupérer la voiture à l'aéroport","S'installer au 4289 rue Parthenais","Dîner au Mon Lapin ou La Lune"], resto: "Mon Lapin — cuisine locale, vins naturels" },
-      { date: "12 août", jour: "Jour 2", region: "montreal", title: "Montréal authentique", km: 25, budget: 100, badge: "Montréal", desc: "Marché Jean-Talon, Vieux-Montréal, Mile End. Dégustation de bagels !", activities: ["Marché Jean-Talon (fromages, fruits, bagels)","Basilique Notre-Dame & Vieux-Port","Dégustation St-Viateur vs Fairmount Bagel"], resto: "La Banquise — poutine mythique" },
-      { date: "13 août", jour: "Jour 3", region: "montreal", title: "Montréal culture & nature", km: 20, budget: 125, badge: "Montréal", desc: "Randonnée Mont-Royal (sentier Olmsted), Plateau Mont-Royal.", activities: ["Randonnée Mont-Royal — sentier Olmsted","Vue panoramique depuis le belvédère","Explorer les ruelles colorées du Plateau"], resto: "Montréal Plaza — Michelin 2026" },
-      { date: "14 août", jour: "Jour 4", region: "montreal", title: "Excursion Mont-Tremblant", km: 280, budget: 120, badge: "Laurentides", desc: "Journée dans les Laurentides. Randonnée sentier La Roche (5,8 km).", activities: ["Route vers Mont-Tremblant","Randonnée sentier La Roche (5,8 km, 2h30)","Vue spectaculaire sur le lac Tremblant"], resto: "Beba (Verdun) — retour soir" },
-      { date: "15 août", jour: "Jour 5", region: "montreal", title: "Montréal gourmand", km: 15, budget: 130, badge: "Montréal", desc: "Atwater Market, produits locaux. Option spa Bota Bota ou Biosphère.", activities: ["Atwater Market (produits locaux, fromagerie)","Dégustation de fromages québécois","Option : Bota Bota spa-sur-l'eau"], resto: "Le Violon — fine dining intime" },
-      { date: "16 août", jour: "Jour 6", region: "outaouais", title: "Départ vers l'Outaouais", km: 140, budget: 140, badge: "Outaouais", desc: "Route vers Montebello. Visite du Château Montebello (plus grand château en rondins).", activities: ["Route vers Montebello","Visite Château Montebello (jardins & lobby)","Dégustation Fromagerie Montebello"], resto: "Bistro La Seigneurie — terrasse fleuve" },
-      { date: "17 août", jour: "Jour 7", region: "outaouais", title: "🐻 PARC OMEGA — Journée & Nuit", km: 10, budget: 0, badge: "Outaouais", desc: "Journée complète en voiture parmi les animaux. Nuit en prospecteur !", activities: ["Entrée Parc Omega en voiture","Observer ours, loups, bisons, orignaux","Option : visite guidée au réveil des animaux","Nuit en lodge/prospecteur au cœur du parc"], resto: "Resto du Parc Omega" },
-      { date: "18 août", jour: "Jour 8", region: "outaouais", title: "Montebello → Ottawa → Montréal", km: 290, budget: 135, badge: "Ottawa", desc: "Promenade Montebello, Ottawa (Parlement, Marché ByWard), retour Montréal.", activities: ["Derniers pas à Montebello","Ottawa : Parlement du Canada","Marché ByWard & Canal Rideau"], resto: "Pichai ou Limbo — Michelin Bib" },
-      { date: "19 août", jour: "Jour 9", region: "montreal", title: "Montréal insolite", km: 20, budget: 75, badge: "Montréal", desc: "Cité Mémoire, street art Plateau, Oratoire Saint-Joseph.", activities: ["Cité Mémoire (projections historiques)","Street art dans le Plateau","Oratoire Saint-Joseph"], resto: "Dobe & Andy — BBQ cantonais" },
-      { date: "20 août", jour: "Jour 10", region: "estrie", title: "Excursion Estrie", km: 260, budget: 100, badge: "Estrie", desc: "Cantons-de-l'Est, Mont Orford (8 km, 3h, vue 360°).", activities: ["Route vers Magog/Knowlton","Randonnée Mont Orford (sentier Le Mont-Orford)","Vue 360° sur les Cantons-de-l'Est"], resto: "Auberge Knowlton — pub historique" },
-      { date: "21 août", jour: "Jour 11", region: "montreal", title: "Dernière soirée à Montréal", km: 10, budget: 215, badge: "Montréal", desc: "Shopping boutiques locales, préparation départ.", activities: ["Shopping boutiques locales Plateau","Derniers achats au marché","Préparer les bagages"], resto: "Au Pied de Cochon — LE classique !" },
-      { date: "22 août", jour: "Jour 12", region: "mauricie", title: "Trois-Rivières", km: 140, budget: 100, badge: "Mauricie", desc: "Boréalis (musée du papier), Vieille Prison (visite dramatisée).", activities: ["Boréalis — musée du papier interactif","Vieille Prison — visite guidée dramatisée","Découverte du centre-ville"], resto: "Le Poivre Noir — terroir mauricien" },
-      { date: "23 août", jour: "Jour 13", region: "centre", title: "Trois-Rivières → Lévis", km: 120, budget: 80, badge: "Centre", desc: "Sanctuaire Notre-Dame-du-Cap, installation chez votre copine.", activities: ["Sanctuaire Notre-Dame-du-Cap (basilique, jardins)","Route vers Lévis (1h30)","Installation chez votre copine"], resto: "Cochon Dingue — vue sur le fleuve" },
-      { date: "24 août", jour: "Jour 14", region: "quebec", title: "Chutes Montmorency & Québec", km: 60, budget: 210, badge: "Québec", desc: "Chutes de 83 m (30 m de plus que Niagara !), Vieux-Québec.", activities: ["Parc de la Chute-Montmorency (83 m)","Pont suspendu & tyrolienne","Vieux-Québec : Château Frontenac"], resto: "Le Continental ou L'Initiale" },
-      { date: "25 août", jour: "Jour 15", region: "quebec", title: "🧀 Île d'Orléans gourmande", km: 50, budget: 160, badge: "Québec", desc: "Tour de l'île en boucle anti-horaire. Fromages, cassis, chocolat.", activities: ["Les Fromages de l'Isle (Paillasson grillé)","Cassis Monna & Filles (crème de cassis)","Chocolaterie de l'Île","Beignes de patate chauds"], resto: "La Goéliche — terrasse sur le fleuve" },
-      { date: "26 août", jour: "Jour 16", region: "charlevoix", title: "Charlevoix & Canyon Sainte-Anne", km: 220, budget: 140, badge: "Charlevoix", desc: "Ponts suspendus, cascades, Baie-Saint-Paul (galeries d'art).", activities: ["Canyon Sainte-Anne (ponts suspendus)","Cascades et sentiers en forêt","Baie-Saint-Paul — rue principale pittoresque"], resto: "Le Mouton Noir — terroir charlevoisien" },
-      { date: "27 août", jour: "Jour 17", region: "tadoussac", title: "🐋 Baleines à Tadoussac", km: 420, budget: 580, badge: "Tadoussac", desc: "Croisière baleines 13h00. Rorquals, baleines à bosse, bélugas !", activities: ["Départ tôt vers Tadoussac (2h30)","Croisière baleines AML 13h00","Observer rorquals, baleines à bosse, bélugas","Fjord du Saguenay"], resto: "Le Pêcheur — fish & chips" },
-      { date: "28 août", jour: "Jour 18", region: "quebec", title: "Parc national Jacques-Cartier", km: 120, budget: 100, badge: "Québec", desc: "Randonnée Les Loups (11 km, 3h30) ou L'Éperon (4 km). Baignade.", activities: ["Randonnée Sentier Les Loups (11 km)","Vue panoramique sur la vallée","Baignade dans la rivière Jacques-Cartier"], resto: "L'Atelier — cuisine québécoise moderne" },
-      { date: "29 août", jour: "Jour 19", region: "montreal", title: "Départ vers Montréal", km: 280, budget: 50, badge: "Montréal", desc: "Premium Outlets Mirabel, arrivée aéroport. Vol 23h50.", activities: ["Lever tôt, derniers bagages","Premium Outlets Montréal (Mirabel)","Arrivée aéroport, vol 23h50"], resto: "St-Hubert — classique québécois !" }
+      { date: "11 août", jour: "Jour 1", region: "montreal", title: "Arrivée à Montréal", km: 15, budget: 150, badge: "Montréal", desc: "Récupération voiture à l'aéroport, installation maison échangée au 4289 rue Parthenais. Soirée découverte du quartier Rosemont/Petite-Patrie.", activities: ["Récupérer la voiture de location à l'aéroport","S'installer au 4289 rue Parthenais","Explorer le quartier Rosemont à pied"], resto: "🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine locale & vins naturels" },
+      { date: "12 août", jour: "Jour 2", region: "montreal", title: "Montréal authentique", km: 25, budget: 100, badge: "Montréal", desc: "Matin au Marché Jean-Talon (fromages, fruits, bagels). Après-midi : Vieux-Montréal (Basilique Notre-Dame, Vieux-Port). Soirée Mile End.", activities: ["Marché Jean-Talon — fromages, fruits, bagels","Basilique Notre-Dame & Vieux-Port de Montréal","Dégustation comparée St-Viateur vs Fairmount Bagel"], resto: "🍽️ La Banquise (994 rue Rachel E.) — poutine mythique 24h/24" },
+      { date: "13 août", jour: "Jour 3", region: "montreal", title: "Montréal culture & nature", km: 20, budget: 125, badge: "Montréal", desc: "Randonnée Mont-Royal (sentier Olmsted, vue panoramique). Après-midi : Plateau Mont-Royal (ruelles colorées, street art, boutiques).", activities: ["Randonnée Mont-Royal — sentier Olmsted","Vue panoramique depuis le belvédère Kondiaronk","Explorer les ruelles colorées du Plateau-Mont-Royal"], resto: "🍽️ Montréal Plaza (4720 rue Marquette) — Michelin 2026" },
+      { date: "14 août", jour: "Jour 4", region: "laurentides", title: "Excursion Mont-Tremblant", km: 280, budget: 120, badge: "Laurentides", desc: "Journée dans les Laurentides. Randonnée sentier La Roche (5,8 km, 2h30, vue spectaculaire sur le lac Tremblant).", activities: ["Route vers Mont-Tremblant (1h30)","Randonnée sentier La Roche (5,8 km, 2h30)","Vue spectaculaire sur le lac Tremblant au sommet"], resto: "🍽️ Beba (3900 rue Éthel, Verdun) — argentin-juif, ambiance conviviale" },
+      { date: "15 août", jour: "Jour 5", region: "montreal", title: "Montréal gourmand & détente", km: 15, budget: 130, badge: "Montréal", desc: "Matin : Atwater Market (produits locaux, fromagerie). Après-midi : option Bota Bota (spa-sur-l'eau au Vieux-Port) ou Biosphère.", activities: ["Atwater Market — produits locaux et fromagerie","Dégustation de fromages québécois","Option : Bota Bota spa-sur-l'eau au Vieux-Port"], resto: "🍽️ Le Violon (Plateau) — fine dining intime, design Zébulon Perron" },
+      { date: "16 août", jour: "Jour 6", region: "outaouais", title: "Départ vers l'Outaouais", km: 140, budget: 140, badge: "Outaouais", desc: "En route pour Montebello. Après-midi : visite du Château Montebello (Fairmont, plus grand château en rondins au monde).", activities: ["Route vers Montebello (1h30)","Visite Château Montebello — jardins & lobby historique","Dégustation Fromagerie Montebello (cheddar local)"], resto: "🍽️ Bistro La Seigneurie (Château Montebello) — terrasse sur le fleuve" },
+      { date: "17 août", jour: "Jour 7", region: "outaouais", title: "🐻 PARC OMEGA — Journée & Nuit", km: 10, budget: 0, badge: "Outaouais", desc: "Journée complète en voiture dans le parc (ours, loups, bisons, orignaux). Nuit en prospecteur/lodge au cœur du parc (déjà réservé).", activities: ["Entrée Parc Omega — safari en voiture","Observer ours, loups, bisons, orignaux de près","Option : visite guidée au réveil des animaux (7h15)","Nuit en lodge/prospecteur au cœur du parc"], resto: "🍽️ Resto du Parc Omega — cuisine locale" },
+      { date: "18 août", jour: "Jour 8", region: "ottawa", title: "Montebello → Ottawa → Montréal", km: 290, budget: 135, badge: "Ottawa", desc: "Matin : promenade Montebello, Fromagerie Montebello. Route Ottawa (1h). Après-midi : Parlement, Marché ByWard, Canal Rideau. Retour Montréal soir.", activities: ["Derniers pas à Montebello & fromagerie","Ottawa : Parlement du Canada (visite extérieure)","Marché ByWard & BeaverTails + Canal Rideau"], resto: "🍽️ Pichai ou Limbo — Michelin Bib Gourmand 2026" },
+      { date: "19 août", jour: "Jour 9", region: "montreal", title: "Montréal insolite", km: 20, budget: 75, badge: "Montréal", desc: "Matin : Cité Mémoire (projections historiques nocturnes Quartier latin). Après-midi : street art Plateau, Oratoire Saint-Joseph.", activities: ["Cité Mémoire — projections historiques Quartier latin","Street art et murales dans le Plateau-Mont-Royal","Oratoire Saint-Joseph — vue panoramique sur Montréal"], resto: "🍽️ Dobe & Andy (Chinatown) — barbecue cantonais historique" },
+      { date: "20 août", jour: "Jour 10", region: "estrie", title: "Excursion Estrie / Cantons-de-l'Est", km: 260, budget: 100, badge: "Estrie", desc: "Journée à Magog/Knowlton. Randonnée Mont Orford (sentier Le Mont-Orford, 8 km, 3h, vue 360° sur les Cantons-de-l'Est).", activities: ["Route vers Magog / Knowlton","Randonnée Mont Orford — sentier Le Mont-Orford (8 km)","Vue 360° sur les Cantons-de-l'Est au sommet"], resto: "🍽️ Auberge Knowlton — pub anglo-québécois historique" },
+      { date: "21 août", jour: "Jour 11", region: "montreal", title: "Dernière soirée à Montréal", km: 10, budget: 215, badge: "Montréal", desc: "Matin : shopping boutiques locales Plateau. Après-midi : préparation des bagages pour le départ vers Trois-Rivières demain.", activities: ["Shopping boutiques locales du Plateau","Derniers achats au marché","Préparer les bagages pour le départ"], resto: "🍽️ Au Pied de Cochon (536 av. Duluth E.) — LE classique québécois !" },
+      { date: "22 août", jour: "Jour 12", region: "mauricie", title: "Trois-Rivières", km: 140, budget: 100, badge: "Mauricie", desc: "En route tôt. Matin : Boréalis (musée du papier super interactif). Après-midi : Vieille Prison de Trois-Rivières (visite guidée dramatisée).", activities: ["Boréalis — musée du papier interactif","Vieille Prison — visite guidée dramatisée","Découverte du centre-ville de Trois-Rivières"], resto: "🍽️ Le Poivre Noir — bistro local, terroir mauricien" },
+      { date: "23 août", jour: "Jour 13", region: "centre", title: "Trois-Rivières → Lévis", km: 120, budget: 80, badge: "Centre", desc: "Matin : Sanctuaire Notre-Dame-du-Cap (basilique, jardins). Route vers Lévis (1h30). Installation chez votre copine pour la semaine.", activities: ["Sanctuaire Notre-Dame-du-Cap — basilique & jardins","Route vers Lévis (1h30)","Installation chez votre copine — base pour la semaine"], resto: "🍽️ Cochon Dingue (1170 rue de Courchevel, Lévis) — vue fleuve" },
+      { date: "24 août", jour: "Jour 14", region: "quebec", title: "Chutes Montmorency & Québec", km: 60, budget: 210, badge: "Québec", desc: "Parc de la Chute-Montmorency (83 m de haut, 30 m de plus que Niagara !). Pont suspendu, tyrolienne. Après-midi : Vieux-Québec.", activities: ["Parc de la Chute-Montmorency — 83 m de haut !","Pont suspendu & tyrolienne au-dessus des chutes","Vieux-Québec : Château Frontenac & Terrasse Dufferin"], resto: "🍽️ Le Continental (26 rue Saint-Louis) ou L'Initiale — Michelin" },
+      { date: "25 août", jour: "Jour 15", region: "quebec", title: "🧀 Île d'Orléans gourmande", km: 50, budget: 160, badge: "Québec", desc: "Tour de l'île en boucle anti-horaire. Fromages Paillasson, cassis Monna & Filles, chocolaterie, beignes de patate.", activities: ["Les Fromages de l'Isle — Paillasson grillé, costumes d'époque","Cassis Monna & Filles — crème de cassis & glace","Chocolaterie de l'Île & beignes de patate chauds"], resto: "🍽️ La Goéliche (22 rue du Quai, Sainte-Pétronille) — terrasse fleuve" },
+      { date: "26 août", jour: "Jour 16", region: "charlevoix", title: "Charlevoix & Canyon Sainte-Anne", km: 220, budget: 140, badge: "Charlevoix", desc: "Matin : Canyon Sainte-Anne (ponts suspendus, cascades, sentiers en forêt). Après-midi : Baie-Saint-Paul (galeries d'art, rue pittoresque).", activities: ["Canyon Sainte-Anne — ponts suspendus & cascades","Sentiers en forêt le long du canyon","Baie-Saint-Paul — rue principale & galeries d'art"], resto: "🍽️ Le Mouton Noir (Baie-Saint-Paul) — terroir charlevoisien" },
+      { date: "27 août", jour: "Jour 17", region: "tadoussac", title: "🐋 Baleines à Tadoussac", km: 420, budget: 580, badge: "Tadoussac", desc: "Départ tôt (2h30 de route). Croisière baleines 13h00 avec Croisières AML. Rorquals, baleines à bosse, bélugas, phoques. Fjord du Saguenay.", activities: ["Départ tôt vers Tadoussac (2h30 de route)","Croisière baleines AML à 13h00 (3h)","Observer rorquals, baleines à bosse, bélugas, phoques","Fjord du Saguenay — paysages grandioses"], resto: "🍽️ Resto Pub Le Pêcheur (Tadoussac) — fish & chips" },
+      { date: "28 août", jour: "Jour 18", region: "quebec", title: "Parc national Jacques-Cartier", km: 120, budget: 100, badge: "Québec", desc: "Randonnée Sentier Les Loups (11 km, 3h30, vue panoramique vallée). Alternative courte : L'Éperon (4 km, 1h30). Baignade rivière.", activities: ["Randonnée Sentier Les Loups (11 km, 3h30)","Vue panoramique sur la vallée de la Jacques-Cartier","Baignade dans la rivière Jacques-Cartier"], resto: "🍽️ L'Atelier (Lévis) — cuisine québécoise moderne" },
+      { date: "29 août", jour: "Jour 19", region: "montreal", title: "Départ vers Montréal", km: 280, budget: 50, badge: "Montréal", desc: "Lever tôt. Derniers achats : Premium Outlets Montréal (Mirabel). Arrivée aéroport Montréal en fin de journée. Vol 23h50.", activities: ["Lever tôt, derniers bagages","Premium Outlets Montréal — Mirabel (souvenirs)","Arrivée aéroport Montréal — vol 23h50 ✈️"], resto: "🍽️ St-Hubert — classique québécois ou Tim Hortons" }
     ];
 
     const totalKm = 2495;
     const totalBudget = 3500;
     const pointsPerActivity = 10;
-
     let currentDay = 0;
-    let completedActivities = new Set();
-    let totalPoints = 0;
+    let completedActivities = new Set(JSON.parse(localStorage.getItem('canada2026_done') || '[]'));
+    let totalPoints = completedActivities.size * pointsPerActivity;
 
     function init() {
       renderProgressTrack();
@@ -126,15 +546,18 @@
       updateStats();
     }
 
+    function saveProgress() {
+      localStorage.setItem('canada2026_done', JSON.stringify([...completedActivities]));
+    }
+
     function renderProgressTrack() {
       const track = document.getElementById('progressTrack');
       track.innerHTML = '';
       days.forEach((d, i) => {
         const dot = document.createElement('div');
-        dot.className = 'progress-dot';
-        dot.dataset.day = d.jour;
-        if (i < currentDay) dot.classList.add('done');
-        if (i === currentDay) dot.classList.add('current');
+        dot.className = 'progress-dot' + (i < currentDay ? ' done' : '') + (i === currentDay ? ' current' : '');
+        dot.dataset.label = d.jour;
+        dot.title = `${d.jour} — ${d.title}`;
         dot.onclick = () => { currentDay = i; renderDay(i); renderNav(); renderProgressTrack(); };
         track.appendChild(dot);
       });
@@ -143,24 +566,23 @@
     function renderNav() {
       const nav = document.getElementById('navBar');
       nav.innerHTML = '';
+
       const prev = document.createElement('button');
       prev.className = 'nav-btn';
-      prev.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Précédent';
+      prev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Précédent';
       prev.disabled = currentDay === 0;
-      prev.style.opacity = currentDay === 0 ? '0.4' : '1';
       prev.onclick = () => { if (currentDay > 0) { currentDay--; renderDay(currentDay); renderNav(); renderProgressTrack(); }};
-
-      const next = document.createElement('button');
-      next.className = 'nav-btn';
-      next.innerHTML = 'Suivant <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      next.disabled = currentDay === days.length - 1;
-      next.style.opacity = currentDay === days.length - 1 ? '0.4' : '1';
-      next.onclick = () => { if (currentDay < days.length - 1) { currentDay++; renderDay(currentDay); renderNav(); renderProgressTrack(); }};
 
       const all = document.createElement('button');
       all.className = 'nav-btn' + (document.getElementById('daysContainer').dataset.view === 'all' ? ' active' : '');
-      all.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Tous les jours';
+      all.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Tous les jours';
       all.onclick = toggleAllView;
+
+      const next = document.createElement('button');
+      next.className = 'nav-btn';
+      next.innerHTML = 'Suivant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+      next.disabled = currentDay === days.length - 1;
+      next.onclick = () => { if (currentDay < days.length - 1) { currentDay++; renderDay(currentDay); renderNav(); renderProgressTrack(); }};
 
       nav.appendChild(prev);
       nav.appendChild(all);
@@ -185,7 +607,8 @@
       days.forEach((d, i) => {
         container.appendChild(createDayCard(d, i));
       });
-      document.getElementById('progressText').textContent = 'Vue complète';
+      document.getElementById('progressText').textContent = 'Vue complète — 19 jours';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function renderDay(index) {
@@ -200,7 +623,6 @@
       const card = document.createElement('div');
       card.className = 'day-card';
       const badgeClass = `badge-${day.region}`;
-      const isDone = index < currentDay;
 
       let activitiesHtml = '';
       day.activities.forEach((act, ai) => {
@@ -209,7 +631,7 @@
         activitiesHtml += `
           <li class="activity-item ${done ? 'done' : ''}" onclick="toggleActivity('${key}', this)">
             <div class="checkbox">
-              ${done ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
+              ${done ? '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
             </div>
             <span class="activity-text">${act}</span>
           </li>`;
@@ -217,7 +639,7 @@
 
       card.innerHTML = `
         <div class="day-header">
-          <div>
+          <div class="day-header-left">
             <div class="day-title">${day.jour} — ${day.date}</div>
             <div class="day-sub">${day.desc}</div>
           </div>
@@ -225,12 +647,18 @@
         </div>
         <ul class="activity-list">${activitiesHtml}</ul>
         <div class="resto-chip">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-4-3-7-7-7z" stroke="currentColor" stroke-width="2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
           ${day.resto}
         </div>
         <div class="day-footer">
-          <span><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="2" fill="none"/></svg> ${day.km} km</span>
-          <span><svg viewBox="0 0 24 24" fill="none"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ~${day.budget} $</span>
+          <span class="day-footer-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${day.km} km
+          </span>
+          <span class="day-footer-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            ~${day.budget} $ CAD
+          </span>
         </div>
       `;
       return card;
@@ -245,29 +673,33 @@
       } else {
         completedActivities.add(key);
         el.classList.add('done');
-        el.querySelector('.checkbox').innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        el.querySelector('.checkbox').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
         totalPoints += pointsPerActivity;
-        showFlash(`+${pointsPerActivity} points !`);
+        showFlash(`+${pointsPerActivity} points ! 🎉`);
         spawnConfetti(el);
       }
+      saveProgress();
       updateStats();
     }
 
     function showFlash(text) {
-      const flash = document.getElementById('scoreFlash');
+      const flash = document.getElementById('flash');
       flash.textContent = text;
       flash.classList.add('show');
-      setTimeout(() => flash.classList.remove('show'), 1500);
+      setTimeout(() => flash.classList.remove('show'), 1800);
     }
 
     function spawnConfetti(el) {
       const rect = el.getBoundingClientRect();
-      for (let i = 0; i < 6; i++) {
+      const colors = ['#34c759', '#0071e3', '#ff9500', '#ff3b30', '#af52de', '#5856d6'];
+      for (let i = 0; i < 8; i++) {
         const c = document.createElement('div');
         c.className = 'confetti';
-        c.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 40) + 'px';
-        c.style.top = (rect.top + (Math.random() - 0.5) * 20) + 'px';
-        c.style.background = ['#16a34a', '#2563eb', '#f59e0b', '#ef4444'][Math.floor(Math.random() * 4)];
+        c.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 60) + 'px';
+        c.style.top = (rect.top + window.scrollY + (Math.random() - 0.5) * 20) + 'px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.width = (4 + Math.random() * 6) + 'px';
+        c.style.height = c.style.width;
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 1000);
       }
@@ -290,5 +722,5 @@
 
     init();
   </script>
-</div>
-</kimi-widget>
+</body>
+</html>
