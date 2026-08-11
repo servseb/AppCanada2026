@@ -55,7 +55,6 @@
     }
     .container { max-width: 720px; margin: 0 auto; padding: 20px 16px; }
 
-    /* Hero */
     .hero {
       text-align: center;
       padding: 32px 0 24px;
@@ -87,7 +86,6 @@
       color: var(--text2);
     }
 
-    /* Stats */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -152,7 +150,6 @@
     .stat-bar-fill.km { background: var(--accent); }
     .stat-bar-fill.budget { background: var(--warn); }
 
-    /* Progress timeline */
     .progress-section {
       background: var(--card);
       border: 1px solid var(--border);
@@ -217,7 +214,6 @@
       50% { opacity: 0.5; }
     }
 
-    /* Navigation */
     .nav-bar {
       display: flex;
       justify-content: center;
@@ -264,7 +260,6 @@
       height: 16px;
     }
 
-    /* Day card */
     .day-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -409,7 +404,6 @@
     }
     .day-footer svg { width: 15px; height: 15px; }
 
-    /* Flash notification */
     .flash {
       position: fixed;
       top: 20px;
@@ -432,7 +426,6 @@
       transform: translateY(0) scale(1);
     }
 
-    /* Confetti */
     .confetti {
       position: fixed;
       pointer-events: none;
@@ -447,7 +440,6 @@
       100% { transform: translateY(120px) rotate(720deg) scale(0.3); opacity: 0; }
     }
 
-    /* Responsive */
     @media (max-width: 600px) {
       .stats-grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 22px; }
@@ -464,7 +456,7 @@
     <div class="hero">
       <h1>🇨🇦 Road Trip Québec 2026</h1>
       <p>Suivez votre aventure jour par jour</p>
-      <div class="dates">📅 11 août — 29 août · 👨‍👩‍👦‍👦 Famille · 🚗 2 495 km</div>
+      <div class="dates">📅 11 août — 29 août · 👨‍👩‍👦‍👦 Famille · 🚗 2 515 km</div>
     </div>
 
     <div class="stats-grid">
@@ -513,7 +505,7 @@
     const days = [
       { date: "11 août", jour: "Jour 1", region: "montreal", title: "Arrivée à Montréal", km: 15, budget: 150, badge: "Montréal", desc: "Récupération voiture à l'aéroport, installation maison échangée au 4289 rue Parthenais. Soirée découverte du quartier Rosemont/Petite-Patrie.", activities: ["Récupérer la voiture de location à l'aéroport","S'installer au 4289 rue Parthenais","Explorer le quartier Rosemont à pied"], resto: "🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine locale & vins naturels" },
       { date: "12 août", jour: "Jour 2", region: "montreal", title: "Montréal authentique", km: 25, budget: 100, badge: "Montréal", desc: "Matin au Marché Jean-Talon (fromages, fruits, bagels). Après-midi : Vieux-Montréal (Basilique Notre-Dame, Vieux-Port). Soirée Mile End.", activities: ["Marché Jean-Talon — fromages, fruits, bagels","Basilique Notre-Dame & Vieux-Port de Montréal","Dégustation comparée St-Viateur vs Fairmount Bagel"], resto: "🍽️ La Banquise (994 rue Rachel E.) — poutine mythique 24h/24" },
-      { date: "13 août", jour: "Jour 3", region: "montreal", title: "Montréal culture & nature", km: 20, budget: 125, badge: "Montréal", desc: "Randonnée Mont-Royal (sentier Olmsted, vue panoramique). Après-midi : Plateau Mont-Royal (ruelles colorées, street art, boutiques).", activities: ["Randonnée Mont-Royal — sentier Olmsted","Vue panoramique depuis le belvédère Kondiaronk","Explorer les ruelles colorées du Plateau-Mont-Royal"], resto: "🍽️ Montréal Plaza (4720 rue Marquette) — Michelin 2026" },
+      { date: "13 août", jour: "Jour 3", region: "montreal", title: "Montréal culture, nature & shopping", km: 80, budget: 200, badge: "Montréal", desc: "Matin : Mont-Royal (randonnée sentier Olmsted). Après-midi : Premium Outlets Montréal à Mirabel pour les marques locales et souvenirs.", activities: ["Randonnée Mont-Royal — sentier Olmsted","Vue panoramique depuis le belvédère Kondiaronk","Premium Outlets Montréal (Mirabel) — shopping & souvenirs"], resto: "🍽️ Montréal Plaza (4720 rue Marquette) — Michelin 2026" },
       { date: "14 août", jour: "Jour 4", region: "laurentides", title: "Excursion Mont-Tremblant", km: 280, budget: 120, badge: "Laurentides", desc: "Journée dans les Laurentides. Randonnée sentier La Roche (5,8 km, 2h30, vue spectaculaire sur le lac Tremblant).", activities: ["Route vers Mont-Tremblant (1h30)","Randonnée sentier La Roche (5,8 km, 2h30)","Vue spectaculaire sur le lac Tremblant au sommet"], resto: "🍽️ Beba (3900 rue Éthel, Verdun) — argentin-juif, ambiance conviviale" },
       { date: "15 août", jour: "Jour 5", region: "montreal", title: "Montréal gourmand & détente", km: 15, budget: 130, badge: "Montréal", desc: "Matin : Atwater Market (produits locaux, fromagerie). Après-midi : option Bota Bota (spa-sur-l'eau au Vieux-Port) ou Biosphère.", activities: ["Atwater Market — produits locaux et fromagerie","Dégustation de fromages québécois","Option : Bota Bota spa-sur-l'eau au Vieux-Port"], resto: "🍽️ Le Violon (Plateau) — fine dining intime, design Zébulon Perron" },
       { date: "16 août", jour: "Jour 6", region: "outaouais", title: "Départ vers l'Outaouais", km: 140, budget: 140, badge: "Outaouais", desc: "En route pour Montebello. Après-midi : visite du Château Montebello (Fairmont, plus grand château en rondins au monde).", activities: ["Route vers Montebello (1h30)","Visite Château Montebello — jardins & lobby historique","Dégustation Fromagerie Montebello (cheddar local)"], resto: "🍽️ Bistro La Seigneurie (Château Montebello) — terrasse sur le fleuve" },
@@ -524,16 +516,16 @@
       { date: "21 août", jour: "Jour 11", region: "montreal", title: "Dernière soirée à Montréal", km: 10, budget: 215, badge: "Montréal", desc: "Matin : shopping boutiques locales Plateau. Après-midi : préparation des bagages pour le départ vers Trois-Rivières demain.", activities: ["Shopping boutiques locales du Plateau","Derniers achats au marché","Préparer les bagages pour le départ"], resto: "🍽️ Au Pied de Cochon (536 av. Duluth E.) — LE classique québécois !" },
       { date: "22 août", jour: "Jour 12", region: "mauricie", title: "Trois-Rivières", km: 140, budget: 100, badge: "Mauricie", desc: "En route tôt. Matin : Boréalis (musée du papier super interactif). Après-midi : Vieille Prison de Trois-Rivières (visite guidée dramatisée).", activities: ["Boréalis — musée du papier interactif","Vieille Prison — visite guidée dramatisée","Découverte du centre-ville de Trois-Rivières"], resto: "🍽️ Le Poivre Noir — bistro local, terroir mauricien" },
       { date: "23 août", jour: "Jour 13", region: "centre", title: "Trois-Rivières → Lévis", km: 120, budget: 80, badge: "Centre", desc: "Matin : Sanctuaire Notre-Dame-du-Cap (basilique, jardins). Route vers Lévis (1h30). Installation chez votre copine pour la semaine.", activities: ["Sanctuaire Notre-Dame-du-Cap — basilique & jardins","Route vers Lévis (1h30)","Installation chez votre copine — base pour la semaine"], resto: "🍽️ Cochon Dingue (1170 rue de Courchevel, Lévis) — vue fleuve" },
-      { date: "24 août", jour: "Jour 14", region: "quebec", title: "Chutes Montmorency & Québec", km: 60, budget: 210, badge: "Québec", desc: "Parc de la Chute-Montmorency (83 m de haut, 30 m de plus que Niagara !). Pont suspendu, tyrolienne. Après-midi : Vieux-Québec.", activities: ["Parc de la Chute-Montmorency — 83 m de haut !","Pont suspendu & tyrolienne au-dessus des chutes","Vieux-Québec : Château Frontenac & Terrasse Dufferin"], resto: "🍽️ Le Continental (26 rue Saint-Louis) ou L'Initiale — Michelin" },
-      { date: "25 août", jour: "Jour 15", region: "quebec", title: "🧀 Île d'Orléans gourmande", km: 50, budget: 160, badge: "Québec", desc: "Tour de l'île en boucle anti-horaire. Fromages Paillasson, cassis Monna & Filles, chocolaterie, beignes de patate.", activities: ["Les Fromages de l'Isle — Paillasson grillé, costumes d'époque","Cassis Monna & Filles — crème de cassis & glace","Chocolaterie de l'Île & beignes de patate chauds"], resto: "🍽️ La Goéliche (22 rue du Quai, Sainte-Pétronille) — terrasse fleuve" },
-      { date: "26 août", jour: "Jour 16", region: "charlevoix", title: "Charlevoix & Canyon Sainte-Anne", km: 220, budget: 140, badge: "Charlevoix", desc: "Matin : Canyon Sainte-Anne (ponts suspendus, cascades, sentiers en forêt). Après-midi : Baie-Saint-Paul (galeries d'art, rue pittoresque).", activities: ["Canyon Sainte-Anne — ponts suspendus & cascades","Sentiers en forêt le long du canyon","Baie-Saint-Paul — rue principale & galeries d'art"], resto: "🍽️ Le Mouton Noir (Baie-Saint-Paul) — terroir charlevoisien" },
+      { date: "24 août", jour: "Jour 14", region: "quebec", title: "🌊 Chutes Montmorency + 🧀 Île d'Orléans", km: 90, budget: 220, badge: "Québec", desc: "Journée combinée ! Matin : Chutes de 83 m (30 m de plus que Niagara !). Après-midi : tour gourmand de l'Île d'Orléans en boucle.", activities: ["Parc de la Chute-Montmorency — 83 m de haut !","Pont suspendu & tyrolienne au-dessus des chutes","Île d'Orléans — Fromages Paillasson, Cassis Monna, chocolaterie","Beignes de patate chauds & crème de cassis"], resto: "🍽️ La Goéliche (Sainte-Pétronille) — terrasse sur le fleuve" },
+      { date: "25 août", jour: "Jour 15", region: "quebec", title: "Québec approfondi & Wendake", km: 50, budget: 120, badge: "Québec", desc: "Matin : Village des Hurons Wendake (culture amérindienne, Hôtel-Musée). Après-midi : Vieux-Québec approfondi (Petit Champlain, funiculaire, Plains of Abraham).", activities: ["Village des Hurons Wendake — culture amérindienne","Hôtel-Musée Premières Nations & site traditionnel","Quartier Petit Champlain & funiculaire","Plains of Abraham — vue sur le fleuve Saint-Laurent"], resto: "🍽️ Le Continental (26 rue Saint-Louis) ou L'Initiale — Michelin" },
+      { date: "26 août", jour: "Jour 16", region: "charlevoix", title: "Charlevoix & Canyon Sainte-Anne", km: 220, budget: 140, badge: "Charlevoix", desc: "Matin : Canyon Sainte-Anne (ponts suspendus, cascades, sentiers en forêt). Après-midi : Baie-Saint-Paul (galeries d'art, rue principale pittoresque).", activities: ["Canyon Sainte-Anne — ponts suspendus & cascades","Sentiers en forêt le long du canyon","Baie-Saint-Paul — rue principale & galeries d'art"], resto: "🍽️ Le Mouton Noir (Baie-Saint-Paul) — terroir charlevoisien" },
       { date: "27 août", jour: "Jour 17", region: "tadoussac", title: "🐋 Baleines à Tadoussac", km: 420, budget: 580, badge: "Tadoussac", desc: "Départ tôt (2h30 de route). Croisière baleines 13h00 avec Croisières AML. Rorquals, baleines à bosse, bélugas, phoques. Fjord du Saguenay.", activities: ["Départ tôt vers Tadoussac (2h30 de route)","Croisière baleines AML à 13h00 (3h)","Observer rorquals, baleines à bosse, bélugas, phoques","Fjord du Saguenay — paysages grandioses"], resto: "🍽️ Resto Pub Le Pêcheur (Tadoussac) — fish & chips" },
-      { date: "28 août", jour: "Jour 18", region: "quebec", title: "Parc national Jacques-Cartier", km: 120, budget: 100, badge: "Québec", desc: "Randonnée Sentier Les Loups (11 km, 3h30, vue panoramique vallée). Alternative courte : L'Éperon (4 km, 1h30). Baignade rivière.", activities: ["Randonnée Sentier Les Loups (11 km, 3h30)","Vue panoramique sur la vallée de la Jacques-Cartier","Baignade dans la rivière Jacques-Cartier"], resto: "🍽️ L'Atelier (Lévis) — cuisine québécoise moderne" },
-      { date: "29 août", jour: "Jour 19", region: "montreal", title: "Départ vers Montréal", km: 280, budget: 50, badge: "Montréal", desc: "Lever tôt. Derniers achats : Premium Outlets Montréal (Mirabel). Arrivée aéroport Montréal en fin de journée. Vol 23h50.", activities: ["Lever tôt, derniers bagages","Premium Outlets Montréal — Mirabel (souvenirs)","Arrivée aéroport Montréal — vol 23h50 ✈️"], resto: "🍽️ St-Hubert — classique québécois ou Tim Hortons" }
+      { date: "28 août", jour: "Jour 18", region: "quebec", title: "🚣 Rafting & Parc Jacques-Cartier", km: 120, budget: 480, badge: "Québec", desc: "Journée d'aventure ! Rafting sur la rivière Jacques-Cartier (descente en eaux vives). Randonnée Sentier Les Loups ou L'Éperon. Baignade.", activities: ["Rafting sur la rivière Jacques-Cartier — eaux vives !","Randonnée Sentier Les Loups (11 km) ou L'Éperon (4 km)","Vue panoramique sur la vallée","Baignade dans la rivière Jacques-Cartier"], resto: "🍽️ L'Atelier (Lévis) — cuisine québécoise moderne" },
+      { date: "29 août", jour: "Jour 19", region: "montreal", title: "Départ vers Montréal", km: 280, budget: 50, badge: "Montréal", desc: "Lever tôt. Route directe vers l'aéroport Montréal. Vol retour prévu à 23h50. Derniers moments au Québec !", activities: ["Lever tôt, derniers bagages","Route vers l'aéroport Montréal (2h45)","Vol retour 23h50 ✈️ — Au revoir le Québec !"], resto: "🍽️ St-Hubert — classique québécois ou Tim Hortons" }
     ];
 
-    const totalKm = 2495;
-    const totalBudget = 3500;
+    const totalKm = 2515;
+    const totalBudget = 3800;
     const pointsPerActivity = 10;
     let currentDay = 0;
     let completedActivities = new Set(JSON.parse(localStorage.getItem('canada2026_done') || '[]'));
