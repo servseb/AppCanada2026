@@ -626,6 +626,32 @@
       100% { transform: translateY(120px) rotate(720deg) scale(0.3); opacity: 0; }
     }
 
+    .save-config-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .save-config-btn:hover {
+      background: var(--accent);
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .save-config-btn:active { transform: translateY(0); }
+    .save-config-btn.saved {
+      background: var(--pos);
+      border-color: var(--pos);
+    }
+    .save-config-btn svg { width: 14px; height: 14px; }
+
     @media (max-width: 600px) {
       .stats-grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 22px; }
@@ -686,11 +712,17 @@
         </div>
         <div class="config-row">
           <label>Cloud name</label>
-          <input type="text" id="cloudName" placeholder="ex: dupont-family" onchange="saveConfig()">
+          <input type="text" id="cloudName" placeholder="ex: dupont-family">
         </div>
         <div class="config-row">
           <label>Upload preset</label>
-          <input type="text" id="uploadPreset" placeholder="ex: canada2026" onchange="saveConfig()">
+          <input type="text" id="uploadPreset" placeholder="ex: canada2026">
+        </div>
+        <div class="config-row" style="justify-content: flex-end; margin-top: 4px;">
+          <button class="save-config-btn" onclick="saveConfig()" id="saveConfigBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            💾 Sauvegarder
+          </button>
         </div>
         <div class="config-info">
           💡 Sans configuration, vos photos sont stockées <strong>localement</strong> dans le navigateur (limité à ~5 Mo). Pour plus d'espace, utilisez Cloudinary ou collez un lien Google Photos/iCloud.
@@ -773,6 +805,14 @@
       const cloudName = document.getElementById('cloudName').value.trim();
       const uploadPreset = document.getElementById('uploadPreset').value.trim();
       localStorage.setItem('canada2026_cloud', JSON.stringify({ cloudName, uploadPreset }));
+      const btn = document.getElementById('saveConfigBtn');
+      const originalHTML = btn.innerHTML;
+      btn.classList.add('saved');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ✅ Config sauvegardée !';
+      setTimeout(() => {
+        btn.classList.remove('saved');
+        btn.innerHTML = originalHTML;
+      }, 2000);
     }
 
     function loadConfig() {
