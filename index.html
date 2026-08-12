@@ -69,10 +69,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero p {
-      font-size: 15px;
-      color: var(--text3);
-    }
+    .hero p { font-size: 15px; color: var(--text3); }
     .hero .dates {
       display: inline-flex;
       align-items: center;
@@ -164,19 +161,9 @@
       align-items: center;
       margin-bottom: 16px;
     }
-    .progress-header h3 {
-      font-size: 15px;
-      font-weight: 600;
-    }
-    .progress-header span {
-      font-size: 13px;
-      color: var(--text3);
-      font-weight: 500;
-    }
-    .progress-track {
-      display: flex;
-      gap: 3px;
-    }
+    .progress-header h3 { font-size: 15px; font-weight: 600; }
+    .progress-header span { font-size: 13px; color: var(--text3); font-weight: 500; }
+    .progress-track { display: flex; gap: 3px; }
     .progress-dot {
       flex: 1;
       height: 6px;
@@ -191,9 +178,7 @@
       background: var(--accent);
       animation: pulse 2s ease-in-out infinite;
     }
-    .progress-dot:hover {
-      transform: scaleY(1.8);
-    }
+    .progress-dot:hover { transform: scaleY(1.8); }
     .progress-dot:hover::after {
       content: attr(data-label);
       position: absolute;
@@ -242,9 +227,7 @@
       border-color: var(--accent);
       transform: translateY(-1px);
     }
-    .nav-btn:active {
-      transform: translateY(0);
-    }
+    .nav-btn:active { transform: translateY(0); }
     .nav-btn.active {
       background: var(--text1);
       color: var(--bg);
@@ -255,10 +238,7 @@
       cursor: not-allowed;
       transform: none;
     }
-    .nav-btn svg {
-      width: 16px;
-      height: 16px;
-    }
+    .nav-btn svg { width: 16px; height: 16px; }
 
     .day-card {
       background: var(--card);
@@ -274,9 +254,7 @@
       from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .day-card:hover {
-      box-shadow: var(--shadow-hover);
-    }
+    .day-card:hover { box-shadow: var(--shadow-hover); }
     .day-header {
       display: flex;
       justify-content: space-between;
@@ -404,6 +382,214 @@
     }
     .day-footer svg { width: 15px; height: 15px; }
 
+    /* === GALERIE PHOTOS === */
+    .media-section {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+    }
+    .media-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .media-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .media-title svg { width: 16px; height: 16px; color: var(--accent); }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .media-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .media-item img, .media-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .media-item:hover img, .media-item:hover video {
+      transform: scale(1.05);
+    }
+    .media-delete {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .media-item:hover .media-delete { opacity: 1; }
+
+    .upload-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text2);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .upload-btn:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .upload-btn svg { width: 16px; height: 16px; }
+    .upload-input { display: none; }
+
+    .url-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      width: 100%;
+    }
+    .url-input-row input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text1);
+      font-size: 13px;
+      outline: none;
+    }
+    .url-input-row input:focus { border-color: var(--accent); }
+    .url-input-row button {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .config-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .config-panel h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text1);
+    }
+    .config-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .config-row label {
+      font-size: 12px;
+      color: var(--text3);
+      width: 110px;
+      flex-shrink: 0;
+    }
+    .config-row input {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text1);
+      font-size: 13px;
+      outline: none;
+    }
+    .config-row input:focus { border-color: var(--accent); }
+    .config-info {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .config-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .config-toggle svg { width: 14px; height: 14px; transition: transform 0.2s; }
+    .config-toggle.open svg { transform: rotate(180deg); }
+    .config-content { display: none; }
+    .config-content.open { display: block; }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img, .lightbox video {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 12px;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
     .flash {
       position: fixed;
       top: 20px;
@@ -447,6 +633,9 @@
       .day-header { flex-direction: column; }
       .day-badge { align-self: flex-start; }
       .nav-btn { padding: 8px 12px; font-size: 13px; }
+      .media-grid { grid-template-columns: repeat(3, 1fr); }
+      .config-row { flex-direction: column; align-items: flex-start; }
+      .config-row label { width: auto; }
     }
   </style>
 <base target="_blank">
@@ -486,6 +675,29 @@
       </div>
     </div>
 
+    <div class="config-panel">
+      <div class="config-toggle" onclick="toggleConfig()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        ⚙️ Configuration Cloudinary (optionnel)
+      </div>
+      <div class="config-content" id="configContent">
+        <div class="config-info">
+          Pour uploader vers le cloud, créez un compte gratuit sur <strong>cloudinary.com</strong>, puis copiez votre "Cloud name" et créez un "Upload preset" en mode Unsigned.
+        </div>
+        <div class="config-row">
+          <label>Cloud name</label>
+          <input type="text" id="cloudName" placeholder="ex: dupont-family" onchange="saveConfig()">
+        </div>
+        <div class="config-row">
+          <label>Upload preset</label>
+          <input type="text" id="uploadPreset" placeholder="ex: canada2026" onchange="saveConfig()">
+        </div>
+        <div class="config-info">
+          💡 Sans configuration, vos photos sont stockées <strong>localement</strong> dans le navigateur (limité à ~5 Mo). Pour plus d'espace, utilisez Cloudinary ou collez un lien Google Photos/iCloud.
+        </div>
+      </div>
+    </div>
+
     <div class="progress-section">
       <div class="progress-header">
         <h3>📍 Progression du voyage</h3>
@@ -501,6 +713,11 @@
 
   <div class="flash" id="flash">+10 points ! 🎉</div>
 
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close">×</button>
+    <div id="lightboxContent"></div>
+  </div>
+
   <script>
     const days = [
       { date: "11 août", jour: "Jour 1", region: "montreal", title: "Arrivée à Montréal", km: 15, budget: 150, badge: "Montréal", desc: "Récupération voiture à l'aéroport, installation maison échangée au 4289 rue Parthenais. Soirée découverte du quartier Rosemont/Petite-Patrie.", activities: ["Récupérer la voiture de location à l'aéroport","S'installer au 4289 rue Parthenais","Explorer le quartier Rosemont à pied"], resto: "🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine locale & vins naturels" },
@@ -512,4 +729,364 @@
       { date: "17 août", jour: "Jour 7", region: "outaouais", title: "🐻 PARC OMEGA — Journée & Nuit", km: 10, budget: 0, badge: "Outaouais", desc: "Journée complète en voiture dans le parc (ours, loups, bisons, orignaux). Nuit en prospecteur/lodge au cœur du parc (déjà réservé).", activities: ["Entrée Parc Omega — safari en voiture","Observer ours, loups, bisons, orignaux de près","Option : visite guidée au réveil des animaux (7h15)","Nuit en lodge/prospecteur au cœur du parc"], resto: "🍽️ Resto du Parc Omega — cuisine locale" },
       { date: "18 août", jour: "Jour 8", region: "ottawa", title: "Montebello → Ottawa → Montréal", km: 290, budget: 135, badge: "Ottawa", desc: "Matin : promenade Montebello, Fromagerie Montebello. Route Ottawa (1h). Après-midi : Parlement, Marché ByWard, Canal Rideau. Retour Montréal soir.", activities: ["Derniers pas à Montebello & fromagerie","Ottawa : Parlement du Canada (visite extérieure)","Marché ByWard & BeaverTails + Canal Rideau"], resto: "🍽️ Pichai ou Limbo — Michelin Bib Gourmand 2026" },
       { date: "19 août", jour: "Jour 9", region: "montreal", title: "Montréal insolite", km: 20, budget: 75, badge: "Montréal", desc: "Matin : Cité Mémoire (projections historiques nocturnes Quartier latin). Après-midi : street art Plateau, Oratoire Saint-Joseph.", activities: ["Cité Mémoire — projections historiques Quartier latin","Street art et murales dans le Plateau-Mont-Royal","Oratoire Saint-Joseph — vue panoramique sur Montréal"], resto: "🍽️ Dobe & Andy (Chinatown) — barbecue cantonais historique" },
-      { date: "20 août", jour: "Jour 10", region: "estrie", title: "Excursion Estrie / Cantons-de-l'Est", km: 260, budget: 100, badge: "Estrie", desc: "Journée à Magog/Knowlton.
+      { date: "20 août", jour: "Jour 10", region: "estrie", title: "Excursion Estrie / Cantons-de-l'Est", km: 260, budget: 100, badge: "Estrie", desc: "Journée à Magog/Knowlton. Randonnée Mont Orford (sentier Le Mont-Orford, 8 km, 3h, vue 360° sur les Cantons-de-l'Est).", activities: ["Route vers Magog / Knowlton","Randonnée Mont Orford — sentier Le Mont-Orford (8 km)","Vue 360° sur les Cantons-de-l'Est au sommet"], resto: "🍽️ Auberge Knowlton — pub anglo-québécois historique" },
+      { date: "21 août", jour: "Jour 11", region: "montreal", title: "Dernière soirée à Montréal", km: 10, budget: 215, badge: "Montréal", desc: "Matin : shopping boutiques locales Plateau. Après-midi : préparation des bagages pour le départ vers Trois-Rivières demain.", activities: ["Shopping boutiques locales du Plateau","Derniers achats au marché","Préparer les bagages pour le départ"], resto: "🍽️ Au Pied de Cochon (536 av. Duluth E.) — LE classique québécois !" },
+      { date: "22 août", jour: "Jour 12", region: "mauricie", title: "Trois-Rivières", km: 140, budget: 100, badge: "Mauricie", desc: "En route tôt. Matin : Boréalis (musée du papier super interactif). Après-midi : Vieille Prison de Trois-Rivières (visite guidée dramatisée).", activities: ["Boréalis — musée du papier interactif","Vieille Prison — visite guidée dramatisée","Découverte du centre-ville de Trois-Rivières"], resto: "🍽️ Le Poivre Noir — bistro local, terroir mauricien" },
+      { date: "23 août", jour: "Jour 13", region: "centre", title: "Trois-Rivières → Lévis", km: 120, budget: 80, badge: "Centre", desc: "Matin : Sanctuaire Notre-Dame-du-Cap (basilique, jardins). Route vers Lévis (1h30). Installation chez votre copine pour la semaine.", activities: ["Sanctuaire Notre-Dame-du-Cap — basilique & jardins","Route vers Lévis (1h30)","Installation chez votre copine — base pour la semaine"], resto: "🍽️ Cochon Dingue (1170 rue de Courchevel, Lévis) — vue fleuve" },
+      { date: "24 août", jour: "Jour 14", region: "quebec", title: "🌊 Chutes Montmorency + 🧀 Île d'Orléans", km: 90, budget: 220, badge: "Québec", desc: "Journée combinée ! Matin : Chutes de 83 m (30 m de plus que Niagara !). Après-midi : tour gourmand de l'Île d'Orléans en boucle.", activities: ["Parc de la Chute-Montmorency — 83 m de haut !","Pont suspendu & tyrolienne au-dessus des chutes","Île d'Orléans — Fromages Paillasson, Cassis Monna, chocolaterie","Beignes de patate chauds & crème de cassis"], resto: "🍽️ La Goéliche (Sainte-Pétronille) — terrasse sur le fleuve" },
+      { date: "25 août", jour: "Jour 15", region: "quebec", title: "🚣 RAFTING & Parc Jacques-Cartier", km: 120, budget: 480, badge: "Québec", desc: "Journée d'aventure ! Rafting sur la rivière Jacques-Cartier (descente en eaux vives). Randonnée Sentier Les Loups ou L'Éperon. Baignade.", activities: ["Rafting sur la rivière Jacques-Cartier — eaux vives !","Randonnée Sentier Les Loups (11 km) ou L'Éperon (4 km)","Vue panoramique sur la vallée","Baignade dans la rivière Jacques-Cartier"], resto: "🍽️ L'Atelier (Lévis) — cuisine québécoise moderne" },
+      { date: "26 août", jour: "Jour 16", region: "charlevoix", title: "Charlevoix & Canyon Sainte-Anne", km: 220, budget: 140, badge: "Charlevoix", desc: "Matin : Canyon Sainte-Anne (ponts suspendus, cascades, sentiers en forêt). Après-midi : Baie-Saint-Paul (galeries d'art, rue principale pittoresque).", activities: ["Canyon Sainte-Anne — ponts suspendus & cascades","Sentiers en forêt le long du canyon","Baie-Saint-Paul — rue principale & galeries d'art"], resto: "🍽️ Le Mouton Noir (Baie-Saint-Paul) — terroir charlevoisien" },
+      { date: "27 août", jour: "Jour 17", region: "tadoussac", title: "🐋 Baleines à Tadoussac", km: 420, budget: 580, badge: "Tadoussac", desc: "Départ tôt (2h30 de route). Croisière baleines 13h00 avec Croisières AML. Rorquals, baleines à bosse, bélugas, phoques. Fjord du Saguenay.", activities: ["Départ tôt vers Tadoussac (2h30 de route)","Croisière baleines AML à 13h00 (3h)","Observer rorquals, baleines à bosse, bélugas, phoques","Fjord du Saguenay — paysages grandioses"], resto: "🍽️ Resto Pub Le Pêcheur (Tadoussac) — fish & chips" },
+      { date: "28 août", jour: "Jour 18", region: "quebec", title: "Québec approfondi & Wendake", km: 50, budget: 120, badge: "Québec", desc: "Matin : Village des Hurons Wendake (culture amérindienne, Hôtel-Musée). Après-midi : Vieux-Québec approfondi (Petit Champlain, funiculaire, Plains of Abraham).", activities: ["Village des Hurons Wendake — culture amérindienne","Hôtel-Musée Premières Nations & site traditionnel","Quartier Petit Champlain & funiculaire","Plains of Abraham — vue sur le fleuve Saint-Laurent"], resto: "🍽️ Le Continental (26 rue Saint-Louis) ou L'Initiale — Michelin" },
+      { date: "29 août", jour: "Jour 19", region: "montreal", title: "Départ vers Montréal", km: 280, budget: 50, badge: "Montréal", desc: "Lever tôt. Route directe vers l'aéroport Montréal. Vol retour prévu à 23h50. Derniers moments au Québec !", activities: ["Lever tôt, derniers bagages","Route vers l'aéroport Montréal (2h45)","Vol retour 23h50 ✈️ — Au revoir le Québec !"], resto: "🍽️ St-Hubert — classique québécois ou Tim Hortons" }
+    ];
+
+    const totalKm = 2585;
+    const totalBudget = 3800;
+    const pointsPerActivity = 10;
+    let currentDay = 0;
+    let completedActivities = new Set(JSON.parse(localStorage.getItem('canada2026_done') || '[]'));
+    let totalPoints = completedActivities.size * pointsPerActivity;
+    let dayMedia = JSON.parse(localStorage.getItem('canada2026_media') || '{}');
+
+    function init() {
+      loadConfig();
+      renderProgressTrack();
+      renderNav();
+      renderDay(0);
+      updateStats();
+    }
+
+    function saveProgress() {
+      localStorage.setItem('canada2026_done', JSON.stringify([...completedActivities]));
+      localStorage.setItem('canada2026_media', JSON.stringify(dayMedia));
+    }
+
+    function toggleConfig() {
+      const el = document.getElementById('configContent');
+      const btn = document.querySelector('.config-toggle');
+      el.classList.toggle('open');
+      btn.classList.toggle('open');
+    }
+
+    function saveConfig() {
+      const cloudName = document.getElementById('cloudName').value.trim();
+      const uploadPreset = document.getElementById('uploadPreset').value.trim();
+      localStorage.setItem('canada2026_cloud', JSON.stringify({ cloudName, uploadPreset }));
+    }
+
+    function loadConfig() {
+      const cfg = JSON.parse(localStorage.getItem('canada2026_cloud') || '{}');
+      if (cfg.cloudName) document.getElementById('cloudName').value = cfg.cloudName;
+      if (cfg.uploadPreset) document.getElementById('uploadPreset').value = cfg.uploadPreset;
+    }
+
+    function getCloudConfig() {
+      return JSON.parse(localStorage.getItem('canada2026_cloud') || '{}');
+    }
+
+    function renderProgressTrack() {
+      const track = document.getElementById('progressTrack');
+      track.innerHTML = '';
+      days.forEach((d, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (i < currentDay ? ' done' : '') + (i === currentDay ? ' current' : '');
+        dot.dataset.label = d.jour;
+        dot.title = `${d.jour} — ${d.title}`;
+        dot.onclick = () => { currentDay = i; renderDay(i); renderNav(); renderProgressTrack(); };
+        track.appendChild(dot);
+      });
+    }
+
+    function renderNav() {
+      const nav = document.getElementById('navBar');
+      nav.innerHTML = '';
+
+      const prev = document.createElement('button');
+      prev.className = 'nav-btn';
+      prev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Précédent';
+      prev.disabled = currentDay === 0;
+      prev.onclick = () => { if (currentDay > 0) { currentDay--; renderDay(currentDay); renderNav(); renderProgressTrack(); }};
+
+      const all = document.createElement('button');
+      all.className = 'nav-btn' + (document.getElementById('daysContainer').dataset.view === 'all' ? ' active' : '');
+      all.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Tous les jours';
+      all.onclick = toggleAllView;
+
+      const next = document.createElement('button');
+      next.className = 'nav-btn';
+      next.innerHTML = 'Suivant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+      next.disabled = currentDay === days.length - 1;
+      next.onclick = () => { if (currentDay < days.length - 1) { currentDay++; renderDay(currentDay); renderNav(); renderProgressTrack(); }};
+
+      nav.appendChild(prev);
+      nav.appendChild(all);
+      nav.appendChild(next);
+    }
+
+    function toggleAllView() {
+      const container = document.getElementById('daysContainer');
+      if (container.dataset.view === 'all') {
+        container.dataset.view = 'single';
+        renderDay(currentDay);
+      } else {
+        container.dataset.view = 'all';
+        renderAllDays();
+      }
+      renderNav();
+    }
+
+    function renderAllDays() {
+      const container = document.getElementById('daysContainer');
+      container.innerHTML = '';
+      days.forEach((d, i) => {
+        container.appendChild(createDayCard(d, i));
+      });
+      document.getElementById('progressText').textContent = 'Vue complète — 19 jours';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderDay(index) {
+      const container = document.getElementById('daysContainer');
+      container.dataset.view = 'single';
+      container.innerHTML = '';
+      container.appendChild(createDayCard(days[index], index));
+      document.getElementById('progressText').textContent = `Jour ${index + 1} / ${days.length}`;
+    }
+
+    function createDayCard(day, index) {
+      const card = document.createElement('div');
+      card.className = 'day-card';
+      const badgeClass = `badge-${day.region}`;
+      const media = dayMedia[index] || [];
+
+      let activitiesHtml = '';
+      day.activities.forEach((act, ai) => {
+        const key = `${index}-${ai}`;
+        const done = completedActivities.has(key);
+        activitiesHtml += `
+          <li class="activity-item ${done ? 'done' : ''}" onclick="toggleActivity('${key}', this)">
+            <div class="checkbox">
+              ${done ? '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+            </div>
+            <span class="activity-text">${act}</span>
+          </li>`;
+      });
+
+      let mediaHtml = '';
+      if (media.length > 0) {
+        mediaHtml = '<div class="media-grid">' + media.map((m, mi) => `
+          <div class="media-item" onclick="openLightbox('${m.url}', '${m.type}')">
+            ${m.type === 'video' 
+              ? `<video src="${m.url}" muted></video>` 
+              : `<img src="${m.url}" alt="photo">`}
+            <button class="media-delete" onclick="event.stopPropagation(); deleteMedia(${index}, ${mi})">×</button>
+          </div>
+        `).join('') + '</div>';
+      }
+
+      card.innerHTML = `
+        <div class="day-header">
+          <div class="day-header-left">
+            <div class="day-title">${day.jour} — ${day.date}</div>
+            <div class="day-sub">${day.desc}</div>
+          </div>
+          <span class="day-badge ${badgeClass}">${day.badge}</span>
+        </div>
+        <ul class="activity-list">${activitiesHtml}</ul>
+        <div class="resto-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          ${day.resto}
+        </div>
+        <div class="media-section">
+          <div class="media-header">
+            <span class="media-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              📷 Souvenirs du jour (${media.length})
+            </span>
+          </div>
+          ${mediaHtml}
+          <div class="upload-bar">
+            <button class="upload-btn" onclick="triggerUpload(${index})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Ajouter une photo
+            </button>
+            <button class="upload-btn" onclick="toggleUrlInput(${index})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Coller un lien
+            </button>
+          </div>
+          <input type="file" class="upload-input" id="upload-${index}" accept="image/*,video/*" onchange="handleFileUpload(${index}, this)">
+          <div class="url-input-row" id="url-row-${index}" style="display:none">
+            <input type="text" id="url-input-${index}" placeholder="https://... (Google Photos, iCloud, etc.)">
+            <button onclick="addUrlMedia(${index})">OK</button>
+          </div>
+        </div>
+        <div class="day-footer">
+          <span class="day-footer-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${day.km} km
+          </span>
+          <span class="day-footer-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            ~${day.budget} $ CAD
+          </span>
+        </div>
+      `;
+      return card;
+    }
+
+    function toggleActivity(key, el) {
+      if (completedActivities.has(key)) {
+        completedActivities.delete(key);
+        el.classList.remove('done');
+        el.querySelector('.checkbox').innerHTML = '';
+        totalPoints -= pointsPerActivity;
+      } else {
+        completedActivities.add(key);
+        el.classList.add('done');
+        el.querySelector('.checkbox').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        totalPoints += pointsPerActivity;
+        showFlash(`+${pointsPerActivity} points ! 🎉`);
+        spawnConfetti(el);
+      }
+      saveProgress();
+      updateStats();
+    }
+
+    function triggerUpload(dayIndex) {
+      document.getElementById(`upload-${dayIndex}`).click();
+    }
+
+    function toggleUrlInput(dayIndex) {
+      const row = document.getElementById(`url-row-${dayIndex}`);
+      row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function addUrlMedia(dayIndex) {
+      const input = document.getElementById(`url-input-${dayIndex}`);
+      const url = input.value.trim();
+      if (!url) return;
+      const type = url.match(/\.(mp4|mov|webm)(\?|$)/i) ? 'video' : 'image';
+      if (!dayMedia[dayIndex]) dayMedia[dayIndex] = [];
+      dayMedia[dayIndex].push({ url, type });
+      saveProgress();
+      renderDay(currentDay);
+      showFlash('Lien ajouté ! 📎');
+    }
+
+    async function handleFileUpload(dayIndex, input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const cfg = getCloudConfig();
+      if (cfg.cloudName && cfg.uploadPreset) {
+        // Upload vers Cloudinary
+        showFlash('Upload en cours... ☁️');
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', cfg.uploadPreset);
+        try {
+          const res = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloudName}/auto/upload`, {
+            method: 'POST',
+            body: formData
+          });
+          const data = await res.json();
+          if (data.secure_url) {
+            const type = file.type.startsWith('video') ? 'video' : 'image';
+            if (!dayMedia[dayIndex]) dayMedia[dayIndex] = [];
+            dayMedia[dayIndex].push({ url: data.secure_url, type });
+            saveProgress();
+            renderDay(currentDay);
+            showFlash('Photo uploadée ! ☁️');
+          } else {
+            showFlash('Erreur upload Cloudinary');
+          }
+        } catch (e) {
+          showFlash('Erreur réseau, stockage local...');
+          storeLocal(dayIndex, file);
+        }
+      } else {
+        // Stockage local base64
+        storeLocal(dayIndex, file);
+      }
+      input.value = '';
+    }
+
+    function storeLocal(dayIndex, file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const type = file.type.startsWith('video') ? 'video' : 'image';
+        if (!dayMedia[dayIndex]) dayMedia[dayIndex] = [];
+        dayMedia[dayIndex].push({ url: e.target.result, type });
+        saveProgress();
+        renderDay(currentDay);
+        showFlash('Photo sauvegardée ! 💾');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function deleteMedia(dayIndex, mediaIndex) {
+      if (!dayMedia[dayIndex]) return;
+      dayMedia[dayIndex].splice(mediaIndex, 1);
+      if (dayMedia[dayIndex].length === 0) delete dayMedia[dayIndex];
+      saveProgress();
+      renderDay(currentDay);
+    }
+
+    function openLightbox(url, type) {
+      const lb = document.getElementById('lightbox');
+      const content = document.getElementById('lightboxContent');
+      content.innerHTML = type === 'video' 
+        ? `<video src="${url}" controls autoplay style="max-width:100%;max-height:90vh;border-radius:12px"></video>`
+        : `<img src="${url}" style="max-width:100%;max-height:90vh;border-radius:12px">`;
+      lb.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.getElementById('lightboxContent').innerHTML = '';
+    }
+
+    function showFlash(text) {
+      const flash = document.getElementById('flash');
+      flash.textContent = text;
+      flash.classList.add('show');
+      setTimeout(() => flash.classList.remove('show'), 1800);
+    }
+
+    function spawnConfetti(el) {
+      const rect = el.getBoundingClientRect();
+      const colors = ['#34c759', '#0071e3', '#ff9500', '#ff3b30', '#af52de', '#5856d6'];
+      for (let i = 0; i < 8; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 60) + 'px';
+        c.style.top = (rect.top + window.scrollY + (Math.random() - 0.5) * 20) + 'px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.width = (4 + Math.random() * 6) + 'px';
+        c.style.height = c.style.width;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 1000);
+      }
+    }
+
+    function updateStats() {
+      const kmSoFar = days.slice(0, currentDay).reduce((s, d) => s + d.km, 0);
+      const budgetSoFar = days.slice(0, currentDay).reduce((s, d) => s + d.budget, 0);
+      const maxPoints = days.reduce((s, d) => s + d.activities.length, 0) * pointsPerActivity;
+
+      document.getElementById('scoreVal').textContent = totalPoints;
+      document.getElementById('scoreBar').style.width = Math.min(100, (totalPoints / maxPoints) * 100) + '%';
+
+      document.getElementById('kmVal').textContent = kmSoFar;
+      document.getElementById('kmBar').style.width = Math.min(100, (kmSoFar / totalKm) * 100) + '%';
+
+      document.getElementById('budgetVal').textContent = budgetSoFar;
+      document.getElementById('budgetBar').style.width = Math.min(100, (budgetSoFar / totalBudget) * 100) + '%';
+    }
+
+    init();
+  </script>
+</body>
+</html>
