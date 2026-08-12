@@ -1,1132 +1,3102 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🇨🇦 Road Trip Québec 2026 — Suivi de voyage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🇨🇦 Road Trip Québec 2026 — Carnet de Voyage Interactif</title>
+  <meta name="description" content="Suivi complet et collaboratif du road trip au Québec en famille du 11 au 29 août 2026. Itinéraire, activités, carte interactive et galerie photos partagée.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍁</text></svg>">
-  <style>
-    :root {
-      --bg: #f5f5f7;
-      --card: #ffffff;
-      --text1: #1d1d1f;
-      --text2: #424245;
-      --text3: #86868b;
-      --border: #d2d2d7;
-      --accent: #0071e3;
-      --accent-light: #e8f4fd;
-      --pos: #34c759;
-      --pos-light: #e6f9ec;
-      --warn: #ff9500;
-      --warn-light: #fff4e5;
-      --danger: #ff3b30;
-      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
-      --shadow-hover: 0 4px 12px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
-      --radius: 16px;
-      --radius-sm: 10px;
-      --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #000000;
-        --card: #1c1c1e;
-        --text1: #f5f5f7;
-        --text2: #aeaeb2;
-        --text3: #636366;
-        --border: #38383a;
-        --accent: #0a84ff;
-        --accent-light: rgba(10,132,255,0.15);
-        --pos: #30d158;
-        --pos-light: rgba(48,209,88,0.15);
-        --warn: #ff9f0a;
-        --warn-light: rgba(255,159,10,0.15);
-        --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
-        --shadow-hover: 0 4px 12px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3);
-      }
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text1);
-      line-height: 1.5;
-      min-height: 100vh;
-      padding-bottom: 40px;
-    }
-    .container { max-width: 720px; margin: 0 auto; padding: 20px 16px; }
 
-    .hero {
-      text-align: center;
-      padding: 32px 0 24px;
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <style>
+    /* ==========================================================================
+       VARIABLES & DESIGN SYSTEM
+       ========================================================================== */
+    :root {
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      /* Colors - Light Theme */
+      --bg: #f8fafc;
+      --bg-elevated: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(226, 232, 240, 0.9);
+      --card-hover: #ffffff;
+
+      --text-1: #0f172a;
+      --text-2: #334155;
+      --text-3: #64748b;
+      --text-muted: #94a3b8;
+
+      --accent: #0284c7;
+      --accent-gradient: linear-gradient(135deg, #0284c7, #06b6d4);
+      --accent-subtle: rgba(2, 132, 199, 0.1);
+
+      --maple: #e11d48;
+      --maple-gradient: linear-gradient(135deg, #e11d48, #f43f5e);
+      --maple-subtle: rgba(225, 29, 72, 0.1);
+
+      --pos: #10b981;
+      --pos-subtle: rgba(16, 185, 129, 0.12);
+      --warn: #f59e0b;
+      --warn-subtle: rgba(245, 158, 11, 0.12);
+      --purple: #8b5cf6;
+      --purple-subtle: rgba(139, 92, 246, 0.12);
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+      --shadow-glow: 0 0 24px rgba(2, 132, 199, 0.25);
+
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+
+      --backdrop: blur(16px);
+      --transition: 250ms cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .hero h1 {
-      font-size: 28px;
+
+    [data-theme="dark"] {
+      --bg: #0b0f19;
+      --bg-elevated: #111827;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 36, 56, 0.9);
+
+      --text-1: #f8fafc;
+      --text-2: #cbd5e1;
+      --text-3: #94a3b8;
+      --text-muted: #64748b;
+
+      --accent: #38bdf8;
+      --accent-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+      --accent-subtle: rgba(56, 189, 248, 0.15);
+
+      --maple: #fb7185;
+      --maple-gradient: linear-gradient(135deg, #f43f5e, #fda4af);
+      --maple-subtle: rgba(244, 63, 94, 0.18);
+
+      --pos: #34d399;
+      --pos-subtle: rgba(52, 211, 153, 0.15);
+      --warn: #fbbf24;
+      --warn-subtle: rgba(251, 191, 36, 0.15);
+      --purple: #a78bfa;
+      --purple-subtle: rgba(167, 139, 250, 0.15);
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 28px rgba(56, 189, 248, 0.2);
+    }
+
+    /* Base Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg);
+      color: var(--text-1);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color var(--transition), color var(--transition);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(225, 29, 72, 0.06) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* ==========================================================================
+       LAYOUT & HEADER
+       ========================================================================== */
+    .app-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px 20px 90px;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      -webkit-backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+      position: sticky;
+      top: 14px;
+      z-index: 900;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-1);
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -0.3px;
+    }
+    .brand-icon {
+      font-size: 24px;
+      filter: drop-shadow(0 2px 4px rgba(225, 29, 72, 0.3));
+      animation: floatLeaf 4s ease-in-out infinite;
+    }
+    @keyframes floatLeaf {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-3px) rotate(4deg); }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .icon-btn:hover {
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .icon-btn svg { width: 18px; height: 18px; }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, var(--accent-subtle) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      background: var(--maple-subtle);
+      color: var(--maple);
+      border: 1px solid rgba(225, 29, 72, 0.2);
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 6px;
-      background: linear-gradient(135deg, var(--accent), var(--pos));
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+    }
+    .hero-pill .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--maple);
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0% { transform: scale(0.9); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.5; }
+      100% { transform: scale(0.9); opacity: 1; }
+    }
+
+    .hero-title {
+      font-family: var(--font-title);
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--text-1) 30%, var(--accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero p { font-size: 15px; color: var(--text3); }
-    .hero .dates {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      padding: 6px 16px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 13px;
-      color: var(--text2);
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text-3);
+      max-width: 580px;
+      margin: 0 auto 20px;
     }
 
-    .stats-grid {
+    /* Countdown Widget */
+    .countdown-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 48px;
+    }
+    .countdown-num {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .countdown-lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 3px;
+    }
+    .countdown-sep {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: -6px;
+    }
+
+    .hero-stats-chips {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: var(--bg-elevated);
+      border: 1px solid var(--card-border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+    }
+    .chip svg { width: 15px; height: 15px; color: var(--accent); }
+
+    /* ==========================================================================
+       STATS SUMMARY CARDS
+       ========================================================================== */
+    .stats-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
       margin-bottom: 24px;
     }
     .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 14px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      transition: transform var(--transition), box-shadow var(--transition);
-      cursor: default;
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
     }
     .stat-card:hover {
       transform: translateY(-3px);
-      box-shadow: var(--shadow-hover);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
     }
-    .stat-icon {
-      width: 32px;
-      height: 32px;
-      margin: 0 auto 8px;
-      border-radius: 10px;
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .stat-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .stat-icon.points { background: var(--pos-light); color: var(--pos); }
-    .stat-icon.km { background: var(--accent-light); color: var(--accent); }
-    .stat-icon.budget { background: var(--warn-light); color: var(--warn); }
-    .stat-icon svg { width: 18px; height: 18px; }
-    .stat-value {
-      font-size: 26px;
+    .stat-icon-wrap.points { background: var(--pos-subtle); color: var(--pos); }
+    .stat-icon-wrap.km { background: var(--accent-subtle); color: var(--accent); }
+    .stat-icon-wrap.budget { background: var(--warn-subtle); color: var(--warn); }
+    .stat-icon-wrap svg { width: 20px; height: 20px; }
+
+    .stat-badge {
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text1);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: var(--bg-elevated);
+      border: 1px solid var(--card-border);
+      color: var(--text-3);
+    }
+    .stat-value {
+      font-family: var(--font-title);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-1);
       line-height: 1;
       margin-bottom: 4px;
       font-variant-numeric: tabular-nums;
     }
     .stat-label {
-      font-size: 11px;
-      color: var(--text3);
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-3);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .stat-bar {
-      height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin-top: 10px;
+    .stat-progress {
+      height: 6px;
+      background: var(--card-border);
+      border-radius: var(--radius-full);
+      margin-top: 12px;
       overflow: hidden;
     }
-    .stat-bar-fill {
+    .stat-progress-bar {
       height: 100%;
-      border-radius: 2px;
-      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: var(--radius-full);
+      transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .stat-bar-fill.points { background: var(--pos); }
-    .stat-bar-fill.km { background: var(--accent); }
-    .stat-bar-fill.budget { background: var(--warn); }
+    .stat-progress-bar.points { background: linear-gradient(90deg, #10b981, #34d399); }
+    .stat-progress-bar.km { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+    .stat-progress-bar.budget { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
 
-    .progress-section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
+    /* ==========================================================================
+       PRIMARY TABS & NAVIGATION
+       ========================================================================== */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      padding: 6px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
       margin-bottom: 24px;
-      box-shadow: var(--shadow);
+      overflow-x: auto;
+      scrollbar-width: none;
     }
-    .progress-header {
+    .nav-tabs::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex: 1;
+      min-width: fit-content;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      color: var(--text-2);
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+    .tab-btn.active {
+      background: var(--text-1);
+      color: var(--bg);
+      box-shadow: var(--shadow-md);
+    }
+    .tab-btn svg { width: 17px; height: 17px; }
+
+    /* Search & Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-1);
+      font-size: 14px;
+      outline: none;
+      transition: all var(--transition);
+    }
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow);
+    }
+    .search-box svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+    }
+
+    .region-select {
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-1);
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Day Stepper Navigator */
+    .day-stepper-box {
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+    .stepper-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
-    .progress-header h3 { font-size: 15px; font-weight: 600; }
-    .progress-header span { font-size: 13px; color: var(--text3); font-weight: 500; }
-    .progress-track { display: flex; gap: 3px; }
-    .progress-dot {
-      flex: 1;
-      height: 6px;
-      border-radius: 3px;
-      background: var(--border);
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
+    .stepper-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .progress-dot.done { background: var(--pos); }
-    .progress-dot.current {
-      background: var(--accent);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    .progress-dot:hover { transform: scaleY(1.8); }
-    .progress-dot:hover::after {
-      content: attr(data-label);
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      background: var(--text1);
-      color: var(--bg);
-      padding: 3px 8px;
-      border-radius: 6px;
-      white-space: nowrap;
-      pointer-events: none;
-      font-weight: 500;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+    .stepper-progress-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
     }
 
-    .nav-bar {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
+    .progress-track-grid {
+      display: grid;
+      grid-template-columns: repeat(19, 1fr);
+      gap: 4px;
+      margin-bottom: 14px;
     }
-    .nav-btn {
-      padding: 10px 18px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text2);
-      font-size: 14px;
-      font-weight: 500;
+    .track-pill {
+      height: 8px;
+      border-radius: 4px;
+      background: var(--card-border);
       cursor: pointer;
       transition: all var(--transition);
+      position: relative;
+    }
+    .track-pill:hover {
+      transform: scaleY(1.8);
+      background: var(--accent-subtle);
+    }
+    .track-pill.done { background: var(--pos); }
+    .track-pill.active {
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      transform: scaleY(1.5);
+    }
+
+    .stepper-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-step {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      box-shadow: var(--shadow);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
     }
-    .nav-btn:hover {
-      background: var(--accent-light);
+    .btn-step:hover:not(:disabled) {
+      background: var(--accent-subtle);
       color: var(--accent);
       border-color: var(--accent);
-      transform: translateY(-1px);
     }
-    .nav-btn:active { transform: translateY(0); }
-    .nav-btn.active {
-      background: var(--text1);
-      color: var(--bg);
-      border-color: var(--text1);
-    }
-    .nav-btn:disabled {
-      opacity: 0.35;
+    .btn-step:disabled {
+      opacity: 0.4;
       cursor: not-allowed;
-      transform: none;
     }
-    .nav-btn svg { width: 16px; height: 16px; }
 
-    .day-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
+    .btn-view-all {
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
       transition: all var(--transition);
-      animation: slideUp 0.4s ease-out;
     }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
+    .btn-view-all.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ==========================================================================
+       DAY CARD (THE CORE COMPONENT)
+       ========================================================================== */
+    .day-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition);
+      animation: cardFadeIn 0.4s ease-out;
+    }
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .day-card:hover { box-shadow: var(--shadow-hover); }
-    .day-header {
+    .day-card:hover {
+      border-color: rgba(2, 132, 199, 0.4);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .day-card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      gap: 16px;
       margin-bottom: 16px;
-      gap: 12px;
     }
-    .day-header-left { flex: 1; min-width: 0; }
-    .day-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text1);
-      margin-bottom: 4px;
-      letter-spacing: -0.3px;
-    }
-    .day-sub {
+    .day-date-tag {
       font-size: 13px;
-      color: var(--text3);
-      line-height: 1.5;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
     }
-    .day-badge {
-      font-size: 11px;
-      padding: 5px 12px;
-      border-radius: 100px;
-      font-weight: 600;
-      white-space: nowrap;
-      flex-shrink: 0;
+    .day-main-title {
+      font-family: var(--font-title);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-1);
+      line-height: 1.25;
+      margin-bottom: 8px;
     }
-    .badge-montreal { background: #e8f4fd; color: #0071e3; }
-    .badge-outaouais { background: #fce8e8; color: #c0392b; }
-    .badge-ottawa { background: #f0e6ff; color: #8e44ad; }
-    .badge-estrie { background: #e6f9ec; color: #27ae60; }
-    .badge-mauricie { background: #fff8e6; color: #f39c12; }
-    .badge-centre { background: #e6f2ff; color: #2980b9; }
-    .badge-quebec { background: #ffe6f0; color: #c2185b; }
-    .badge-charlevoix { background: #e6fff0; color: #16a085; }
-    .badge-tadoussac { background: #e6f0ff; color: #2c3e50; }
-    .badge-laurentides { background: #f0e6ff; color: #6c3483; }
-    @media (prefers-color-scheme: dark) {
-      .badge-montreal { background: rgba(0,113,227,0.2); color: #0a84ff; }
-      .badge-outaouais { background: rgba(192,57,43,0.2); color: #ff6b6b; }
-      .badge-ottawa { background: rgba(142,68,173,0.2); color: #bb8fce; }
-      .badge-estrie { background: rgba(39,174,96,0.2); color: #58d68d; }
-      .badge-mauricie { background: rgba(243,156,18,0.2); color: #f5b041; }
-      .badge-centre { background: rgba(41,128,185,0.2); color: #5dade2; }
-      .badge-quebec { background: rgba(194,24,89,0.2); color: #f48fb1; }
-      .badge-charlevoix { background: rgba(22,160,133,0.2); color: #76d7c4; }
-      .badge-tadoussac { background: rgba(44,62,80,0.2); color: #aab7b8; }
-      .badge-laurentides { background: rgba(108,52,131,0.2); color: #af7ac5; }
+    .day-description {
+      font-size: 14px;
+      color: var(--text-3);
+      line-height: 1.6;
     }
 
-    .activity-list { list-style: none; margin-bottom: 16px; }
+    .region-badge {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-montreal { background: rgba(2, 132, 199, 0.15); color: #0284c7; }
+    .badge-outaouais { background: rgba(225, 29, 72, 0.15); color: #e11d48; }
+    .badge-ottawa { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+    .badge-estrie { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .badge-mauricie { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .badge-centre { background: rgba(6, 182, 212, 0.15); color: #06b6d4; }
+    .badge-quebec { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+    .badge-charlevoix { background: rgba(20, 184, 166, 0.15); color: #14b8a6; }
+    .badge-tadoussac { background: rgba(99, 102, 241, 0.15); color: #6366f1; }
+    .badge-laurentides { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+
+    /* Activities Checklist */
+    .activity-container {
+      margin: 20px 0;
+    }
+    .activity-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .activity-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
     .activity-item {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      background: var(--bg-elevated);
+      border: 1px solid var(--card-border);
       cursor: pointer;
       transition: all var(--transition);
-      border-radius: 8px;
-      margin: 0 -8px;
-      padding-left: 8px;
-      padding-right: 8px;
     }
-    .activity-item:last-child { border-bottom: none; }
-    .activity-item:hover { background: var(--bg); }
-    .activity-item.done .activity-text {
-      text-decoration: line-through;
-      color: var(--text3);
+    .activity-item:hover {
+      background: var(--accent-subtle);
+      border-color: var(--accent);
+      transform: translateX(4px);
     }
-    .activity-item.done .checkbox {
-      background: var(--pos);
-      border-color: var(--pos);
-    }
-    .checkbox {
+    .activity-checkbox {
       width: 22px;
       height: 22px;
-      border: 2px solid var(--border);
-      border-radius: 7px;
+      border-radius: 6px;
+      border: 2px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 1px;
       transition: all var(--transition);
-      background: var(--card);
+      background: var(--bg);
+    }
+    .activity-item.done {
+      background: var(--pos-subtle);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .activity-item.done .activity-checkbox {
+      background: var(--pos);
+      border-color: var(--pos);
+      color: white;
     }
     .activity-text {
       font-size: 14px;
-      color: var(--text2);
-      line-height: 1.5;
+      color: var(--text-2);
+      font-weight: 500;
       flex: 1;
-      transition: color var(--transition);
+      transition: all var(--transition);
+    }
+    .activity-item.done .activity-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
     }
 
-    .resto-chip {
-      display: inline-flex;
+    /* Restaurant Card Pill */
+    .resto-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--warn-subtle);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-1);
+    }
+    .resto-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       PHOTOS & SOUVENIRS SECTION (CLOUDINARY INTEGRATION)
+       ========================================================================== */
+    .gallery-day-box {
+      border-top: 1px dashed var(--card-border);
+      padding-top: 18px;
+      margin-top: 20px;
+    }
+    .gallery-day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .gallery-day-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-1);
+      display: flex;
       align-items: center;
       gap: 6px;
-      background: var(--warn-light);
-      color: var(--warn);
-      padding: 6px 14px;
-      border-radius: 100px;
-      font-size: 12px;
-      font-weight: 600;
+    }
+    .gallery-day-title svg { width: 17px; height: 17px; color: var(--accent); }
+
+    .gallery-day-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
       margin-bottom: 14px;
     }
-    .resto-chip svg { width: 14px; height: 14px; }
-
-    .day-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--text3);
-      font-weight: 500;
-    }
-    .day-footer-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .day-footer svg { width: 15px; height: 15px; }
-
-    /* === GALERIE PHOTOS === */
-    .media-section {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px dashed var(--border);
-    }
-    .media-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .media-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text2);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .media-title svg { width: 16px; height: 16px; color: var(--accent); }
-    .media-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    .media-item {
+    .gallery-item {
       position: relative;
-      aspect-ratio: 1;
-      border-radius: 10px;
+      aspect-ratio: 4 / 3;
+      border-radius: var(--radius-md);
       overflow: hidden;
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      border: 1px solid var(--card-border);
       cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
     }
-    .media-item img, .media-item video {
+    .gallery-item:hover {
+      transform: scale(1.03);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent);
+    }
+    .gallery-item img, .gallery-item video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s;
+      transition: transform 0.4s ease;
     }
-    .media-item:hover img, .media-item:hover video {
-      transform: scale(1.05);
+    .gallery-item:hover img {
+      transform: scale(1.08);
     }
-    .media-delete {
+
+    .gallery-item-badge {
       position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 22px;
-      height: 22px;
-      background: rgba(0,0,0,0.5);
+      bottom: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .btn-delete-media {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
       color: #fff;
       border: none;
-      border-radius: 6px;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 13px;
+      cursor: pointer;
       opacity: 0;
-      transition: opacity 0.2s;
+      transition: all 0.2s;
     }
-    .media-item:hover .media-delete { opacity: 1; }
+    .gallery-item:hover .btn-delete-media { opacity: 1; }
 
-    .upload-bar {
+    .upload-action-row {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
-    .upload-btn {
+    .btn-upload {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text2);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-2);
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       transition: all var(--transition);
     }
-    .upload-btn:hover {
-      background: var(--accent-light);
+    .btn-upload:hover {
+      background: var(--accent-subtle);
       color: var(--accent);
       border-color: var(--accent);
     }
-    .upload-btn svg { width: 16px; height: 16px; }
-    .upload-input { display: none; }
-
-    .url-input-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-      width: 100%;
+    .btn-upload.primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
     }
-    .url-input-row input {
+    .btn-upload.primary:hover {
+      opacity: 0.9;
+    }
+    .btn-upload svg { width: 16px; height: 16px; }
+
+    .upload-input-file { display: none; }
+
+    .url-input-box {
+      display: none;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .url-input-box.open { display: flex; }
+    .url-input-box input {
       flex: 1;
       padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text1);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-1);
       font-size: 13px;
       outline: none;
     }
-    .url-input-row input:focus { border-color: var(--accent); }
-    .url-input-row button {
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: none;
+    .url-input-box button {
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
       background: var(--accent);
       color: #fff;
-      font-size: 13px;
-      font-weight: 500;
+      border: none;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    .config-panel {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
-    }
-    .config-panel h4 {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: var(--text1);
-    }
-    .config-row {
+    /* Day Card Footer (Meta: Km & Budget) */
+    .day-card-footer {
       display: flex;
-      gap: 10px;
-      margin-bottom: 8px;
+      justify-content: space-between;
       align-items: center;
-    }
-    .config-row label {
-      font-size: 12px;
-      color: var(--text3);
-      width: 110px;
-      flex-shrink: 0;
-    }
-    .config-row input {
-      flex: 1;
-      padding: 7px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text1);
+      padding-top: 16px;
+      margin-top: 20px;
+      border-top: 1px solid var(--card-border);
       font-size: 13px;
-      outline: none;
+      color: var(--text-3);
+      font-weight: 600;
     }
-    .config-row input:focus { border-color: var(--accent); }
-    .config-info {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 6px;
-      line-height: 1.4;
-    }
-    .config-toggle {
+    .day-footer-stat {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
-      color: var(--accent);
-      cursor: pointer;
-      font-weight: 500;
-      margin-bottom: 10px;
     }
-    .config-toggle svg { width: 14px; height: 14px; transition: transform 0.2s; }
-    .config-toggle.open svg { transform: rotate(180deg); }
-    .config-content { display: none; }
-    .config-content.open { display: block; }
+    .day-footer-stat svg { width: 16px; height: 16px; color: var(--accent); }
 
-    .lightbox {
+    /* ==========================================================================
+       MAP VIEW SECTION (LEAFLET ROADMAP)
+       ========================================================================== */
+    .map-section {
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+    }
+    .map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .map-title {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #mapContainer {
+      height: 480px;
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-inner);
+      z-index: 10;
+    }
+
+    /* Custom Leaflet Map Dark filter */
+    [data-theme="dark"] .leaflet-layer,
+    [data-theme="dark"] .leaflet-control-zoom-in,
+    [data-theme="dark"] .leaflet-control-zoom-out,
+    [data-theme="dark"] .leaflet-control-attribution {
+      filter: brightness(0.85) invert(1) contrast(1.2) hue-rotate(200deg) saturate(0.6);
+    }
+    .custom-map-pin {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 11px;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .custom-map-pin:hover {
+      transform: scale(1.3);
+      background: var(--maple);
+    }
+
+    /* ==========================================================================
+       MUR DE PHOTOS (FULL PHOTO WALL VIEW)
+       ========================================================================== */
+    .photo-wall-container {
+      display: none;
+    }
+    .photo-wall-container.active { display: block; }
+
+    .wall-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .wall-filter-pill {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+    }
+    .wall-filter-pill.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .wall-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .wall-card {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .wall-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }
+    .wall-card img, .wall-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .wall-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12px;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .wall-card:hover .wall-card-overlay { opacity: 1; }
+    .wall-card-day { font-size: 12px; font-weight: 700; color: var(--accent); }
+    .wall-card-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ==========================================================================
+       VALISE & PRÉPARATIFS (INTERACTIVE PACKING LIST)
+       ========================================================================== */
+    .packing-section {
+      display: none;
+    }
+    .packing-section.active { display: block; }
+
+    .packing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .packing-category-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+    }
+    .packing-category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--text-1);
+    }
+
+    /* ==========================================================================
+       GUIDE & INFOS PRATIQUES SECTION
+       ========================================================================== */
+    .guide-section {
+      display: none;
+    }
+    .guide-section.active { display: block; }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .guide-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+    .guide-card h3 {
+      font-family: var(--font-title);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .guide-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 13.5px;
+    }
+    .guide-item:last-child { border-bottom: none; }
+    .guide-term { font-weight: 700; color: var(--accent); }
+    .guide-meaning { color: var(--text-2); text-align: right; }
+
+    /* Currency Converter */
+    .converter-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .converter-input-wrap {
+      flex: 1;
+    }
+    .converter-input-wrap label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-3);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .converter-input-wrap input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-1);
+      font-size: 15px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    /* ==========================================================================
+       CLOUDINARY CONFIG MODAL / DRAWER
+       ========================================================================== */
+    .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.9);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 2000;
       padding: 20px;
     }
-    .lightbox.active { display: flex; }
-    .lightbox img, .lightbox video {
-      max-width: 100%;
-      max-height: 90vh;
-      border-radius: 12px;
+    .modal-backdrop.open { display: flex; }
+
+    .modal-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      animation: modalSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .lightbox-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-      border: none;
+    @keyframes modalSlide {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-close-btn {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      font-size: 20px;
+      border: none;
+      background: var(--card-border);
+      color: var(--text-1);
+      font-size: 16px;
       cursor: pointer;
     }
 
-    .flash {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: var(--pos);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(52,199,89,0.3);
-      opacity: 0;
-      transform: translateY(-16px) scale(0.95);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      pointer-events: none;
-      z-index: 1000;
+    .form-group {
+      margin-bottom: 16px;
     }
-    .flash.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .confetti {
-      position: fixed;
-      pointer-events: none;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      animation: confetti-fall 0.9s ease-out forwards;
-      z-index: 999;
-    }
-    @keyframes confetti-fall {
-      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-      100% { transform: translateY(120px) rotate(720deg) scale(0.3); opacity: 0; }
-    }
-
-    .save-config-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 18px;
-      border-radius: 8px;
-      border: 1px solid var(--accent);
-      background: var(--accent);
-      color: #fff;
+    .form-group label {
+      display: block;
       font-size: 13px;
       font-weight: 600;
-      cursor: pointer;
-      transition: all var(--transition);
+      color: var(--text-2);
+      margin-bottom: 6px;
     }
-    .save-config-btn:hover {
-      background: var(--accent);
-      opacity: 0.9;
-      transform: translateY(-1px);
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--bg);
+      color: var(--text-1);
+      font-size: 14px;
+      outline: none;
     }
-    .save-config-btn:active { transform: translateY(0); }
-    .save-config-btn.saved {
-      background: var(--pos);
-      border-color: var(--pos);
+    .form-help {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-top: 6px;
+      line-height: 1.4;
     }
-    .save-config-btn svg { width: 14px; height: 14px; }
 
-    @media (max-width: 600px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 22px; }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* ==========================================================================
+       LIGHTBOX & NOTIFICATIONS
+       ========================================================================== */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      padding: 20px;
+    }
+    .lightbox-modal.active { display: flex; }
+
+    .lightbox-container {
+      position: relative;
+      max-width: 92vw;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .lightbox-media-wrap img, .lightbox-media-wrap video {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: var(--radius-md);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+    .lightbox-caption {
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .lightbox-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: none;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lightbox-nav-btn:hover { background: rgba(255, 255, 255, 0.4); }
+    .lightbox-prev { left: -60px; }
+    .lightbox-next { right: -60px; }
+    .lightbox-close-top {
+      position: absolute;
+      top: -46px;
+      right: 0;
+      background: transparent;
+      color: #fff;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    /* Toast Flash */
+    .toast-flash {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--pos);
+      color: #ffffff;
+      padding: 14px 22px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 4000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toast-flash.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Confetti */
+    .confetti-particle {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      animation: confettiDrop 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      z-index: 5000;
+    }
+    @keyframes confettiDrop {
+      0% { transform: translateY(0) rotate(0deg) scale(1.2); opacity: 1; }
+      100% { transform: translateY(140px) rotate(720deg) scale(0.2); opacity: 0; }
+    }
+
+    /* ==========================================================================
+       RESPONSIVE & PRINT STYLES
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .stats-container { grid-template-columns: 1fr; gap: 10px; }
+      .hero-title { font-size: 26px; }
+      .hero-banner { padding: 24px 18px; }
       .day-card { padding: 18px; }
-      .day-header { flex-direction: column; }
-      .day-badge { align-self: flex-start; }
-      .nav-btn { padding: 8px 12px; font-size: 13px; }
-      .media-grid { grid-template-columns: repeat(3, 1fr); }
-      .config-row { flex-direction: column; align-items: flex-start; }
-      .config-row label { width: auto; }
+      .day-card-header { flex-direction: column; gap: 10px; }
+      .region-badge { align-self: flex-start; }
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+      .lightbox-close-top { right: 10px; top: 10px; }
+    }
+
+    @media print {
+      .top-bar, .nav-tabs, .day-stepper-box, .upload-action-row, .header-actions, .filter-bar {
+        display: none !important;
+      }
+      body { background: #fff !important; color: #000 !important; }
+      .day-card { break-inside: avoid; border: 1px solid #ddd !important; box-shadow: none !important; }
     }
   </style>
-<base target="_blank">
 </head>
 <body>
-  <div class="container">
-    <div class="hero">
-      <h1>🇨🇦 Road Trip Québec 2026</h1>
-      <p>Suivez votre aventure jour par jour</p>
-      <div class="dates">📅 11 août — 29 août · 👨‍👩‍👦‍👦 Famille · 🚗 2 585 km</div>
-    </div>
 
-    <div class="stats-grid">
+  <div class="app-container">
+
+    <!-- Top Sticky Bar -->
+    <header class="top-bar">
+      <a href="#" class="brand" onclick="switchTab('itinerary'); return false;">
+        <span class="brand-icon">🍁</span>
+        <span>Québec 2026</span>
+      </a>
+
+      <div class="header-actions">
+        <!-- Live Cloudinary status sync badge -->
+        <button class="icon-btn" title="Paramètres Cloudinary & Partage" onclick="openConfigModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+        </button>
+
+        <button class="icon-btn" title="Imprimer le Roadbook" onclick="window.print()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        </button>
+
+        <button class="icon-btn" id="themeToggleBtn" title="Changer le thème" onclick="toggleTheme()">
+          <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="12" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div class="hero-pill">
+        <span class="dot"></span>
+        <span>Road Trip Familial au Québec</span>
+      </div>
+
+      <h1 class="hero-title">🇨🇦 Aventure Québec 2026</h1>
+      <p class="hero-desc">Du 11 au 29 août 2026 · 19 jours d'exploration entre fleuve, forêts boréales, baleines et poutines.</p>
+
+      <!-- Countdown -->
+      <div class="countdown-box" id="countdownBox">
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cdDays">--</span>
+          <span class="countdown-lbl">Jours</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cdHours">--</span>
+          <span class="countdown-lbl">Heures</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cdMins">--</span>
+          <span class="countdown-lbl">Min</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cdSecs">--</span>
+          <span class="countdown-lbl">Sec</span>
+        </div>
+      </div>
+
+      <div class="hero-stats-chips">
+        <span class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          19 Jours
+        </span>
+        <span class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+          2 585 km
+        </span>
+        <span class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Famille (4 pers.)
+        </span>
+        <span class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span id="completedCountBadge">0</span> / 48 Activités
+        </span>
+      </div>
+    </section>
+
+    <!-- Global Progress & Stats -->
+    <div class="stats-container">
       <div class="stat-card">
-        <div class="stat-icon points">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <div class="stat-header">
+          <div class="stat-icon-wrap points">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <span class="stat-badge" id="pointsPct">0%</span>
         </div>
         <div class="stat-value" id="scoreVal">0</div>
-        <div class="stat-label">Points de vacances</div>
-        <div class="stat-bar"><div class="stat-bar-fill points" id="scoreBar" style="width:0%"></div></div>
+        <div class="stat-label">Points d'Aventure</div>
+        <div class="stat-progress"><div class="stat-progress-bar points" id="scoreBar" style="width:0%"></div></div>
       </div>
+
       <div class="stat-card">
-        <div class="stat-icon km">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="stat-header">
+          <div class="stat-icon-wrap km">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <span class="stat-badge" id="kmTotalLabel">2 585 km</span>
         </div>
         <div class="stat-value" id="kmVal">0</div>
-        <div class="stat-label">km parcourus</div>
-        <div class="stat-bar"><div class="stat-bar-fill km" id="kmBar" style="width:0%"></div></div>
+        <div class="stat-label">km Parcourus</div>
+        <div class="stat-progress"><div class="stat-progress-bar km" id="kmBar" style="width:0%"></div></div>
       </div>
+
       <div class="stat-card">
-        <div class="stat-icon budget">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div class="stat-header">
+          <div class="stat-icon-wrap budget">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <span class="stat-badge" id="budgetTotalLabel">~3 800 $</span>
         </div>
-        <div class="stat-value" id="budgetVal">0</div>
-        <div class="stat-label">$ dépensés</div>
-        <div class="stat-bar"><div class="stat-bar-fill budget" id="budgetBar" style="width:0%"></div></div>
+        <div class="stat-value" id="budgetVal">0 $</div>
+        <div class="stat-label">Budget Étape (CAD)</div>
+        <div class="stat-progress"><div class="stat-progress-bar budget" id="budgetBar" style="width:0%"></div></div>
       </div>
     </div>
 
-    <div class="config-panel">
-      <div class="config-toggle" onclick="toggleConfig()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        ⚙️ Configuration Cloudinary (optionnel)
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" id="tabBtnItinerary" onclick="switchTab('itinerary')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Itinéraire & Jours
+      </button>
+      <button class="tab-btn" id="tabBtnMap" onclick="switchTab('map')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        Carte Interactive
+      </button>
+      <button class="tab-btn" id="tabBtnWall" onclick="switchTab('wall')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mur de Photos (<span id="totalMediaCount">0</span>)
+      </button>
+      <button class="tab-btn" id="tabBtnPacking" onclick="switchTab('packing')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Valise & Checklist
+      </button>
+      <button class="tab-btn" id="tabBtnGuide" onclick="switchTab('guide')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Guide & Devises
+      </button>
+    </nav>
+
+    <!-- =========================================================================
+         TAB 1: ITINERARY VIEW
+         ========================================================================= -->
+    <div id="viewItinerary">
+      <!-- Search & Filters -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Rechercher une activité, resto, ville..." oninput="handleSearch()">
+        </div>
+        <select class="region-select" id="regionSelect" onchange="handleRegionFilter()">
+          <option value="all">Toutes les régions</option>
+          <option value="montreal">Montréal</option>
+          <option value="laurentides">Laurentides</option>
+          <option value="outaouais">Outaouais & Parc Oméga</option>
+          <option value="ottawa">Ottawa</option>
+          <option value="estrie">Estrie / Cantons-de-l'Est</option>
+          <option value="mauricie">Mauricie / Trois-Rivières</option>
+          <option value="quebec">Québec & Lévis</option>
+          <option value="charlevoix">Charlevoix</option>
+          <option value="tadoussac">Tadoussac & Baleines</option>
+        </select>
       </div>
-      <div class="config-content" id="configContent">
-        <div class="config-info">
-          Pour uploader vers le cloud, créez un compte gratuit sur <strong>cloudinary.com</strong>, puis copiez votre "Cloud name" et créez un "Upload preset" en mode Unsigned.
+
+      <!-- Stepper Controls -->
+      <div class="day-stepper-box" id="stepperBox">
+        <div class="stepper-header">
+          <span class="stepper-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--accent);"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+            Étape en cours
+          </span>
+          <span class="stepper-progress-text" id="stepperProgressText">Jour 1 sur 19</span>
         </div>
-        <div class="config-row">
-          <label>Cloud name</label>
-          <input type="text" id="cloudName" placeholder="ex: dupont-family">
-        </div>
-        <div class="config-row">
-          <label>Upload preset</label>
-          <input type="text" id="uploadPreset" placeholder="ex: canada2026">
-        </div>
-        <div class="config-row" style="justify-content: flex-end; margin-top: 4px;">
-          <button class="save-config-btn" onclick="saveConfig()" id="saveConfigBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            💾 Sauvegarder
+
+        <div class="progress-track-grid" id="progressTrackGrid"></div>
+
+        <div class="stepper-controls">
+          <button class="btn-step" id="prevDayBtn" onclick="prevDay()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="15 18 9 12 15 6"/></svg>
+            Jour Précédent
+          </button>
+
+          <button class="btn-view-all" id="btnToggleAll" onclick="toggleAllDaysView()">
+            Afficher les 19 jours
+          </button>
+
+          <button class="btn-step" id="nextDayBtn" onclick="nextDay()">
+            Jour Suivant
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
-        <div class="config-info">
-          💡 Sans configuration, vos photos sont stockées <strong>localement</strong> dans le navigateur (limité à ~5 Mo). Pour plus d'espace, utilisez Cloudinary ou collez un lien Google Photos/iCloud.
+      </div>
+
+      <!-- Days Container -->
+      <div id="daysCardsContainer"></div>
+    </div>
+
+    <!-- =========================================================================
+         TAB 2: INTERACTIVE LEAFLET MAP VIEW
+         ========================================================================= -->
+    <div id="viewMap" style="display:none;">
+      <div class="map-section">
+        <div class="map-header">
+          <div class="map-title">
+            <span>🗺️</span> Tracé du Circuit Québec 2026 (2 585 km)
+          </div>
+          <span style="font-size:12px; color:var(--text-3);">Cliquez sur une étape pour voir les détails</span>
+        </div>
+        <div id="mapContainer"></div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         TAB 3: MUR DE PHOTOS (CLOUDINARY MULTI-USER FEED)
+         ========================================================================= -->
+    <div id="viewWall" class="photo-wall-container">
+      <div class="day-stepper-box" style="margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="font-size:16px; font-weight:800; color:var(--text-1);">📸 Mur Collaboratif Cloudinary</h3>
+            <p style="font-size:13px; color:var(--text-3);">Toutes les photos partagées par la famille apparaissent ici en temps réel pour tous les visiteurs.</p>
+          </div>
+          <button class="btn-upload primary" onclick="triggerGlobalUpload()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Ajouter une Photo
+          </button>
+        </div>
+      </div>
+
+      <div class="wall-filters" id="wallFilters">
+        <button class="wall-filter-pill active" onclick="filterWallMedia('all', this)">Toutes (<span id="wallFilterCountAll">0</span>)</button>
+      </div>
+
+      <div class="wall-grid" id="wallGrid"></div>
+      <input type="file" id="globalUploadInput" class="upload-input-file" accept="image/*,video/*" onchange="handleGlobalFileUpload(this)">
+    </div>
+
+    <!-- =========================================================================
+         TAB 4: VALISE & CHECKLIST INTERACTIVE
+         ========================================================================= -->
+    <div id="viewPacking" class="packing-section">
+      <div class="packing-grid" id="packingGrid"></div>
+    </div>
+
+    <!-- =========================================================================
+         TAB 5: GUIDE PRATIQUE & DEVISES
+         ========================================================================= -->
+    <div id="viewGuide" class="guide-section">
+      <div class="guide-grid">
+        <!-- Currency Converter -->
+        <div class="guide-card">
+          <h3>💱 Convertisseur CAD / EUR</h3>
+          <p style="font-size:13px; color:var(--text-3); margin-bottom:14px;">Taux indicatif : 1 EUR ≈ 1.47 CAD (1 CAD ≈ 0.68 EUR)</p>
+          <div class="converter-box">
+            <div class="converter-input-wrap">
+              <label>Dollars CAD ($)</label>
+              <input type="number" id="cadInput" value="100" oninput="convertCurrency('cad')">
+            </div>
+            <span style="font-size:20px; font-weight:800; color:var(--text-muted); margin-top:16px;">⇄</span>
+            <div class="converter-input-wrap">
+              <label>Euros EUR (€)</label>
+              <input type="number" id="eurInput" value="68" oninput="convertCurrency('eur')">
+            </div>
+          </div>
+        </div>
+
+        <!-- Practical Rules in Quebec -->
+        <div class="guide-card">
+          <h3>🍁 Repères Essentiels au Québec</h3>
+          <div class="guide-item">
+            <span class="guide-term">Pourboires / Tips</span>
+            <span class="guide-meaning">15% à 20% au resto (non inclus)</span>
+          </div>
+          <div class="guide-item">
+            <span class="guide-term">Taxes de vente</span>
+            <span class="guide-meaning">+14.975% ajoutés à la caisse (TPS+TVQ)</span>
+          </div>
+          <div class="guide-item">
+            <span class="guide-term">Urgences</span>
+            <span class="guide-meaning">Composer le <strong>911</strong></span>
+          </div>
+          <div class="guide-item">
+            <span class="guide-term">Virage à droite au rouge</span>
+            <span class="guide-meaning">Autorisé au Québec sauf à Montréal</span>
+          </div>
+          <div class="guide-item">
+            <span class="guide-term">Prises électriques</span>
+            <span class="guide-meaning">110V Type A/B (adaptateur US requis)</span>
+          </div>
+        </div>
+
+        <!-- Fun Quebec Glossary -->
+        <div class="guide-card" style="grid-column: 1 / -1;">
+          <h3>🗣️ Petit Lexique Québécois Indispensable</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+            <div class="guide-item"><span class="guide-term">Magasiner</span><span class="guide-meaning">Faire les magasins / shopping</span></div>
+            <div class="guide-item"><span class="guide-term">Un char</span><span class="guide-meaning">Une voiture</span></div>
+            <div class="guide-item"><span class="guide-term">C'est l'fun !</span><span class="guide-meaning">C'est super / agréable</span></div>
+            <div class="guide-item"><span class="guide-term">Une tuque</span><span class="guide-meaning">Un bonnet d'hiver</span></div>
+            <div class="guide-item"><span class="guide-term">Un breuvage</span><span class="guide-meaning">Une boisson</span></div>
+            <div class="guide-item"><span class="guide-term">Faire la baboune</span><span class="guide-meaning">Bouder</span></div>
+            <div class="guide-item"><span class="guide-term">Le dépanneur</span><span class="guide-meaning">Petite épicerie de quartier ouverte tard</span></div>
+            <div class="guide-item"><span class="guide-term">Pantoute</span><span class="guide-meaning">Pas du tout</span></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="progress-section">
-      <div class="progress-header">
-        <h3>📍 Progression du voyage</h3>
-        <span id="progressText">Jour 1 / 19</span>
+  </div>
+
+  <!-- =========================================================================
+       MODALS: CONFIGURATION CLOUDINARY
+       ========================================================================= -->
+  <div class="modal-backdrop" id="configModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>⚙️</span> Configuration Cloudinary
+        </div>
+        <button class="modal-close-btn" onclick="closeConfigModal()">✕</button>
       </div>
-      <div class="progress-track" id="progressTrack"></div>
+
+      <p style="font-size:13.5px; color:var(--text-3); margin-bottom:16px;">
+        Pour que toutes les photos uploadées soient immédiatement visibles par n'importe qui consultant le site (sans serveur), nous utilisons Cloudinary avec un tag public.
+      </p>
+
+      <div class="form-group">
+        <label for="cfgCloudName">Cloud Name Cloudinary</label>
+        <input type="text" id="cfgCloudName" placeholder="ex: servseb ou votre_cloud">
+        <div class="form-help">Nom de votre compte Cloudinary gratuit (ex: servseb).</div>
+      </div>
+
+      <div class="form-group">
+        <label for="cfgUploadPreset">Upload Preset (Mode Unsigned)</label>
+        <input type="text" id="cfgUploadPreset" placeholder="ex: canada2026">
+        <div class="form-help">Preset d'upload non signé créé dans les réglages Cloudinary.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="cfgPublicTag">Tag Public de Synchronisation</label>
+        <input type="text" id="cfgPublicTag" value="canada2026">
+        <div class="form-help">Tag automatiquement appliqué pour rassembler les photos du voyage.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-upload" onclick="closeConfigModal()">Fermer</button>
+        <button class="btn-upload primary" onclick="saveCloudConfig()">💾 Sauvegarder & Synchroniser</button>
+      </div>
     </div>
-
-    <div class="nav-bar" id="navBar"></div>
-
-    <div id="daysContainer"></div>
   </div>
 
-  <div class="flash" id="flash">+10 points ! 🎉</div>
-
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <button class="lightbox-close">×</button>
-    <div id="lightboxContent"></div>
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox(event)">
+    <div class="lightbox-container" onclick="event.stopPropagation()">
+      <button class="lightbox-close-top" onclick="closeLightbox()">✕</button>
+      <button class="lightbox-nav-btn lightbox-prev" onclick="prevLightbox()">‹</button>
+      <div class="lightbox-media-wrap" id="lightboxMediaWrap"></div>
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+      <button class="lightbox-nav-btn lightbox-next" onclick="nextLightbox()">›</button>
+    </div>
   </div>
 
+  <!-- Toast Notification -->
+  <div class="toast-flash" id="toastFlash">
+    <span>🎉</span>
+    <span id="toastText">Action effectuée !</span>
+  </div>
+
+  <!-- =========================================================================
+       JAVASCRIPT LOGIC & APP ENGINE
+       ========================================================================= -->
   <script>
-    const days = [
-      { date: "11 août", jour: "Jour 1", region: "montreal", title: "Arrivée à Montréal", km: 15, budget: 150, badge: "Montréal", desc: "Récupération voiture à l'aéroport, installation maison échangée au 4289 rue Parthenais. Soirée découverte du quartier Rosemont/Petite-Patrie.", activities: ["Récupérer la voiture de location à l'aéroport","S'installer au 4289 rue Parthenais","Explorer le quartier Rosemont à pied"], resto: "🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine locale & vins naturels" },
-      { date: "12 août", jour: "Jour 2", region: "montreal", title: "Montréal authentique", km: 25, budget: 100, badge: "Montréal", desc: "Matin au Marché Jean-Talon (fromages, fruits, bagels). Après-midi : Vieux-Montréal (Basilique Notre-Dame, Vieux-Port). Soirée Mile End.", activities: ["Marché Jean-Talon — fromages, fruits, bagels","Basilique Notre-Dame & Vieux-Port de Montréal","Dégustation comparée St-Viateur vs Fairmount Bagel"], resto: "🍽️ La Banquise (994 rue Rachel E.) — poutine mythique 24h/24" },
-      { date: "13 août", jour: "Jour 3", region: "montreal", title: "Montréal culture, nature & shopping", km: 80, budget: 200, badge: "Montréal", desc: "Matin : Mont-Royal (randonnée sentier Olmsted). Après-midi : Premium Outlets Montréal à Mirabel pour les marques locales et souvenirs.", activities: ["Randonnée Mont-Royal — sentier Olmsted","Vue panoramique depuis le belvédère Kondiaronk","Premium Outlets Montréal (Mirabel) — shopping & souvenirs"], resto: "🍽️ Montréal Plaza (4720 rue Marquette) — Michelin 2026" },
-      { date: "14 août", jour: "Jour 4", region: "laurentides", title: "Excursion Mont-Tremblant", km: 280, budget: 120, badge: "Laurentides", desc: "Journée dans les Laurentides. Randonnée sentier La Roche (5,8 km, 2h30, vue spectaculaire sur le lac Tremblant).", activities: ["Route vers Mont-Tremblant (1h30)","Randonnée sentier La Roche (5,8 km, 2h30)","Vue spectaculaire sur le lac Tremblant au sommet"], resto: "🍽️ Beba (3900 rue Éthel, Verdun) — argentin-juif, ambiance conviviale" },
-      { date: "15 août", jour: "Jour 5", region: "montreal", title: "Montréal gourmand & détente", km: 15, budget: 130, badge: "Montréal", desc: "Matin : Atwater Market (produits locaux, fromagerie). Après-midi : option Bota Bota (spa-sur-l'eau au Vieux-Port) ou Biosphère.", activities: ["Atwater Market — produits locaux et fromagerie","Dégustation de fromages québécois","Option : Bota Bota spa-sur-l'eau au Vieux-Port"], resto: "🍽️ Le Violon (Plateau) — fine dining intime, design Zébulon Perron" },
-      { date: "16 août", jour: "Jour 6", region: "outaouais", title: "Départ vers l'Outaouais", km: 140, budget: 140, badge: "Outaouais", desc: "En route pour Montebello. Après-midi : visite du Château Montebello (Fairmont, plus grand château en rondins au monde).", activities: ["Route vers Montebello (1h30)","Visite Château Montebello — jardins & lobby historique","Dégustation Fromagerie Montebello (cheddar local)"], resto: "🍽️ Bistro La Seigneurie (Château Montebello) — terrasse sur le fleuve" },
-      { date: "17 août", jour: "Jour 7", region: "outaouais", title: "🐻 PARC OMEGA — Journée & Nuit", km: 10, budget: 0, badge: "Outaouais", desc: "Journée complète en voiture dans le parc (ours, loups, bisons, orignaux). Nuit en prospecteur/lodge au cœur du parc (déjà réservé).", activities: ["Entrée Parc Omega — safari en voiture","Observer ours, loups, bisons, orignaux de près","Option : visite guidée au réveil des animaux (7h15)","Nuit en lodge/prospecteur au cœur du parc"], resto: "🍽️ Resto du Parc Omega — cuisine locale" },
-      { date: "18 août", jour: "Jour 8", region: "ottawa", title: "Montebello → Ottawa → Montréal", km: 290, budget: 135, badge: "Ottawa", desc: "Matin : promenade Montebello, Fromagerie Montebello. Route Ottawa (1h). Après-midi : Parlement, Marché ByWard, Canal Rideau. Retour Montréal soir.", activities: ["Derniers pas à Montebello & fromagerie","Ottawa : Parlement du Canada (visite extérieure)","Marché ByWard & BeaverTails + Canal Rideau"], resto: "🍽️ Pichai ou Limbo — Michelin Bib Gourmand 2026" },
-      { date: "19 août", jour: "Jour 9", region: "montreal", title: "Montréal insolite", km: 20, budget: 75, badge: "Montréal", desc: "Matin : Cité Mémoire (projections historiques nocturnes Quartier latin). Après-midi : street art Plateau, Oratoire Saint-Joseph.", activities: ["Cité Mémoire — projections historiques Quartier latin","Street art et murales dans le Plateau-Mont-Royal","Oratoire Saint-Joseph — vue panoramique sur Montréal"], resto: "🍽️ Dobe & Andy (Chinatown) — barbecue cantonais historique" },
-      { date: "20 août", jour: "Jour 10", region: "estrie", title: "Excursion Estrie / Cantons-de-l'Est", km: 260, budget: 100, badge: "Estrie", desc: "Journée à Magog/Knowlton. Randonnée Mont Orford (sentier Le Mont-Orford, 8 km, 3h, vue 360° sur les Cantons-de-l'Est).", activities: ["Route vers Magog / Knowlton","Randonnée Mont Orford — sentier Le Mont-Orford (8 km)","Vue 360° sur les Cantons-de-l'Est au sommet"], resto: "🍽️ Auberge Knowlton — pub anglo-québécois historique" },
-      { date: "21 août", jour: "Jour 11", region: "montreal", title: "Dernière soirée à Montréal", km: 10, budget: 215, badge: "Montréal", desc: "Matin : shopping boutiques locales Plateau. Après-midi : préparation des bagages pour le départ vers Trois-Rivières demain.", activities: ["Shopping boutiques locales du Plateau","Derniers achats au marché","Préparer les bagages pour le départ"], resto: "🍽️ Au Pied de Cochon (536 av. Duluth E.) — LE classique québécois !" },
-      { date: "22 août", jour: "Jour 12", region: "mauricie", title: "Trois-Rivières", km: 140, budget: 100, badge: "Mauricie", desc: "En route tôt. Matin : Boréalis (musée du papier super interactif). Après-midi : Vieille Prison de Trois-Rivières (visite guidée dramatisée).", activities: ["Boréalis — musée du papier interactif","Vieille Prison — visite guidée dramatisée","Découverte du centre-ville de Trois-Rivières"], resto: "🍽️ Le Poivre Noir — bistro local, terroir mauricien" },
-      { date: "23 août", jour: "Jour 13", region: "centre", title: "Trois-Rivières → Lévis", km: 120, budget: 80, badge: "Centre", desc: "Matin : Sanctuaire Notre-Dame-du-Cap (basilique, jardins). Route vers Lévis (1h30). Installation chez votre copine pour la semaine.", activities: ["Sanctuaire Notre-Dame-du-Cap — basilique & jardins","Route vers Lévis (1h30)","Installation chez votre copine — base pour la semaine"], resto: "🍽️ Cochon Dingue (1170 rue de Courchevel, Lévis) — vue fleuve" },
-      { date: "24 août", jour: "Jour 14", region: "quebec", title: "🌊 Chutes Montmorency + 🧀 Île d'Orléans", km: 90, budget: 220, badge: "Québec", desc: "Journée combinée ! Matin : Chutes de 83 m (30 m de plus que Niagara !). Après-midi : tour gourmand de l'Île d'Orléans en boucle.", activities: ["Parc de la Chute-Montmorency — 83 m de haut !","Pont suspendu & tyrolienne au-dessus des chutes","Île d'Orléans — Fromages Paillasson, Cassis Monna, chocolaterie","Beignes de patate chauds & crème de cassis"], resto: "🍽️ La Goéliche (Sainte-Pétronille) — terrasse sur le fleuve" },
-      { date: "25 août", jour: "Jour 15", region: "quebec", title: "🚣 RAFTING & Parc Jacques-Cartier", km: 120, budget: 480, badge: "Québec", desc: "Journée d'aventure ! Rafting sur la rivière Jacques-Cartier (descente en eaux vives). Randonnée Sentier Les Loups ou L'Éperon. Baignade.", activities: ["Rafting sur la rivière Jacques-Cartier — eaux vives !","Randonnée Sentier Les Loups (11 km) ou L'Éperon (4 km)","Vue panoramique sur la vallée","Baignade dans la rivière Jacques-Cartier"], resto: "🍽️ L'Atelier (Lévis) — cuisine québécoise moderne" },
-      { date: "26 août", jour: "Jour 16", region: "charlevoix", title: "Charlevoix & Canyon Sainte-Anne", km: 220, budget: 140, badge: "Charlevoix", desc: "Matin : Canyon Sainte-Anne (ponts suspendus, cascades, sentiers en forêt). Après-midi : Baie-Saint-Paul (galeries d'art, rue principale pittoresque).", activities: ["Canyon Sainte-Anne — ponts suspendus & cascades","Sentiers en forêt le long du canyon","Baie-Saint-Paul — rue principale & galeries d'art"], resto: "🍽️ Le Mouton Noir (Baie-Saint-Paul) — terroir charlevoisien" },
-      { date: "27 août", jour: "Jour 17", region: "tadoussac", title: "🐋 Baleines à Tadoussac", km: 420, budget: 580, badge: "Tadoussac", desc: "Départ tôt (2h30 de route). Croisière baleines 13h00 avec Croisières AML. Rorquals, baleines à bosse, bélugas, phoques. Fjord du Saguenay.", activities: ["Départ tôt vers Tadoussac (2h30 de route)","Croisière baleines AML à 13h00 (3h)","Observer rorquals, baleines à bosse, bélugas, phoques","Fjord du Saguenay — paysages grandioses"], resto: "🍽️ Resto Pub Le Pêcheur (Tadoussac) — fish & chips" },
-      { date: "28 août", jour: "Jour 18", region: "quebec", title: "Québec approfondi & Wendake", km: 50, budget: 120, badge: "Québec", desc: "Matin : Village des Hurons Wendake (culture amérindienne, Hôtel-Musée). Après-midi : Vieux-Québec approfondi (Petit Champlain, funiculaire, Plains of Abraham).", activities: ["Village des Hurons Wendake — culture amérindienne","Hôtel-Musée Premières Nations & site traditionnel","Quartier Petit Champlain & funiculaire","Plains of Abraham — vue sur le fleuve Saint-Laurent"], resto: "🍽️ Le Continental (26 rue Saint-Louis) ou L'Initiale — Michelin" },
-      { date: "29 août", jour: "Jour 19", region: "montreal", title: "Départ vers Montréal", km: 280, budget: 50, badge: "Montréal", desc: "Lever tôt. Route directe vers l'aéroport Montréal. Vol retour prévu à 23h50. Derniers moments au Québec !", activities: ["Lever tôt, derniers bagages","Route vers l'aéroport Montréal (2h45)","Vol retour 23h50 ✈️ — Au revoir le Québec !"], resto: "🍽️ St-Hubert — classique québécois ou Tim Hortons" }
+    // --------------------------------------------------------------------------
+    // 1. DATA: 19-DAY COMPREHENSIVE ROAD TRIP ITINERARY WITH GPS COORDINATES
+    // --------------------------------------------------------------------------
+    const DAYS_DATA = [
+      {
+        dayNum: 1,
+        date: "11 août",
+        region: "montreal",
+        badge: "Montréal",
+        title: "Arrivée à Montréal & Rosemont",
+        coords: [45.5412, -73.5786],
+        km: 15,
+        budget: 150,
+        desc: "Récupération de la voiture de location à l'aéroport Trudeau, installation dans la maison échangée au 4289 rue Parthenais. Première soirée détente et balade dans le quartier Rosemont/Petite-Patrie.",
+        activities: [
+          "Récupérer le véhicule de location à l'aéroport YUL",
+          "S'installer confortablement au 4289 rue Parthenais",
+          "Explorer les rues animées et ruelles vertes de Rosemont à pied"
+        ],
+        resto: "🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine du terroir & vins vivants"
+      },
+      {
+        dayNum: 2,
+        date: "12 août",
+        region: "montreal",
+        badge: "Montréal",
+        title: "Montréal Authentique & Vieux-Port",
+        coords: [45.5017, -73.5673],
+        km: 25,
+        budget: 100,
+        desc: "Matin gourmand au Marché Jean-Talon. Après-midi historique dans le Vieux-Montréal, Basilique Notre-Dame et Vieux-Port au bord du Saint-Laurent. Duel mythique des bagels en soirée !",
+        activities: [
+          "Marché Jean-Talon — dégustation de fromages fins, fruits & sirop d'érable",
+          "Basilique Notre-Dame & ruelles pavées du Vieux-Port de Montréal",
+          "Dégustation comparée : St-Viateur Bagel vs Fairmount Bagel dans le Mile End"
+        ],
+        resto: "🍽️ La Banquise (994 rue Rachel E.) — l'incontournable poutine québécoise 24h/24"
+      },
+      {
+        dayNum: 3,
+        date: "13 août",
+        region: "montreal",
+        badge: "Montréal",
+        title: "Mont-Royal, Belvédère & Shopping Mirabel",
+        coords: [45.5088, -73.5878],
+        km: 80,
+        budget: 200,
+        desc: "Randonnée matinale au Mont-Royal par le sentier Olmsted jusqu'au majestueux belvédère Kondiaronk. Après-midi shopping aux Premium Outlets de Mirabel pour dénicher des marques locales.",
+        activities: [
+          "Randonnée au cœur du Mont-Royal sur le sentier historique Olmsted",
+          "Vue panoramique spectaculaire depuis le Belvédère Kondiaronk",
+          "Escapade shopping aux Premium Outlets Montréal (Mirabel)"
+        ],
+        resto: "🍽️ Montréal Plaza (4720 rue Marquette) — gastronomie festive & inventive"
+      },
+      {
+        dayNum: 4,
+        date: "14 août",
+        region: "laurentides",
+        badge: "Laurentides",
+        title: "Excursion Grandeur Nature à Mont-Tremblant",
+        coords: [46.1185, -74.5962],
+        km: 280,
+        budget: 120,
+        desc: "Immersion dans les montagnes des Laurentides. Randonnée vivifiante du sentier La Roche (5,8 km, 2h30) offrant une vue à couper le souffle sur le lac et le mont Tremblant.",
+        activities: [
+          "Route panoramique vers le Parc national du Mont-Tremblant (1h30)",
+          "Randonnée sportive du sentier La Roche (5,8 km, dénivelé +215 m)",
+          "Contemplation du panorama grandiose sur le lac Tremblant et les collines"
+        ],
+        resto: "🍽️ Beba (3900 rue Éthel, Verdun) — bistronomie argentico-méditerranéenne conviviale"
+      },
+      {
+        dayNum: 5,
+        date: "15 août",
+        region: "montreal",
+        badge: "Montréal",
+        title: "Montréal Gourmand, Canal Lachine & Détente",
+        coords: [45.4795, -73.5772],
+        km: 15,
+        budget: 130,
+        desc: "Matinée au marché Atwater au bord du canal de Lachine. Après-midi détente sur l'eau au Bota Bota (spa sur bateau) ou visite de la Biosphère au Parc Jean-Drapeau.",
+        activities: [
+          "Marché Atwater — fromagerie de renommée et pique-nique au canal",
+          "Balade le long des berges du Canal de Lachine à vélo ou à pied",
+          "Détente au spa sur l'eau Bota Bota au Vieux-Port ou visite de la Biosphère"
+        ],
+        resto: "🍽️ Le Violon (Plateau-Mont-Royal) — fine dining intimiste design Zébulon Perron"
+      },
+      {
+        dayNum: 6,
+        date: "16 août",
+        region: "outaouais",
+        badge: "Outaouais",
+        title: "Cap vers l'Outaouais & Château Montebello",
+        coords: [45.6515, -74.9416],
+        km: 140,
+        budget: 140,
+        desc: "Départ pour la région de l'Outaouais. Visite du Fairmont Le Château Montebello, le plus grand hôtel en rondins de bois du monde, et arrêt à la fromagerie artisanale.",
+        activities: [
+          "Route le long de la rivière des Outaouais vers Montebello (1h30)",
+          "Visite et promenade dans les jardins du mythique Château Montebello",
+          "Dégustation à la Fromagerie Montebello (la fameuse Tête à Papineau)"
+        ],
+        resto: "🍽️ Bistro La Seigneurie (Château Montebello) — terrasse avec vue sur la rivière"
+      },
+      {
+        dayNum: 7,
+        date: "17 août",
+        region: "outaouais",
+        badge: "Outaouais",
+        title: "🐻 Safari Sauvage au Parc Oméga & Nuit en Lodge",
+        coords: [45.6844, -74.9472],
+        km: 10,
+        budget: 0,
+        desc: "Journée safari extraordinaire en immersion totale : cerfs, ours noirs, loups, bisons et orignaux au plus près. Nuit magique dans un lodge au cœur du parc (réservé).",
+        activities: [
+          "Safari en voiture au Parc Oméga avec distribution de carottes aux cervidés",
+          "Observation des ours noirs, meutes de loups et bisons d'Amérique",
+          "Visite de la ferme d'antan et sentiers pédestres des Premières Nations",
+          "Nuit immersive en hébergement insolite/lodge au cœur de la faune"
+        ],
+        resto: "🍽️ Restaurant du Parc Oméga — spécialités québécoises du terroir"
+      },
+      {
+        dayNum: 8,
+        date: "18 août",
+        region: "ottawa",
+        badge: "Ottawa",
+        title: "Capitale Fédérale : Ottawa & Canal Rideau",
+        coords: [45.4215, -75.6972],
+        km: 290,
+        budget: 135,
+        desc: "Route vers la capitale du Canada. Découverte de la colline du Parlement, balade sur les écluses du Canal Rideau (UNESCO) et gourmandise Queue de Castor au Marché ByWard.",
+        activities: [
+          "Visite extérieure de la Colline du Parlement et de la Flamme du Centenaire",
+          "Balade le long des 8 écluses historiques du Canal Rideau",
+          "Marché ByWard — dégustation de la légendaire pâtisserie Queue de Castor (BeaverTails)",
+          "Retour à Montréal en fin de journée"
+        ],
+        resto: "🍽️ Pichai ou Limbo — cuisine thaï/bistronomique primée Bib Gourmand"
+      },
+      {
+        dayNum: 9,
+        date: "19 août",
+        region: "montreal",
+        badge: "Montréal",
+        title: "Montréal Insolite, Street Art & Cité Mémoire",
+        coords: [45.4924, -73.6178],
+        km: 20,
+        budget: 75,
+        desc: "Découverte des fresques monumentales de street art sur le boulevard Saint-Laurent, montée à l'Oratoire Saint-Joseph et parcours multimédia nocturne Cité Mémoire.",
+        activities: [
+          "Chasse aux murales géantes de Street Art dans le Plateau et Mile End",
+          "Visite de l'Oratoire Saint-Joseph et panorama coucher de soleil sur l'ouest",
+          "Parcours nocturne Cité Mémoire avec projections d'histoires sur les murs en pierre"
+        ],
+        resto: "🍽️ Dobe & Andy (Quartier Chinois) — institution réputée de barbecue cantonais"
+      },
+      {
+        dayNum: 10,
+        date: "20 août",
+        region: "estrie",
+        badge: "Estrie",
+        title: "Cantons-de-l'Est, Magog & Mont Orford",
+        coords: [45.2676, -72.1528],
+        km: 260,
+        budget: 100,
+        desc: "Échappée champêtre en Estrie. Randonnée panoramique au Parc national du Mont-Orford (8 km, 3h) avec vue à 360° sur les lacs Memphrémagog et les collines verdoyantes.",
+        activities: [
+          "Route des vins vers Magog et le village loyaliste de Knowlton",
+          "Randonnée au sommet du Mont Orford (sentier Le Mont-Orford, 8 km)",
+          "Baignade ou promenade sur la rive du majestueux lac Memphrémagog"
+        ],
+        resto: "🍽️ Auberge Knowlton — pub anglo-québécois historique et convivial"
+      },
+      {
+        dayNum: 11,
+        date: "21 août",
+        region: "montreal",
+        badge: "Montréal",
+        title: "Dernière Soirée Montréalaise & Festin du Terroir",
+        coords: [45.5205, -73.5750],
+        km: 10,
+        budget: 215,
+        desc: "Derniers achats souvenirs et artisanat dans les boutiques indépendantes du Plateau. Préparation des bagages avant le grand départ vers la Mauricie et Québec.",
+        activities: [
+          "Flânerie et magasinage sur l'avenue du Mont-Royal et rue Saint-Denis",
+          "Derniers trésors d'épicerie fine québécoise et cidres de glace",
+          "Préparation des valises pour le départ de demain matin"
+        ],
+        resto: "🍽️ Au Pied de Cochon (536 av. Duluth E.) — le temple mythique du canard et du foie gras"
+      },
+      {
+        dayNum: 12,
+        date: "22 août",
+        region: "mauricie",
+        badge: "Mauricie",
+        title: "Trois-Rivières, Boréalis & Vieille Prison",
+        coords: [46.3432, -72.5421],
+        km: 140,
+        budget: 100,
+        desc: "Route vers la Mauricie au bord du Saint-Laurent. Visite interactive du musée Boréalis sur l'histoire des papetières, puis expérience captivante à la Vieille Prison.",
+        activities: [
+          "Musée Boréalis — atelier interactif de fabrication de papier artisanal",
+          "Visite guidée théâtralisée de la Vieille Prison de Trois-Rivières (1822)",
+          "Promenade dans le quartier historique de Trois-Rivières et rue des Forges"
+        ],
+        resto: "🍽️ Le Poivre Noir — gastronomie créative face au port et au fleuve Saint-Laurent"
+      },
+      {
+        dayNum: 13,
+        date: "23 août",
+        region: "centre",
+        badge: "Centre / Lévis",
+        title: "Sanctuaire Notre-Dame-du-Cap ➔ Installation à Lévis",
+        coords: [46.8033, -71.1779],
+        km: 120,
+        budget: 80,
+        desc: "Arrêt au splendide Sanctuaire Notre-Dame-du-Cap et ses jardins apaisants. Route vers Lévis et installation chez votre amie, notre camp de base pour la semaine québécoise.",
+        activities: [
+          "Découverte de la basilique moderne et des jardins du Sanctuaire",
+          "Traversée panoramique vers Lévis au bord du fleuve (1h30 de route)",
+          "Installation chaleureuse chez votre copine à Lévis pour la semaine"
+        ],
+        resto: "🍽️ Cochon Dingue Lévis (1170 rue de Courchevel) — vue imprenable sur le fleuve"
+      },
+      {
+        dayNum: 14,
+        date: "24 août",
+        region: "quebec",
+        badge: "Québec",
+        title: "🌊 Chutes Montmorency & 🧀 Tour de l'Île d'Orléans",
+        coords: [46.8906, -71.1472],
+        km: 90,
+        budget: 220,
+        desc: "Journée spectaculaire et gourmande. Chutes Montmorency (83 m de haut, 30 m de plus que Niagara !) suivies du tour complet de l'Île d'Orléans et de ses producteurs.",
+        activities: [
+          "Parc de la Chute-Montmorency — passerelle suspendue au-dessus du gouffre",
+          "Tour de l'Île d'Orléans : Fromagerie Ferme Audet & Fromage Paillasson",
+          "Dégustation chez Cassis Monna & Filles et chocolaterie artisanale",
+          "Savoureux beignes de patate chauds à la boulangerie locale"
+        ],
+        resto: "🍽️ La Goéliche (Sainte-Pétronille) — terrasse raffinée au bout de l'île sur le fleuve"
+      },
+      {
+        dayNum: 15,
+        date: "25 août",
+        region: "quebec",
+        badge: "Québec",
+        title: "🚣 Rafting Eaux Vives & Parc Jacques-Cartier",
+        coords: [47.1083, -71.3583],
+        km: 120,
+        budget: 480,
+        desc: "Journée adrénaline et nature sauvage ! Descente exaltante en rafting sur les rapides de la rivière Jacques-Cartier, puis randonnée du sentier Les Loups ou L'Éperon.",
+        activities: [
+          "Descente guidée en rafting sur la rivière Jacques-Cartier (eaux vives)",
+          "Randonnée du Sentier Les Loups (11 km) ou Sentier L'Éperon (5 km)",
+          "Vue vertigineuse sur la vallée glaciaire de la Jacques-Cartier",
+          "Baignade rafraîchissante dans les bassins naturels de la rivière"
+        ],
+        resto: "🍽️ L'Atelier (Lévis) — cuisine québécoise contemporaine et tartares réputés"
+      },
+      {
+        dayNum: 16,
+        date: "26 août",
+        region: "charlevoix",
+        badge: "Charlevoix",
+        title: "Canyon Sainte-Anne & Charlevoix Pittoresque",
+        coords: [47.4417, -70.5056],
+        km: 220,
+        budget: 140,
+        desc: "Traversée des ponts suspendus vertigineux du Canyon Sainte-Anne et ses chutes rugissantes. Après-midi artistique dans les galeries de Baie-Saint-Paul.",
+        activities: [
+          "Canyon Sainte-Anne — franchir les 3 ponts suspendus à 60 m au-dessus du gouffre",
+          "Sentiers en forêt le long des cascades millénaires",
+          "Baie-Saint-Paul — ruelles pittoresques bordées de galeries d'art et artisans"
+        ],
+        resto: "🍽️ Le Mouton Noir (Baie-Saint-Paul) — bistro de terroir au bord de la rivière du Gouffre"
+      },
+      {
+        dayNum: 17,
+        date: "27 août",
+        region: "tadoussac",
+        badge: "Tadoussac",
+        title: "🐋 Croisière aux Baleines à Tadoussac & Fjord",
+        coords: [48.1436, -69.7153],
+        km: 420,
+        budget: 580,
+        desc: "Le point d'orgue du voyage ! Départ tôt pour Tadoussac et embarquement à 13h00 sur la croisière AML aux baleines. Rorquals géants, baleines à bosse et bélugas dans l'embouchure du Saguenay.",
+        activities: [
+          "Route côtière spectaculaire vers Tadoussac avec traversier gratuit",
+          "Croisière d'observation des baleines AML à 13h00 (3h d'émotions intenses)",
+          "Rencontre avec les rorquals, baleines à bosse, phoques et bélugas blancs",
+          "Contemplation des falaises colossales du Fjord du Saguenay"
+        ],
+        resto: "🍽️ Resto Pub Le Pêcheur (Tadoussac) — généreux fish & chips frais du Saint-Laurent"
+      },
+      {
+        dayNum: 18,
+        date: "28 août",
+        region: "quebec",
+        badge: "Québec",
+        title: "Vieux-Québec Historique & Culture Huronne Wendake",
+        coords: [46.8139, -71.2080],
+        km: 50,
+        budget: 120,
+        desc: "Immersion autochtone au Village des Hurons Wendake et Hôtel-Musée Premières Nations. Après-midi dans les ruelles fortifiées du Petit Champlain et Plaines d'Abraham.",
+        activities: [
+          "Village traditionnel Huron Wendake — danses, mythes et artisanat amérindien",
+          "Quartier historique du Petit Champlain, Place Royale et Funiculaire",
+          "Château Frontenac et promenade sur la terrasse Dufferin",
+          "Balade panoramique sur les Plaines d'Abraham face au fleuve"
+        ],
+        resto: "🍽️ Le Continental (26 rue Saint-Louis) — service au guéridon & flambages traditionnels"
+      },
+      {
+        dayNum: 19,
+        date: "29 août",
+        region: "montreal",
+        badge: "Montréal",
+        title: "Derniers Souvenirs & Vol Retour vers la France",
+        coords: [45.4705, -73.7408],
+        km: 280,
+        budget: 50,
+        desc: "Derniers au revoir chaleureux à Lévis. Route retour directe vers l'aéroport Montréal-Trudeau (2h45). Restitution du véhicule et embarquement vol de nuit à 23h50. Merci le Québec !",
+        activities: [
+          "Derniers bagages et achats gourmands de sirop d'érable",
+          "Route fluide vers l'aéroport Pierre-Elliott-Trudeau de Montréal (2h45)",
+          "Restitution du véhicule de location sans encombre",
+          "Embarquement sur le vol retour de 23h50 ✈️ — Des souvenirs inoubliables !"
+        ],
+        resto: "🍽️ St-Hubert — poulet rôti réconfortant ou dernier café Tim Hortons à l'aéroport"
+      }
     ];
 
-    const totalKm = 2585;
-    const totalBudget = 3800;
-    const pointsPerActivity = 10;
-    let currentDay = 0;
-    let completedActivities = new Set(JSON.parse(localStorage.getItem('canada2026_done') || '[]'));
-    let totalPoints = completedActivities.size * pointsPerActivity;
-    let dayMedia = JSON.parse(localStorage.getItem('canada2026_media') || '{}');
+    // Default Curated Fallback High-Res Photos for the 19 days
+    const DEFAULT_SHOWCASE_PHOTOS = [
+      { day: 1, url: "https://images.unsplash.com/photo-1519832979-6fa011b87667?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Montréal - Rosemont & Plateau" },
+      { day: 2, url: "https://images.unsplash.com/photo-1572978051772-2f3b9c7b8d8e?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Vieux-Montréal & Basilique Notre-Dame" },
+      { day: 3, url: "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Vue depuis le Mont-Royal" },
+      { day: 4, url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Mont-Tremblant sentier La Roche" },
+      { day: 6, url: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Château Montebello" },
+      { day: 7, url: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Parc Oméga - Ours noir et faune" },
+      { day: 8, url: "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Ottawa - Colline du Parlement" },
+      { day: 14, url: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Chute Montmorency 83m" },
+      { day: 17, url: "https://images.unsplash.com/photo-1568430462989-44163eb1752f?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Tadoussac - Rorquals & Bélugas" },
+      { day: 18, url: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Château Frontenac & Vieux-Québec" }
+    ];
 
-    function init() {
-      loadConfig();
-      renderProgressTrack();
-      renderNav();
-      renderDay(0);
-      updateStats();
-    }
-
-    function saveProgress() {
-      localStorage.setItem('canada2026_done', JSON.stringify([...completedActivities]));
-      localStorage.setItem('canada2026_media', JSON.stringify(dayMedia));
-    }
-
-    function toggleConfig() {
-      const el = document.getElementById('configContent');
-      const btn = document.querySelector('.config-toggle');
-      el.classList.toggle('open');
-      btn.classList.toggle('open');
-    }
-
-    function saveConfig() {
-      const cloudName = document.getElementById('cloudName').value.trim();
-      const uploadPreset = document.getElementById('uploadPreset').value.trim();
-      localStorage.setItem('canada2026_cloud', JSON.stringify({ cloudName, uploadPreset }));
-      const btn = document.getElementById('saveConfigBtn');
-      const originalHTML = btn.innerHTML;
-      btn.classList.add('saved');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ✅ Config sauvegardée !';
-      setTimeout(() => {
-        btn.classList.remove('saved');
-        btn.innerHTML = originalHTML;
-      }, 2000);
-    }
-
-    function loadConfig() {
-      const cfg = JSON.parse(localStorage.getItem('canada2026_cloud') || '{}');
-      if (cfg.cloudName) document.getElementById('cloudName').value = cfg.cloudName;
-      if (cfg.uploadPreset) document.getElementById('uploadPreset').value = cfg.uploadPreset;
-    }
-
-    function getCloudConfig() {
-      return JSON.parse(localStorage.getItem('canada2026_cloud') || '{}');
-    }
-
-    function renderProgressTrack() {
-      const track = document.getElementById('progressTrack');
-      track.innerHTML = '';
-      days.forEach((d, i) => {
-        const dot = document.createElement('div');
-        dot.className = 'progress-dot' + (i < currentDay ? ' done' : '') + (i === currentDay ? ' current' : '');
-        dot.dataset.label = d.jour;
-        dot.title = `${d.jour} — ${d.title}`;
-        dot.onclick = () => { currentDay = i; renderDay(i); renderNav(); renderProgressTrack(); };
-        track.appendChild(dot);
-      });
-    }
-
-    function renderNav() {
-      const nav = document.getElementById('navBar');
-      nav.innerHTML = '';
-
-      const prev = document.createElement('button');
-      prev.className = 'nav-btn';
-      prev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Précédent';
-      prev.disabled = currentDay === 0;
-      prev.onclick = () => { if (currentDay > 0) { currentDay--; renderDay(currentDay); renderNav(); renderProgressTrack(); }};
-
-      const all = document.createElement('button');
-      all.className = 'nav-btn' + (document.getElementById('daysContainer').dataset.view === 'all' ? ' active' : '');
-      all.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Tous les jours';
-      all.onclick = toggleAllView;
-
-      const next = document.createElement('button');
-      next.className = 'nav-btn';
-      next.innerHTML = 'Suivant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
-      next.disabled = currentDay === days.length - 1;
-      next.onclick = () => { if (currentDay < days.length - 1) { currentDay++; renderDay(currentDay); renderNav(); renderProgressTrack(); }};
-
-      nav.appendChild(prev);
-      nav.appendChild(all);
-      nav.appendChild(next);
-    }
-
-    function toggleAllView() {
-      const container = document.getElementById('daysContainer');
-      if (container.dataset.view === 'all') {
-        container.dataset.view = 'single';
-        renderDay(currentDay);
-      } else {
-        container.dataset.view = 'all';
-        renderAllDays();
+    // Checklist categories for the interactive packing list
+    const PACKING_CATEGORIES = [
+      {
+        title: "📄 Papiers & Documents Officiels",
+        items: [
+          "Passeports valides (toute la famille)",
+          "Autorisation de Voyage Électronique (AVE Canada)",
+          "Permis de conduire français + carte bancaire au nom du conducteur",
+          "Contrat de location auto + confirmation maison d'échange",
+          "Billets d'avion aller/retour (Air France/Air Transat)",
+          "Attestations d'assurance santé / rapatriement"
+        ]
+      },
+      {
+        title: "🔌 Électronique & Voyage en Voiture",
+        items: [
+          "Adaptateurs prises US/Canada (Type A & B 110V)",
+          "Support smartphone pour grille d'aération voiture (GPS)",
+          "Câbles USB-C / Lightning + batterie externe 20 000 mAh",
+          "Cartes bancaires sans frais à l'étranger (Boursorama, Revolut)",
+          "Appareil photo / GoPro pour les baleines et le rafting"
+        ]
+      },
+      {
+        title: "🧥 Vêtements & Météo Québécoise",
+        items: [
+          "Coupe-vent étanche et veste polaire chaude (pour Tadoussac)",
+          "Chaussures de randonnée avec bonne adhérence (Mont-Tremblant, Orford)",
+          "Maillots de bain (Spa Bota Bota & Rafting)",
+          "Lunettes de soleil polarisées & casquettes",
+          "Vêtements légers respirants pour les journées d'été"
+        ]
+      },
+      {
+        title: "🌲 Santé, Plein Air & Confort",
+        items: [
+          "Répulsif moustiques & mouches noires (DEET puissant)",
+          "Crème solaire haute protection biodégradable",
+          "Gourdes isothermes réutilisables",
+          "Petite trousse de secours (pansements ampoules, désinfectant)",
+          "Sacs étanches pour le rafting Jacques-Cartier"
+        ]
       }
-      renderNav();
+    ];
+
+    // --------------------------------------------------------------------------
+    // 2. STATE MANAGEMENT & LOCAL STORAGE
+    // --------------------------------------------------------------------------
+    const TOTAL_KM = 2585;
+    const TOTAL_BUDGET = 3800;
+    const POINTS_PER_ACTIVITY = 10;
+
+    let currentDayIndex = 0;
+    let isViewAllMode = false;
+    let currentTab = 'itinerary';
+    let leafletMap = null;
+    let mapMarkers = [];
+    let mapRouteLine = null;
+
+    // Completed activities set
+    let completedActivities = new Set(JSON.parse(localStorage.getItem('canada2026_done') || '[]'));
+    let checkedPackingItems = new Set(JSON.parse(localStorage.getItem('canada2026_packing') || '[]'));
+
+    // Media Catalog (combines Cloudinary API results + local uploads)
+    let allMediaCatalog = []; 
+
+    // Cloudinary Global Config
+    let cloudConfig = JSON.parse(localStorage.getItem('canada2026_cloud') || JSON.stringify({
+      cloudName: 'servseb',
+      uploadPreset: 'canada2026',
+      publicTag: 'canada2026'
+    }));
+
+    // Active Lightbox State
+    let lightboxIndex = 0;
+    let lightboxCurrentList = [];
+
+    function initActiveDay() {
+      const now = new Date().getTime();
+      const departureDate = new Date('2026-08-11T00:00:00-04:00').getTime();
+      const returnDate = new Date('2026-08-29T23:59:59-04:00').getTime();
+      if (now >= departureDate && now <= returnDate) {
+        const dayMillis = 1000 * 60 * 60 * 24;
+        currentDayIndex = Math.min(18, Math.max(0, Math.floor((now - departureDate) / dayMillis)));
+      }
     }
 
-    function renderAllDays() {
-      const container = document.getElementById('daysContainer');
-      container.innerHTML = '';
-      days.forEach((d, i) => {
-        container.appendChild(createDayCard(d, i));
+    // --------------------------------------------------------------------------
+    // 3. INITIALIZATION
+    // --------------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initActiveDay();
+      initCountdown();
+      initPackingView();
+      renderTrackGrid();
+      renderDaysCards();
+      updateGlobalStats();
+      syncWithCloudinary();
+
+      // Keyboard navigation for Lightbox
+      document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('lightboxModal');
+        if (modal.classList.contains('active')) {
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') prevLightbox();
+          if (e.key === 'ArrowRight') nextLightbox();
+        }
       });
-      document.getElementById('progressText').textContent = 'Vue complète — 19 jours';
+    });
+
+    // --------------------------------------------------------------------------
+    // 4. THEME & COUNTDOWN ENGINES
+    // --------------------------------------------------------------------------
+    function initTheme() {
+      const savedTheme = localStorage.getItem('canada2026_theme') || 
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('canada2026_theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      document.getElementById('themeIconSun').style.display = theme === 'dark' ? 'block' : 'none';
+      document.getElementById('themeIconMoon').style.display = theme === 'dark' ? 'none' : 'block';
+    }
+
+    function initCountdown() {
+      const departureDate = new Date('2026-08-11T00:00:00-04:00').getTime();
+      const returnDate = new Date('2026-08-29T23:59:59-04:00').getTime();
+
+      function update() {
+        const now = new Date().getTime();
+
+        // 1. Before Trip: Active Countdown
+        if (now < departureDate) {
+          const diff = departureDate - now;
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+          const cdDays = document.getElementById('cdDays');
+          const cdHours = document.getElementById('cdHours');
+          const cdMins = document.getElementById('cdMins');
+          const cdSecs = document.getElementById('cdSecs');
+
+          if (cdDays) cdDays.textContent = days;
+          if (cdHours) cdHours.textContent = hours < 10 ? '0' + hours : hours;
+          if (cdMins) cdMins.textContent = mins < 10 ? '0' + mins : mins;
+          if (cdSecs) cdSecs.textContent = secs < 10 ? '0' + secs : secs;
+          return;
+        }
+
+        // 2. During Trip: Live Day Tracker
+        if (now >= departureDate && now <= returnDate) {
+          const dayMillis = 1000 * 60 * 60 * 24;
+          const dayIndexToday = Math.min(18, Math.max(0, Math.floor((now - departureDate) / dayMillis)));
+          const currentDayObj = DAYS_DATA[dayIndexToday];
+
+          const box = document.getElementById('countdownBox');
+          if (box) {
+            box.innerHTML = `
+              <div style="display:flex;align-items:center;gap:10px;padding:4px 8px;">
+                <span style="font-size:22px;">🚗</span>
+                <div style="text-align:left;">
+                  <div style="font-size:12px;font-weight:700;color:var(--maple);text-transform:uppercase;letter-spacing:0.6px;">Voyage en cours · Aujourd'hui</div>
+                  <div style="font-size:15px;font-weight:800;color:var(--text-1);">Jour ${currentDayObj.dayNum} : ${currentDayObj.title}</div>
+                </div>
+              </div>
+            `;
+          }
+          return;
+        }
+
+        // 3. After Trip
+        const box = document.getElementById('countdownBox');
+        if (box) {
+          box.innerHTML = '<div style="font-weight:800;color:var(--pos);font-size:15px;padding:4px 8px;">🍁 Road trip mémorable accompli ! 2 585 km parcourus au Québec.</div>';
+        }
+      }
+
+      update();
+      setInterval(update, 1000);
+    }
+
+    // --------------------------------------------------------------------------
+    // 5. CLOUDINARY MULTI-USER SYNCHRONIZATION ENGINE
+    // --------------------------------------------------------------------------
+    async function syncWithCloudinary() {
+      const cfg = cloudConfig;
+      allMediaCatalog = [];
+
+      // 1. Load default curated showcase photos
+      DEFAULT_SHOWCASE_PHOTOS.forEach((item, idx) => {
+        allMediaCatalog.push({
+          id: `showcase_${idx}`,
+          day: item.day,
+          url: item.url,
+          type: item.type || 'image',
+          caption: item.caption || `Jour ${item.day}`,
+          source: 'showcase'
+        });
+      });
+
+      // 2. Load locally stored media (fallback/offline)
+      const localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
+      localMedia.forEach(m => allMediaCatalog.push(m));
+
+      // 3. Fetch public Cloudinary JSON resource list tagged with the trip tag
+      if (cfg.cloudName && cfg.publicTag) {
+        try {
+          const listUrl = `https://res.cloudinary.com/${cfg.cloudName}/image/list/${cfg.publicTag}.json?_t=${Date.now()}`;
+          const res = await fetch(listUrl);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.resources) {
+              data.resources.forEach(r => {
+                // Find associated day from tags (e.g. "canada2026_day_4" or "day_4")
+                let dayAssigned = 1;
+                if (r.tags) {
+                  r.tags.forEach(t => {
+                    const match = t.match(/day_?(\d+)/i);
+                    if (match) dayAssigned = parseInt(match[1], 10);
+                  });
+                }
+                const fullUrl = `https://res.cloudinary.com/${cfg.cloudName}/image/upload/v${r.version}/${r.public_id}.${r.format}`;
+                const isVideo = r.format === 'mp4' || r.format === 'mov' || r.format === 'webm';
+
+                allMediaCatalog.push({
+                  id: r.public_id,
+                  day: dayAssigned,
+                  url: fullUrl,
+                  type: isVideo ? 'video' : 'image',
+                  caption: r.context && r.context.custom ? r.context.custom.caption : `Photo Cloudinary (Jour ${dayAssigned})`,
+                  source: 'cloudinary',
+                  created_at: r.created_at
+                });
+              });
+            }
+          }
+        } catch (err) {
+          console.warn('Cloudinary list fetch unavailable (or client resource list not enabled yet). Using local & showcase media.', err);
+        }
+      }
+
+      updateMediaViews();
+    }
+
+    function updateMediaViews() {
+      document.getElementById('totalMediaCount').textContent = allMediaCatalog.length;
+      document.getElementById('wallFilterCountAll').textContent = allMediaCatalog.length;
+      renderDaysCards();
+      renderWallGrid('all');
+    }
+
+    // --------------------------------------------------------------------------
+    // 6. TABS & VIEW SWITCHING
+    // --------------------------------------------------------------------------
+    function switchTab(tabId) {
+      currentTab = tabId;
+      const tabs = ['itinerary', 'map', 'wall', 'packing', 'guide'];
+      tabs.forEach(t => {
+        const viewEl = document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (t === tabId) {
+          viewEl.style.display = 'block';
+          viewEl.classList.add('active');
+          btnEl.classList.add('active');
+        } else {
+          viewEl.style.display = 'none';
+          viewEl.classList.remove('active');
+          btnEl.classList.remove('active');
+        }
+      });
+
+      if (tabId === 'map') {
+        setTimeout(initLeafletMap, 100);
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function renderDay(index) {
-      const container = document.getElementById('daysContainer');
-      container.dataset.view = 'single';
-      container.innerHTML = '';
-      container.appendChild(createDayCard(days[index], index));
-      document.getElementById('progressText').textContent = `Jour ${index + 1} / ${days.length}`;
+    // --------------------------------------------------------------------------
+    // 7. ITINERARY & DAYS RENDERING
+    // --------------------------------------------------------------------------
+    function renderTrackGrid() {
+      const track = document.getElementById('progressTrackGrid');
+      track.innerHTML = '';
+      DAYS_DATA.forEach((d, i) => {
+        const pill = document.createElement('div');
+        pill.className = `track-pill ${i === currentDayIndex ? 'active' : ''}`;
+        pill.title = `Jour ${d.dayNum} : ${d.title}`;
+        pill.onclick = () => {
+          currentDayIndex = i;
+          isViewAllMode = false;
+          renderTrackGrid();
+          renderDaysCards();
+          updateGlobalStats();
+        };
+        track.appendChild(pill);
+      });
     }
 
-    function createDayCard(day, index) {
-      const card = document.createElement('div');
-      card.className = 'day-card';
-      const badgeClass = `badge-${day.region}`;
-      const media = dayMedia[index] || [];
+    function prevDay() {
+      if (currentDayIndex > 0) {
+        currentDayIndex--;
+        isViewAllMode = false;
+        renderTrackGrid();
+        renderDaysCards();
+        updateGlobalStats();
+      }
+    }
 
+    function nextDay() {
+      if (currentDayIndex < DAYS_DATA.length - 1) {
+        currentDayIndex++;
+        isViewAllMode = false;
+        renderTrackGrid();
+        renderDaysCards();
+        updateGlobalStats();
+      }
+    }
+
+    function toggleAllDaysView() {
+      isViewAllMode = !isViewAllMode;
+      const btn = document.getElementById('btnToggleAll');
+      if (isViewAllMode) {
+        btn.classList.add('active');
+        btn.textContent = 'Vue par Étape';
+      } else {
+        btn.classList.remove('active');
+        btn.textContent = 'Afficher les 19 jours';
+      }
+      renderDaysCards();
+    }
+
+    function renderDaysCards() {
+      const container = document.getElementById('daysCardsContainer');
+      container.innerHTML = '';
+
+      const query = (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '').toLowerCase().trim();
+      const regionFilter = document.getElementById('regionSelect') ? document.getElementById('regionSelect').value : 'all';
+
+      let daysToRender = isViewAllMode ? DAYS_DATA : [DAYS_DATA[currentDayIndex]];
+
+      // Filter by search / region
+      if (query || regionFilter !== 'all') {
+        daysToRender = DAYS_DATA.filter(d => {
+          const matchRegion = regionFilter === 'all' || d.region === regionFilter;
+          const matchQuery = !query || 
+            d.title.toLowerCase().includes(query) ||
+            d.desc.toLowerCase().includes(query) ||
+            d.activities.some(a => a.toLowerCase().includes(query)) ||
+            d.resto.toLowerCase().includes(query);
+          return matchRegion && matchQuery;
+        });
+      }
+
+      if (daysToRender.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:40px 20px; background:var(--card-bg); border-radius:var(--radius-lg); border:1px solid var(--card-border);">
+            <div style="font-size:36px; margin-bottom:10px;">🔍</div>
+            <h3 style="font-size:18px; font-weight:700; color:var(--text-1);">Aucun résultat pour cette recherche</h3>
+            <p style="font-size:14px; color:var(--text-3); margin-top:6px;">Essayez d'autres mots-clés ou réinitialisez les filtres.</p>
+          </div>
+        `;
+        return;
+      }
+
+      document.getElementById('prevDayBtn').disabled = isViewAllMode || currentDayIndex === 0;
+      document.getElementById('nextDayBtn').disabled = isViewAllMode || currentDayIndex === DAYS_DATA.length - 1;
+      document.getElementById('stepperProgressText').textContent = isViewAllMode 
+        ? `Vue Complète (${daysToRender.length} étapes)` 
+        : `Jour ${currentDayIndex + 1} sur 19`;
+
+      daysToRender.forEach(day => {
+        const card = createDayCardElement(day);
+        container.appendChild(card);
+      });
+    }
+
+    function createDayCardElement(day) {
+      const card = document.createElement('article');
+      card.className = 'day-card';
+      card.id = `dayCard-${day.dayNum}`;
+
+      // Get media for this specific day
+      const dayMedia = allMediaCatalog.filter(m => m.day === day.dayNum);
+
+      // Activities HTML
       let activitiesHtml = '';
-      day.activities.forEach((act, ai) => {
-        const key = `${index}-${ai}`;
-        const done = completedActivities.has(key);
+      day.activities.forEach((act, actIndex) => {
+        const key = `day_${day.dayNum}_act_${actIndex}`;
+        const isDone = completedActivities.has(key);
         activitiesHtml += `
-          <li class="activity-item ${done ? 'done' : ''}" onclick="toggleActivity('${key}', this)">
-            <div class="checkbox">
-              ${done ? '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+          <li class="activity-item ${isDone ? 'done' : ''}" onclick="toggleActivity('${key}', this)">
+            <div class="activity-checkbox">
+              ${isDone ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
             </div>
             <span class="activity-text">${act}</span>
-          </li>`;
+          </li>
+        `;
       });
 
-      let mediaHtml = '';
-      if (media.length > 0) {
-        mediaHtml = '<div class="media-grid">' + media.map((m, mi) => `
-          <div class="media-item" onclick="openLightbox('${m.url}', '${m.type}')">
+      // Photos Grid HTML
+      let mediaGridHtml = '';
+      if (dayMedia.length > 0) {
+        mediaGridHtml = '<div class="gallery-day-grid">' + dayMedia.map((m, mIdx) => `
+          <div class="gallery-item" onclick="openLightboxForDay(${day.dayNum}, ${mIdx})">
             ${m.type === 'video' 
               ? `<video src="${m.url}" muted></video>` 
-              : `<img src="${m.url}" alt="photo">`}
-            <button class="media-delete" onclick="event.stopPropagation(); deleteMedia(${index}, ${mi})">×</button>
+              : `<img src="${m.url}" alt="${m.caption || 'Souvenir'}">`}
+            <span class="gallery-item-badge">${m.source === 'cloudinary' ? '☁️ Cloud' : '📷'}</span>
+            <button class="btn-delete-media" title="Supprimer" onclick="event.stopPropagation(); deleteMedia('${m.id}')">✕</button>
           </div>
         `).join('') + '</div>';
       }
 
       card.innerHTML = `
-        <div class="day-header">
-          <div class="day-header-left">
-            <div class="day-title">${day.jour} — ${day.date}</div>
-            <div class="day-sub">${day.desc}</div>
+        <div class="day-card-header">
+          <div>
+            <div class="day-date-tag">Jour ${day.dayNum} · ${day.date}</div>
+            <h2 class="day-main-title">${day.title}</h2>
+            <p class="day-description">${day.desc}</p>
           </div>
-          <span class="day-badge ${badgeClass}">${day.badge}</span>
+          <span class="region-badge badge-${day.region}">
+            <span>📍</span> ${day.badge}
+          </span>
         </div>
-        <ul class="activity-list">${activitiesHtml}</ul>
-        <div class="resto-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          ${day.resto}
+
+        <div class="activity-container">
+          <div class="activity-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--accent);"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Programme & Activités
+          </div>
+          <ul class="activity-list">${activitiesHtml}</ul>
         </div>
-        <div class="media-section">
-          <div class="media-header">
-            <span class="media-title">
+
+        <div class="resto-box">
+          <span class="resto-icon">🍴</span>
+          <div>${day.resto}</div>
+        </div>
+
+        <div class="gallery-day-box">
+          <div class="gallery-day-header">
+            <div class="gallery-day-title">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              📷 Souvenirs du jour (${media.length})
-            </span>
+              Souvenirs & Photos du Jour (${dayMedia.length})
+            </div>
           </div>
-          ${mediaHtml}
-          <div class="upload-bar">
-            <button class="upload-btn" onclick="triggerUpload(${index})">
+          ${mediaGridHtml}
+
+          <div class="upload-action-row">
+            <button class="btn-upload" onclick="triggerDayUpload(${day.dayNum})">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              Ajouter une photo
+              Ajouter Photo (Cloudinary)
             </button>
-            <button class="upload-btn" onclick="toggleUrlInput(${index})">
+            <button class="btn-upload" onclick="toggleUrlRow(${day.dayNum})">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              Coller un lien
+              Lien Web / iCloud
             </button>
           </div>
-          <input type="file" class="upload-input" id="upload-${index}" accept="image/*,video/*" onchange="handleFileUpload(${index}, this)">
-          <div class="url-input-row" id="url-row-${index}" style="display:none">
-            <input type="text" id="url-input-${index}" placeholder="https://... (Google Photos, iCloud, etc.)">
-            <button onclick="addUrlMedia(${index})">OK</button>
+
+          <input type="file" id="dayFileInput-${day.dayNum}" class="upload-input-file" accept="image/*,video/*" onchange="handleDayUpload(${day.dayNum}, this)">
+          
+          <div class="url-input-box" id="urlInputBox-${day.dayNum}">
+            <input type="text" id="urlInput-${day.dayNum}" placeholder="Collez l'URL de l'image (https://...)">
+            <button onclick="addMediaUrl(${day.dayNum})">Ajouter</button>
           </div>
         </div>
-        <div class="day-footer">
-          <span class="day-footer-item">
+
+        <div class="day-card-footer">
+          <span class="day-footer-stat">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
             ${day.km} km
           </span>
-          <span class="day-footer-item">
+          <span class="day-footer-stat">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            ~${day.budget} $ CAD
+            Budget est. ~${day.budget} $ CAD
           </span>
         </div>
       `;
+
       return card;
     }
 
-    function toggleActivity(key, el) {
+    // --------------------------------------------------------------------------
+    // 8. INTERACTIVE CHECKLIST & GAMIFICATION
+    // --------------------------------------------------------------------------
+    function toggleActivity(key, element) {
       if (completedActivities.has(key)) {
         completedActivities.delete(key);
-        el.classList.remove('done');
-        el.querySelector('.checkbox').innerHTML = '';
-        totalPoints -= pointsPerActivity;
+        element.classList.remove('done');
+        element.querySelector('.activity-checkbox').innerHTML = '';
       } else {
         completedActivities.add(key);
-        el.classList.add('done');
-        el.querySelector('.checkbox').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-        totalPoints += pointsPerActivity;
-        showFlash(`+${pointsPerActivity} points ! 🎉`);
-        spawnConfetti(el);
+        element.classList.add('done');
+        element.querySelector('.activity-checkbox').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>';
+        triggerConfetti(element);
+        showToast(`+${POINTS_PER_ACTIVITY} points d'aventure ! 🎉`);
       }
-      saveProgress();
-      updateStats();
+
+      localStorage.setItem('canada2026_done', JSON.stringify([...completedActivities]));
+      updateGlobalStats();
     }
 
-    function triggerUpload(dayIndex) {
-      document.getElementById(`upload-${dayIndex}`).click();
+    function updateGlobalStats() {
+      const totalActivitiesCount = DAYS_DATA.reduce((sum, d) => sum + d.activities.length, 0);
+      const doneCount = completedActivities.size;
+      const points = doneCount * POINTS_PER_ACTIVITY;
+      const maxPoints = totalActivitiesCount * POINTS_PER_ACTIVITY;
+
+      const scoreVal = document.getElementById('scoreVal');
+      const scoreBar = document.getElementById('scoreBar');
+      const pointsPct = document.getElementById('pointsPct');
+      const completedCountBadge = document.getElementById('completedCountBadge');
+
+      if (scoreVal) scoreVal.textContent = points;
+      if (completedCountBadge) completedCountBadge.textContent = doneCount;
+      const pct = Math.round((points / (maxPoints || 1)) * 100);
+      if (scoreBar) scoreBar.style.width = `${pct}%`;
+      if (pointsPct) pointsPct.textContent = `${pct}%`;
+
+      // Km & Budget progress based on current day
+      const kmUpToCurrent = DAYS_DATA.slice(0, currentDayIndex + 1).reduce((s, d) => s + d.km, 0);
+      const budgetUpToCurrent = DAYS_DATA.slice(0, currentDayIndex + 1).reduce((s, d) => s + d.budget, 0);
+
+      const kmVal = document.getElementById('kmVal');
+      const kmBar = document.getElementById('kmBar');
+      if (kmVal) kmVal.textContent = kmUpToCurrent;
+      if (kmBar) kmBar.style.width = `${Math.min(100, Math.round((kmUpToCurrent / TOTAL_KM) * 100))}%`;
+
+      const budgetVal = document.getElementById('budgetVal');
+      const budgetBar = document.getElementById('budgetBar');
+      if (budgetVal) budgetVal.textContent = `${budgetUpToCurrent} $`;
+      if (budgetBar) budgetBar.style.width = `${Math.min(100, Math.round((budgetUpToCurrent / TOTAL_BUDGET) * 100))}%`;
     }
 
-    function toggleUrlInput(dayIndex) {
-      const row = document.getElementById(`url-row-${dayIndex}`);
-      row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+    function handleSearch() {
+      renderDaysCards();
     }
 
-    function addUrlMedia(dayIndex) {
-      const input = document.getElementById(`url-input-${dayIndex}`);
+    function handleRegionFilter() {
+      renderDaysCards();
+    }
+
+    // --------------------------------------------------------------------------
+    // 9. UPLOAD & CLOUDINARY DISPATCHER
+    // --------------------------------------------------------------------------
+    function triggerDayUpload(dayNum) {
+      document.getElementById(`dayFileInput-${dayNum}`).click();
+    }
+
+    function triggerGlobalUpload() {
+      document.getElementById('globalUploadInput').click();
+    }
+
+    function toggleUrlRow(dayNum) {
+      const box = document.getElementById(`urlInputBox-${dayNum}`);
+      box.classList.toggle('open');
+    }
+
+    function addMediaUrl(dayNum) {
+      const input = document.getElementById(`urlInput-${dayNum}`);
       const url = input.value.trim();
       if (!url) return;
-      const type = url.match(/\.(mp4|mov|webm)(\?|$)/i) ? 'video' : 'image';
-      if (!dayMedia[dayIndex]) dayMedia[dayIndex] = [];
-      dayMedia[dayIndex].push({ url, type });
-      saveProgress();
-      renderDay(currentDay);
-      showFlash('Lien ajouté ! 📎');
+
+      const isVideo = url.match(/\.(mp4|mov|webm)(\?|$)/i);
+      const newMedia = {
+        id: `url_${Date.now()}`,
+        day: dayNum,
+        url: url,
+        type: isVideo ? 'video' : 'image',
+        caption: `Photo ajoutée (Jour ${dayNum})`,
+        source: 'manual'
+      };
+
+      saveLocalMedia(newMedia);
+      input.value = '';
+      document.getElementById(`urlInputBox-${dayNum}`).classList.remove('open');
+      showToast('Lien photo ajouté ! 📸');
     }
 
-    async function handleFileUpload(dayIndex, input) {
+    async function handleDayUpload(dayNum, input) {
       const file = input.files[0];
       if (!file) return;
-
-      const cfg = getCloudConfig();
-      if (cfg.cloudName && cfg.uploadPreset) {
-        // Upload vers Cloudinary
-        showFlash('Upload en cours... ☁️');
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', cfg.uploadPreset);
-        try {
-          const res = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloudName}/auto/upload`, {
-            method: 'POST',
-            body: formData
-          });
-          const data = await res.json();
-          if (data.secure_url) {
-            const type = file.type.startsWith('video') ? 'video' : 'image';
-            if (!dayMedia[dayIndex]) dayMedia[dayIndex] = [];
-            dayMedia[dayIndex].push({ url: data.secure_url, type });
-            saveProgress();
-            renderDay(currentDay);
-            showFlash('Photo uploadée ! ☁️');
-          } else {
-            showFlash('Erreur upload Cloudinary');
-          }
-        } catch (e) {
-          showFlash('Erreur réseau, stockage local...');
-          storeLocal(dayIndex, file);
-        }
-      } else {
-        // Stockage local base64
-        storeLocal(dayIndex, file);
-      }
+      await uploadMediaFile(file, dayNum);
       input.value = '';
     }
 
-    function storeLocal(dayIndex, file) {
+    async function handleGlobalFileUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      await uploadMediaFile(file, currentDayIndex + 1);
+      input.value = '';
+    }
+
+    async function uploadMediaFile(file, dayNum) {
+      const cfg = cloudConfig;
+
+      if (cfg.cloudName && cfg.uploadPreset) {
+        showToast('Upload vers Cloudinary en cours... ☁️');
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', cfg.uploadPreset);
+          formData.append('tags', `${cfg.publicTag},day_${dayNum},canada2026_day_${dayNum}`);
+
+          const endpoint = `https://api.cloudinary.com/v1_1/${cfg.cloudName}/auto/upload`;
+          const res = await fetch(endpoint, { method: 'POST', body: formData });
+          const data = await res.json();
+
+          if (data.secure_url) {
+            const isVideo = file.type.startsWith('video');
+            const newMedia = {
+              id: data.public_id || `cloud_${Date.now()}`,
+              day: dayNum,
+              url: data.secure_url,
+              type: isVideo ? 'video' : 'image',
+              caption: `Photo partagée (Jour ${dayNum})`,
+              source: 'cloudinary'
+            };
+            saveLocalMedia(newMedia);
+            showToast('Photo uploadée sur Cloudinary & synchronisée ! ☁️🎉');
+            return;
+          }
+        } catch (e) {
+          console.error('Erreur Cloudinary, bascule en local', e);
+        }
+      }
+
+      // Local storage fallback (Base64)
       const reader = new FileReader();
-      reader.onload = function(e) {
-        const type = file.type.startsWith('video') ? 'video' : 'image';
-        if (!dayMedia[dayIndex]) dayMedia[dayIndex] = [];
-        dayMedia[dayIndex].push({ url: e.target.result, type });
-        saveProgress();
-        renderDay(currentDay);
-        showFlash('Photo sauvegardée ! 💾');
+      reader.onload = (e) => {
+        const isVideo = file.type.startsWith('video');
+        const newMedia = {
+          id: `local_${Date.now()}`,
+          day: dayNum,
+          url: e.target.result,
+          type: isVideo ? 'video' : 'image',
+          caption: `Photo locale (Jour ${dayNum})`,
+          source: 'local'
+        };
+        saveLocalMedia(newMedia);
+        showToast('Photo enregistrée en local ! 💾');
       };
       reader.readAsDataURL(file);
     }
 
-    function deleteMedia(dayIndex, mediaIndex) {
-      if (!dayMedia[dayIndex]) return;
-      dayMedia[dayIndex].splice(mediaIndex, 1);
-      if (dayMedia[dayIndex].length === 0) delete dayMedia[dayIndex];
-      saveProgress();
-      renderDay(currentDay);
+    function saveLocalMedia(item) {
+      const localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
+      localMedia.push(item);
+      localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
+      syncWithCloudinary();
     }
 
-    function openLightbox(url, type) {
-      const lb = document.getElementById('lightbox');
-      const content = document.getElementById('lightboxContent');
-      content.innerHTML = type === 'video' 
-        ? `<video src="${url}" controls autoplay style="max-width:100%;max-height:90vh;border-radius:12px"></video>`
-        : `<img src="${url}" style="max-width:100%;max-height:90vh;border-radius:12px">`;
-      lb.classList.add('active');
+    function deleteMedia(mediaId) {
+      if (!confirm('Supprimer cette photo ?')) return;
+
+      // Filter from local
+      let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
+      localMedia = localMedia.filter(m => m.id !== mediaId);
+      localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
+
+      // Filter in memory
+      allMediaCatalog = allMediaCatalog.filter(m => m.id !== mediaId);
+      updateMediaViews();
+      showToast('Photo retirée.');
+    }
+
+    // --------------------------------------------------------------------------
+    // 10. MUR DE PHOTOS VIEW (PHOTO WALL)
+    // --------------------------------------------------------------------------
+    function renderWallGrid(filterDay) {
+      const grid = document.getElementById('wallGrid');
+      const filters = document.getElementById('wallFilters');
+
+      // Populate filter pills
+      filters.innerHTML = `
+        <button class="wall-filter-pill ${filterDay === 'all' ? 'active' : ''}" onclick="filterWallMedia('all', this)">
+          Toutes (<span id="wallFilterCountAll">${allMediaCatalog.length}</span>)
+        </button>
+      `;
+
+      // Unique days present in media
+      const availableDays = [...new Set(allMediaCatalog.map(m => m.day))].sort((a,b) => a - b);
+      availableDays.forEach(dNum => {
+        const count = allMediaCatalog.filter(m => m.day === dNum).length;
+        const btn = document.createElement('button');
+        btn.className = `wall-filter-pill ${filterDay === dNum ? 'active' : ''}`;
+        btn.textContent = `Jour ${dNum} (${count})`;
+        btn.onclick = () => filterWallMedia(dNum, btn);
+        filters.appendChild(btn);
+      });
+
+      const mediaToShow = filterDay === 'all' 
+        ? allMediaCatalog 
+        : allMediaCatalog.filter(m => m.day === filterDay);
+
+      if (mediaToShow.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:40px; background:var(--card-bg); border-radius:var(--radius-lg);">
+            <div style="font-size:32px; margin-bottom:8px;">📷</div>
+            <div style="font-weight:700; color:var(--text-1);">Aucune photo pour ce jour</div>
+            <button class="btn-upload primary" style="margin-top:12px;" onclick="triggerGlobalUpload()">Ajouter la première photo</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = mediaToShow.map((m, index) => `
+        <div class="wall-card" onclick="openLightboxFromWall(${index}, '${filterDay}')">
+          ${m.type === 'video' ? `<video src="${m.url}" muted></video>` : `<img src="${m.url}" alt="${m.caption}">`}
+          <div class="wall-card-overlay">
+            <div class="wall-card-day">Jour ${m.day}</div>
+            <div class="wall-card-title">${m.caption || 'Souvenir'}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterWallMedia(dayOrAll, btn) {
+      document.querySelectorAll('.wall-filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderWallGrid(dayOrAll);
+    }
+
+    // --------------------------------------------------------------------------
+    // 11. LIGHTBOX
+    // --------------------------------------------------------------------------
+    function openLightboxForDay(dayNum, index) {
+      lightboxCurrentList = allMediaCatalog.filter(m => m.day === dayNum);
+      lightboxIndex = index;
+      showLightboxModal();
+    }
+
+    function openLightboxFromWall(index, filterDay) {
+      lightboxCurrentList = filterDay === 'all' 
+        ? allMediaCatalog 
+        : allMediaCatalog.filter(m => m.day === filterDay);
+      lightboxIndex = index;
+      showLightboxModal();
+    }
+
+    function showLightboxModal() {
+      const item = lightboxCurrentList[lightboxIndex];
+      if (!item) return;
+
+      const modal = document.getElementById('lightboxModal');
+      const wrap = document.getElementById('lightboxMediaWrap');
+      const caption = document.getElementById('lightboxCaption');
+
+      wrap.innerHTML = item.type === 'video'
+        ? `<video src="${item.url}" controls autoplay></video>`
+        : `<img src="${item.url}" alt="${item.caption}">`;
+
+      caption.innerHTML = `<strong>Jour ${item.day}</strong> — ${item.caption || 'Souvenir du voyage'} (${lightboxIndex + 1}/${lightboxCurrentList.length})`;
+      modal.classList.add('active');
     }
 
     function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('active');
-      document.getElementById('lightboxContent').innerHTML = '';
+      document.getElementById('lightboxModal').classList.remove('active');
+      document.getElementById('lightboxMediaWrap').innerHTML = '';
     }
 
-    function showFlash(text) {
-      const flash = document.getElementById('flash');
-      flash.textContent = text;
-      flash.classList.add('show');
-      setTimeout(() => flash.classList.remove('show'), 1800);
-    }
-
-    function spawnConfetti(el) {
-      const rect = el.getBoundingClientRect();
-      const colors = ['#34c759', '#0071e3', '#ff9500', '#ff3b30', '#af52de', '#5856d6'];
-      for (let i = 0; i < 8; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 60) + 'px';
-        c.style.top = (rect.top + window.scrollY + (Math.random() - 0.5) * 20) + 'px';
-        c.style.background = colors[Math.floor(Math.random() * colors.length)];
-        c.style.width = (4 + Math.random() * 6) + 'px';
-        c.style.height = c.style.width;
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 1000);
+    function prevLightbox() {
+      if (lightboxIndex > 0) {
+        lightboxIndex--;
+        showLightboxModal();
+      } else {
+        lightboxIndex = lightboxCurrentList.length - 1;
+        showLightboxModal();
       }
     }
 
-    function updateStats() {
-      const kmSoFar = days.slice(0, currentDay).reduce((s, d) => s + d.km, 0);
-      const budgetSoFar = days.slice(0, currentDay).reduce((s, d) => s + d.budget, 0);
-      const maxPoints = days.reduce((s, d) => s + d.activities.length, 0) * pointsPerActivity;
-
-      document.getElementById('scoreVal').textContent = totalPoints;
-      document.getElementById('scoreBar').style.width = Math.min(100, (totalPoints / maxPoints) * 100) + '%';
-
-      document.getElementById('kmVal').textContent = kmSoFar;
-      document.getElementById('kmBar').style.width = Math.min(100, (kmSoFar / totalKm) * 100) + '%';
-
-      document.getElementById('budgetVal').textContent = budgetSoFar;
-      document.getElementById('budgetBar').style.width = Math.min(100, (budgetSoFar / totalBudget) * 100) + '%';
+    function nextLightbox() {
+      if (lightboxIndex < lightboxCurrentList.length - 1) {
+        lightboxIndex++;
+        showLightboxModal();
+      } else {
+        lightboxIndex = 0;
+        showLightboxModal();
+      }
     }
 
-    init();
+    // --------------------------------------------------------------------------
+    // 12. LEAFLET INTERACTIVE MAP
+    // --------------------------------------------------------------------------
+    function initLeafletMap() {
+      if (leafletMap) {
+        leafletMap.invalidateSize();
+        return;
+      }
+
+      const mapEl = document.getElementById('mapContainer');
+      if (!mapEl) return;
+
+      // Center map around Quebec/Montreal region
+      leafletMap = L.map('mapContainer', {
+        zoomControl: true,
+        scrollWheelZoom: true
+      }).setView([46.8139, -71.2080], 7);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(leafletMap);
+
+      const latLngs = [];
+
+      DAYS_DATA.forEach((day, i) => {
+        latLngs.push(day.coords);
+
+        const customIcon = L.divIcon({
+          className: 'custom-map-pin-container',
+          html: `<div class="custom-map-pin" title="Jour ${day.dayNum} : ${day.title}">${day.dayNum}</div>`,
+          iconSize: [26, 26],
+          iconAnchor: [13, 13]
+        });
+
+        const marker = L.marker(day.coords, { icon: customIcon }).addTo(leafletMap);
+        marker.bindPopup(`
+          <div style="font-family:var(--font-main); min-width:180px;">
+            <div style="font-size:11px;font-weight:700;color:var(--accent);">Jour ${day.dayNum} · ${day.date}</div>
+            <div style="font-size:14px;font-weight:800;margin:3px 0 6px;">${day.title}</div>
+            <div style="font-size:12px;color:#555;margin-bottom:8px;">${day.km} km · ${day.badge}</div>
+            <button onclick="goToDayFromMap(${i})" style="width:100%;padding:6px;border-radius:6px;background:var(--accent);color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;">
+              Voir les détails ➔
+            </button>
+          </div>
+        `);
+        mapMarkers.push(marker);
+      });
+
+      // Route Polyline
+      mapRouteLine = L.polyline(latLngs, {
+        color: '#0284c7',
+        weight: 4,
+        opacity: 0.8,
+        dashArray: '8, 8',
+        lineCap: 'round'
+      }).addTo(leafletMap);
+
+      leafletMap.fitBounds(mapRouteLine.getBounds(), { padding: [30, 30] });
+    }
+
+    function goToDayFromMap(dayIndex) {
+      currentDayIndex = dayIndex;
+      isViewAllMode = false;
+      switchTab('itinerary');
+      renderTrackGrid();
+      renderDaysCards();
+      updateGlobalStats();
+    }
+
+    // --------------------------------------------------------------------------
+    // 13. VALISE & CHECKLIST INTERACTIVE
+    // --------------------------------------------------------------------------
+    function initPackingView() {
+      const grid = document.getElementById('packingGrid');
+      grid.innerHTML = PACKING_CATEGORIES.map((cat, catIdx) => `
+        <div class="packing-category-card">
+          <div class="packing-category-header">${cat.title}</div>
+          <ul class="activity-list">
+            ${cat.items.map((item, itemIdx) => {
+              const key = `pack_${catIdx}_${itemIdx}`;
+              const checked = checkedPackingItems.has(key);
+              return `
+                <li class="activity-item ${checked ? 'done' : ''}" onclick="togglePackingItem('${key}', this)">
+                  <div class="activity-checkbox">
+                    ${checked ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+                  </div>
+                  <span class="activity-text">${item}</span>
+                </li>
+              `;
+            }).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    function togglePackingItem(key, element) {
+      if (checkedPackingItems.has(key)) {
+        checkedPackingItems.delete(key);
+        element.classList.remove('done');
+        element.querySelector('.activity-checkbox').innerHTML = '';
+      } else {
+        checkedPackingItems.add(key);
+        element.classList.add('done');
+        element.querySelector('.activity-checkbox').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>';
+        triggerConfetti(element);
+      }
+      localStorage.setItem('canada2026_packing', JSON.stringify([...checkedPackingItems]));
+    }
+
+    // --------------------------------------------------------------------------
+    // 14. CURRENCY CONVERTER
+    // --------------------------------------------------------------------------
+    const CAD_TO_EUR_RATE = 0.68;
+    function convertCurrency(source) {
+      if (source === 'cad') {
+        const cad = parseFloat(document.getElementById('cadInput').value) || 0;
+        document.getElementById('eurInput').value = (cad * CAD_TO_EUR_RATE).toFixed(2);
+      } else {
+        const eur = parseFloat(document.getElementById('eurInput').value) || 0;
+        document.getElementById('cadInput').value = (eur / CAD_TO_EUR_RATE).toFixed(2);
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // 15. CONFIG MODAL & PERSISTENCE
+    // --------------------------------------------------------------------------
+    function openConfigModal() {
+      document.getElementById('cfgCloudName').value = cloudConfig.cloudName || 'servseb';
+      document.getElementById('cfgUploadPreset').value = cloudConfig.uploadPreset || 'canada2026';
+      document.getElementById('cfgPublicTag').value = cloudConfig.publicTag || 'canada2026';
+      document.getElementById('configModal').classList.add('open');
+    }
+
+    function closeConfigModal() {
+      document.getElementById('configModal').classList.remove('open');
+    }
+
+    function saveCloudConfig() {
+      cloudConfig.cloudName = document.getElementById('cfgCloudName').value.trim();
+      cloudConfig.uploadPreset = document.getElementById('cfgUploadPreset').value.trim();
+      cloudConfig.publicTag = document.getElementById('cfgPublicTag').value.trim();
+
+      localStorage.setItem('canada2026_cloud', JSON.stringify(cloudConfig));
+      closeConfigModal();
+      showToast('Configuration Cloudinary mise à jour ! ☁️');
+      syncWithCloudinary();
+    }
+
+    // --------------------------------------------------------------------------
+    // 16. TOAST NOTIFICATIONS & CONFETTI
+    // --------------------------------------------------------------------------
+    function showToast(message) {
+      const toast = document.getElementById('toastFlash');
+      document.getElementById('toastText').textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    function triggerConfetti(originEl) {
+      const rect = originEl.getBoundingClientRect();
+      const colors = ['#0284c7', '#10b981', '#f59e0b', '#e11d48', '#8b5cf6'];
+
+      for (let i = 0; i < 10; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-particle';
+        p.style.left = `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 80}px`;
+        p.style.top = `${rect.top + (Math.random() - 0.5) * 30}px`;
+        p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.floor(Math.random() * 6) + 4;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1000);
+      }
+    }
   </script>
 </body>
 </html>
