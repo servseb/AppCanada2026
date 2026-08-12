@@ -2116,20 +2116,6 @@
       }
     ];
 
-    // Default Curated Fallback High-Res Photos for the 19 days
-    const DEFAULT_SHOWCASE_PHOTOS = [
-      { day: 1, url: "https://images.unsplash.com/photo-1519832979-6fa011b87667?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Montréal - Rosemont & Plateau" },
-      { day: 2, url: "https://images.unsplash.com/photo-1572978051772-2f3b9c7b8d8e?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Vieux-Montréal & Basilique Notre-Dame" },
-      { day: 3, url: "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Vue depuis le Mont-Royal" },
-      { day: 4, url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Mont-Tremblant sentier La Roche" },
-      { day: 6, url: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Château Montebello" },
-      { day: 7, url: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Parc Oméga - Ours noir et faune" },
-      { day: 8, url: "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Ottawa - Colline du Parlement" },
-      { day: 14, url: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Chute Montmorency 83m" },
-      { day: 17, url: "https://images.unsplash.com/photo-1568430462989-44163eb1752f?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Tadoussac - Rorquals & Bélugas" },
-      { day: 18, url: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80", type: "image", caption: "Château Frontenac & Vieux-Québec" }
-    ];
-
     // Checklist categories for the interactive packing list
     const PACKING_CATEGORIES = [
       {
@@ -2330,23 +2316,11 @@
       const cfg = cloudConfig;
       allMediaCatalog = [];
 
-      // 1. Load default curated showcase photos
-      DEFAULT_SHOWCASE_PHOTOS.forEach((item, idx) => {
-        allMediaCatalog.push({
-          id: `showcase_${idx}`,
-          day: item.day,
-          url: item.url,
-          type: item.type || 'image',
-          caption: item.caption || `Jour ${item.day}`,
-          source: 'showcase'
-        });
-      });
-
-      // 2. Load locally stored media (fallback/offline)
+      // 1. Load locally uploaded media (stored during trip / offline uploads)
       const localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
       localMedia.forEach(m => allMediaCatalog.push(m));
 
-      // 3. Fetch public Cloudinary JSON resource list tagged with the trip tag
+      // 2. Fetch public Cloudinary JSON resource list tagged with the trip tag
       if (cfg.cloudName && cfg.publicTag) {
         try {
           const listUrl = `https://res.cloudinary.com/${cfg.cloudName}/image/list/${cfg.publicTag}.json?_t=${Date.now()}`;
@@ -2355,31 +2329,33 @@
             const data = await res.json();
             if (data && data.resources) {
               data.resources.forEach(r => {
-                // Find associated day from tags (e.g. "canada2026_day_4" or "day_4")
-                let dayAssigned = 1;
-                if (r.tags) {
-                  r.tags.forEach(t => {
-                    const match = t.match(/day_?(\d+)/i);
-                    if (match) dayAssigned = parseInt(match[1], 10);
+                const existing = allMediaCatalog.find(m => m.id === r.public_id);
+                if (!existing) {
+                  let dayAssigned = 1;
+                  if (r.tags) {
+                    r.tags.forEach(t => {
+                      const match = t.match(/day_?(\d+)/i);
+                      if (match) dayAssigned = parseInt(match[1], 10);
+                    });
+                  }
+                  const fullUrl = `https://res.cloudinary.com/${cfg.cloudName}/image/upload/f_auto,q_auto/v${r.version}/${r.public_id}.${r.format}`;
+                  const isVideo = r.format === 'mp4' || r.format === 'mov' || r.format === 'webm';
+
+                  allMediaCatalog.push({
+                    id: r.public_id,
+                    day: dayAssigned,
+                    url: fullUrl,
+                    type: isVideo ? 'video' : 'image',
+                    caption: r.context && r.context.custom ? r.context.custom.caption : `Photo Cloudinary (Jour ${dayAssigned})`,
+                    source: 'cloudinary',
+                    created_at: r.created_at
                   });
                 }
-                const fullUrl = `https://res.cloudinary.com/${cfg.cloudName}/image/upload/v${r.version}/${r.public_id}.${r.format}`;
-                const isVideo = r.format === 'mp4' || r.format === 'mov' || r.format === 'webm';
-
-                allMediaCatalog.push({
-                  id: r.public_id,
-                  day: dayAssigned,
-                  url: fullUrl,
-                  type: isVideo ? 'video' : 'image',
-                  caption: r.context && r.context.custom ? r.context.custom.caption : `Photo Cloudinary (Jour ${dayAssigned})`,
-                  source: 'cloudinary',
-                  created_at: r.created_at
-                });
               });
             }
           }
         } catch (err) {
-          console.warn('Cloudinary list fetch unavailable (or client resource list not enabled yet). Using local & showcase media.', err);
+          console.warn('Flux Cloudinary indisponible ou preset en attente. Utilisation du stockage local.', err);
         }
       }
 
@@ -2549,10 +2525,12 @@
             ${m.type === 'video' 
               ? `<video src="${m.url}" muted></video>` 
               : `<img src="${m.url}" alt="${m.caption || 'Souvenir'}">`}
-            <span class="gallery-item-badge">${m.source === 'cloudinary' ? '☁️ Cloud' : '📷'}</span>
+            <span class="gallery-item-badge">${m.source === 'cloudinary' ? '☁️ Cloudinary' : '📷'}</span>
             <button class="btn-delete-media" title="Supprimer" onclick="event.stopPropagation(); deleteMedia('${m.id}')">✕</button>
           </div>
         `).join('') + '</div>';
+      } else {
+        mediaGridHtml = '<div style="font-size:13px; color:var(--text-3); margin-bottom:12px; font-style:italic;">📷 Aucune photo pour cette étape. Uploadez les souvenirs vers Cloudinary ci-dessous.</div>';
       }
 
       card.innerHTML = `
@@ -2838,10 +2816,16 @@
 
       if (mediaToShow.length === 0) {
         grid.innerHTML = `
-          <div style="grid-column:1/-1; text-align:center; padding:40px; background:var(--card-bg); border-radius:var(--radius-lg);">
-            <div style="font-size:32px; margin-bottom:8px;">📷</div>
-            <div style="font-weight:700; color:var(--text-1);">Aucune photo pour ce jour</div>
-            <button class="btn-upload primary" style="margin-top:12px;" onclick="triggerGlobalUpload()">Ajouter la première photo</button>
+          <div style="grid-column:1/-1; text-align:center; padding:50px 20px; background:var(--card-bg); border-radius:var(--radius-lg); border:1px solid var(--card-border);">
+            <div style="font-size:36px; margin-bottom:10px;">☁️</div>
+            <h3 style="font-size:17px; font-weight:800; color:var(--text-1);">Aucune photo sur Cloudinary ${filterDay === 'all' ? 'pour le moment' : 'pour ce jour'}</h3>
+            <p style="font-size:13.5px; color:var(--text-3); margin:6px auto 16px; max-width:440px;">
+              Toutes les photos et vidéos uploadées sur Cloudinary apparaîtront automatiquement ici pour tous les visiteurs du site.
+            </p>
+            <button class="btn-upload primary" onclick="triggerGlobalUpload()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Ajouter une photo
+            </button>
           </div>
         `;
         return;
