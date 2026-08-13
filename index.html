@@ -1730,7 +1730,7 @@
   <!-- =========================================================================
        MODALS: CONFIGURATION PHOTOS (IMGBB ILLIMITÉ) & SYNCHRONISATION CLOUD
        ========================================================================= -->
-  <div class="modal-backdrop" id="configModal">
+  <div class="modal-backdrop" id="configModal" onclick="if(event.target === this) closeConfigModal()">
     <div class="modal-card" style="max-height:90vh; overflow-y:auto;">
       <div class="modal-header">
         <div class="modal-title">
@@ -2299,17 +2299,22 @@
       initActiveDay();
       initCountdown();
       initPackingView();
+      loadLocalFallback();
       renderTrackGrid();
       renderDaysCards();
       updateGlobalStats();
+      renderWallGrid('all');
       checkUrlConfigImport();
       initFirebase();
 
-      // Keyboard navigation for Lightbox
+      // Keyboard navigation for Lightbox & Modals
       document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeConfigModal();
+          closeLightbox();
+        }
         const modal = document.getElementById('lightboxModal');
-        if (modal.classList.contains('active')) {
-          if (e.key === 'Escape') closeLightbox();
+        if (modal && modal.classList.contains('active')) {
           if (e.key === 'ArrowLeft') prevLightbox();
           if (e.key === 'ArrowRight') nextLightbox();
         }
@@ -2433,6 +2438,50 @@
       }
     }
 
+    // Sample initial photos for instant rich display
+    const DEFAULT_SAMPLE_MEDIA = [
+      {
+        id: 'sample_1',
+        day: 1,
+        url: 'https://images.unsplash.com/photo-1519178173456-914dfd41f5e8?w=1000&auto=format&fit=crop&q=80',
+        type: 'image',
+        caption: 'Arrivée & skyline de Montréal',
+        source: 'sample'
+      },
+      {
+        id: 'sample_2',
+        day: 2,
+        url: 'https://images.unsplash.com/photo-1588714477688-cf28a50e94f7?w=1000&auto=format&fit=crop&q=80',
+        type: 'image',
+        caption: 'Vieux-Port & ruelles pavées de Montréal',
+        source: 'sample'
+      },
+      {
+        id: 'sample_3',
+        day: 4,
+        url: 'https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=1000&auto=format&fit=crop&q=80',
+        type: 'image',
+        caption: 'Observation des baleines à Tadoussac',
+        source: 'sample'
+      },
+      {
+        id: 'sample_4',
+        day: 7,
+        url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1000&auto=format&fit=crop&q=80',
+        type: 'image',
+        caption: 'Le majestueux Rocher Percé en Gaspésie',
+        source: 'sample'
+      },
+      {
+        id: 'sample_5',
+        day: 14,
+        url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=1000&auto=format&fit=crop&q=80',
+        type: 'image',
+        caption: 'Château Frontenac & Vieux-Québec',
+        source: 'sample'
+      }
+    ];
+
     function initFirebase() {
       // 1. If no config, load local cache
       if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId) {
@@ -2442,6 +2491,12 @@
       }
 
       try {
+        if (typeof firebase === 'undefined') {
+          console.warn('Firebase SDK non chargé. Mode local actif.');
+          loadLocalFallback();
+          return;
+        }
+
         if (!firebase.apps.length) {
           firebaseApp = firebase.initializeApp(firebaseConfig);
         } else {
@@ -2489,11 +2544,16 @@
 
     function loadLocalFallback() {
       try {
-        const localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
-        allMediaCatalog = localMedia;
+        const stored = localStorage.getItem('canada2026_local_media');
+        if (stored !== null) {
+          allMediaCatalog = JSON.parse(stored || '[]');
+        } else {
+          allMediaCatalog = [...DEFAULT_SAMPLE_MEDIA];
+          localStorage.setItem('canada2026_local_media', JSON.stringify(allMediaCatalog));
+        }
         updateMediaViews();
       } catch(e) {
-        allMediaCatalog = [];
+        allMediaCatalog = [...DEFAULT_SAMPLE_MEDIA];
         updateMediaViews();
       }
     }
@@ -2522,19 +2582,29 @@
       tabs.forEach(t => {
         const viewEl = document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`);
         const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
-        if (t === tabId) {
-          viewEl.style.display = 'block';
-          viewEl.classList.add('active');
-          btnEl.classList.add('active');
-        } else {
-          viewEl.style.display = 'none';
-          viewEl.classList.remove('active');
-          btnEl.classList.remove('active');
+        if (viewEl) {
+          if (t === tabId) {
+            viewEl.style.display = 'block';
+            viewEl.classList.add('active');
+          } else {
+            viewEl.style.display = 'none';
+            viewEl.classList.remove('active');
+          }
+        }
+        if (btnEl) {
+          if (t === tabId) {
+            btnEl.classList.add('active');
+          } else {
+            btnEl.classList.remove('active');
+          }
         }
       });
 
       if (tabId === 'map') {
         setTimeout(initLeafletMap, 100);
+      }
+      if (tabId === 'wall') {
+        renderWallGrid('all');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2865,16 +2935,18 @@
     }
 
     async function handleDayUpload(dayNum, input) {
-      const file = input.files[0];
-      if (!file) return;
-      await uploadMediaFile(file, dayNum);
+      if (!input.files || input.files.length === 0) return;
+      for (let i = 0; i < input.files.length; i++) {
+        await uploadMediaFile(input.files[i], dayNum);
+      }
       input.value = '';
     }
 
     async function handleGlobalFileUpload(input) {
-      const file = input.files[0];
-      if (!file) return;
-      await uploadMediaFile(file, currentDayIndex + 1);
+      if (!input.files || input.files.length === 0) return;
+      for (let i = 0; i < input.files.length; i++) {
+        await uploadMediaFile(input.files[i], currentDayIndex + 1);
+      }
       input.value = '';
     }
 
@@ -2956,31 +3028,27 @@
       const imgKey = getImgbbApiKey();
       const hasFirebase = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId;
 
-      if (!imgKey && !hasFirebase) {
-        openConfigModal();
-        showToast('Configurez votre clé gratuite ImgBB ou Firebase 📸');
-        return;
-      }
-
-      showToast('Compression & téléversement en cours... ⏳📸');
+      showToast('Traitement de la photo... ⏳📸');
 
       try {
-        // 1. Client-side compression to make uploads ultra fast on mobile
+        // 1. Client-side compression to make uploads ultra fast & light
         const processedFile = await compressImageFile(file, 2048, 2048, 0.85);
 
         let uploadedUrl = '';
         let deleteUrl = '';
-        let uploadSource = 'imgbb';
+        let uploadSource = 'local';
 
-        // Primary: ImgBB Upload (Unlimited Storage)
+        // A. Primary Cloud: ImgBB Upload (if API key is entered)
         if (imgKey && file.type.startsWith('image/')) {
+          showToast('Téléversement vers ImgBB... ☁️📸');
           const res = await uploadToImgBB(processedFile, imgKey);
           uploadedUrl = res.url;
           deleteUrl = res.deleteUrl;
           uploadSource = 'imgbb';
         }
-        // Fallback: Firebase Storage (if video or if ImgBB not set)
-        else if (firebaseStorage) {
+        // B. Firebase Storage (if configured)
+        else if (hasFirebase && firebaseStorage) {
+          showToast('Téléversement vers Firebase... 🔥');
           const storageRef = firebaseStorage.ref();
           const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
           const filePath = `photos/day_${dayNum}/${Date.now()}_${safeName}`;
@@ -2988,13 +3056,21 @@
           await fileRef.put(processedFile);
           uploadedUrl = await fileRef.getDownloadURL();
           uploadSource = 'firebase';
-        } else if (imgKey) {
-          const res = await uploadToImgBB(processedFile, imgKey);
-          uploadedUrl = res.url;
-          uploadSource = 'imgbb';
+        }
+        // C. Local storage fallback (Base64)
+        else {
+          showToast('Enregistrement en local 💾 (Configurez ImgBB ⚙️ pour le cloud)');
+          const base64Url = await new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.onload = (e) => res(e.target.result);
+            reader.onerror = rej;
+            reader.readAsDataURL(processedFile);
+          });
+          uploadedUrl = base64Url;
+          uploadSource = 'local';
         }
 
-        if (!uploadedUrl) throw new Error("Impossible d'obtenir le lien de l'image.");
+        if (!uploadedUrl) throw new Error("Impossible d'obtenir l'image.");
 
         const isVideo = file.type.startsWith('video');
         const photoData = {
@@ -3004,45 +3080,28 @@
           type: isVideo ? 'video' : 'image',
           caption: `Jour ${dayNum} : ${DAYS_DATA[dayNum - 1] ? DAYS_DATA[dayNum - 1].title : 'Souvenir'}`,
           source: uploadSource,
-          timestamp: (firebase && firebase.firestore && firebase.firestore.FieldValue) ? firebase.firestore.FieldValue.serverTimestamp() : Date.now()
+          timestamp: (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue) ? firebase.firestore.FieldValue.serverTimestamp() : Date.now()
         };
 
-        // 2. Real-time broadcast to all family devices via Firestore
-        if (firestoreDb) {
+        // 2. Broadcast to all family devices if Firestore is connected
+        if (firestoreDb && uploadSource !== 'local') {
           await firestoreDb.collection('canada2026_photos').add(photoData);
           showToast('Photo hébergée sur ImgBB & synchronisée ! 🎉📸');
           return;
         }
 
-        // 3. If no Firestore, save locally
+        // 3. Save locally
         const newMedia = {
-          id: `imgbb_${Date.now()}`,
+          id: `media_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
           ...photoData
         };
         saveLocalMedia(newMedia);
-        showToast('Photo hébergée sur ImgBB & ajoutée ! 📸');
+        showToast(uploadSource === 'imgbb' ? 'Photo hébergée sur ImgBB ! 📸' : 'Photo ajoutée en local ! 💾 (Configurez ImgBB ⚙️ pour synchroniser)');
         return;
 
       } catch (err) {
         console.error('Erreur téléversement:', err);
-        alert('Erreur lors du téléversement :\n' + (err.message || err) + '\n\nSauvegarde temporaire en local...');
-
-        // Local storage fallback (Base64)
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const isVideo = file.type.startsWith('video');
-          const newMedia = {
-            id: `local_${Date.now()}`,
-            day: dayNum,
-            url: e.target.result,
-            type: isVideo ? 'video' : 'image',
-            caption: `Photo locale (Jour ${dayNum})`,
-            source: 'local'
-          };
-          saveLocalMedia(newMedia);
-          showToast('Photo enregistrée en local ! 💾');
-        };
-        reader.readAsDataURL(file);
+        alert('Erreur lors du téléversement :\n' + (err.message || err));
       }
     }
 
@@ -3059,7 +3118,7 @@
     }
 
     async function deleteMedia(mediaId) {
-      if (!confirm('Supprimer cette photo pour toute la famille ?')) return;
+      if (!confirm('Supprimer cette photo ?')) return;
 
       const photo = allMediaCatalog.find(m => m.id === mediaId);
 
@@ -3076,7 +3135,7 @@
         }
       }
 
-      // Local fallback removal
+      // Local removal
       let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
       localMedia = localMedia.filter(m => m.id !== mediaId);
       localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
@@ -3088,9 +3147,10 @@
     // --------------------------------------------------------------------------
     // 10. MUR DE PHOTOS VIEW (PHOTO WALL)
     // --------------------------------------------------------------------------
-    function renderWallGrid(filterDay) {
+    function renderWallGrid(filterDay = 'all') {
       const grid = document.getElementById('wallGrid');
       const filters = document.getElementById('wallFilters');
+      if (!grid || !filters) return;
 
       // Populate filter pills
       filters.innerHTML = `
@@ -3120,7 +3180,7 @@
             <div style="font-size:36px; margin-bottom:10px;">📸</div>
             <h3 style="font-size:17px; font-weight:800; color:var(--text-1);">Galerie prête ${filterDay === 'all' ? 'pour tous vos souvenirs' : 'pour ce jour'}</h3>
             <p style="font-size:13.5px; color:var(--text-3); margin:6px auto 16px; max-width:440px;">
-              Les photos hébergées gratuitement sur ImgBB s'affichent automatiquement en haute qualité pour tous les membres de la famille.
+              Ajoutez vos photos depuis chaque étape ou directement ci-dessous. Elles apparaîtront instantanément dans la galerie.
             </p>
             <button class="btn-upload primary" onclick="triggerGlobalUpload()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -3140,8 +3200,6 @@
           </div>
         </div>
       `).join('');
-    }
-
     function filterWallMedia(dayOrAll, btn) {
       document.querySelectorAll('.wall-filter-pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -3361,56 +3419,66 @@
     }
 
     function updateConfigModalStatus() {
-      const imgbbBoxText = document.getElementById('cfgImgbbStatusText');
-      const key = getImgbbApiKey();
-      if (imgbbBoxText) {
-        if (key && key.length > 5) {
-          imgbbBoxText.innerHTML = `🟢 Configuré (Illimité)`;
-          imgbbBoxText.style.color = 'var(--pos)';
-        } else {
-          imgbbBoxText.innerHTML = `⚡ Non configuré`;
-          imgbbBoxText.style.color = 'var(--text-3)';
+      try {
+        const imgbbBoxText = document.getElementById('cfgImgbbStatusText');
+        const key = getImgbbApiKey();
+        if (imgbbBoxText) {
+          if (key && key.length > 5) {
+            imgbbBoxText.innerHTML = `🟢 Configuré (ImgBB Illimité)`;
+            imgbbBoxText.style.color = 'var(--pos)';
+          } else {
+            imgbbBoxText.innerHTML = `⚡ Mode local (clé non saisie)`;
+            imgbbBoxText.style.color = 'var(--text-3)';
+          }
         }
-      }
 
-      const fbBoxText = document.getElementById('cfgStatusText');
-      if (fbBoxText) {
-        if (firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId) {
-          fbBoxText.innerHTML = `🟢 Connecté (${firebaseConfig.projectId})`;
-          fbBoxText.style.color = 'var(--pos)';
-        } else {
-          fbBoxText.innerHTML = `⚡ Mode local actif`;
-          fbBoxText.style.color = 'var(--text-3)';
+        const fbBoxText = document.getElementById('cfgStatusText');
+        if (fbBoxText) {
+          if (typeof firebaseConfig !== 'undefined' && firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId) {
+            fbBoxText.innerHTML = `🟢 Connecté (${firebaseConfig.projectId})`;
+            fbBoxText.style.color = 'var(--pos)';
+          } else {
+            fbBoxText.innerHTML = `⚡ Mode local actif`;
+            fbBoxText.style.color = 'var(--text-3)';
+          }
         }
+      } catch(e) {
+        console.warn('updateConfigModalStatus error', e);
       }
     }
 
     function openConfigModal() {
-      updateConfigModalStatus();
+      try {
+        updateConfigModalStatus();
 
-      const imgInput = document.getElementById('cfgImgbbKey');
-      if (imgInput) {
-        imgInput.value = getImgbbApiKey();
+        const imgInput = document.getElementById('cfgImgbbKey');
+        if (imgInput) {
+          imgInput.value = getImgbbApiKey() || '';
+        }
+
+        if (typeof firebaseConfig !== 'undefined' && firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId) {
+          const kInput = document.getElementById('cfgApiKey');
+          const pInput = document.getElementById('cfgProjectId');
+          const sInput = document.getElementById('cfgFirebaseSnippet');
+
+          if (kInput) kInput.value = firebaseConfig.apiKey || '';
+          if (pInput) pInput.value = firebaseConfig.projectId || '';
+          if (sInput) sInput.value = JSON.stringify(firebaseConfig, null, 2);
+
+          const detailsEl = document.getElementById('cfgFirebaseDetails');
+          if (detailsEl) detailsEl.open = true;
+        }
+
+        const modalEl = document.getElementById('configModal');
+        if (modalEl) modalEl.classList.add('open');
+      } catch (err) {
+        console.error('Erreur ouverture modal config:', err);
       }
-
-      if (firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId) {
-        const kInput = document.getElementById('cfgApiKey');
-        const pInput = document.getElementById('cfgProjectId');
-        const sInput = document.getElementById('cfgFirebaseSnippet');
-
-        if (kInput) kInput.value = firebaseConfig.apiKey || '';
-        if (pInput) pInput.value = firebaseConfig.projectId || '';
-        if (sInput) sInput.value = JSON.stringify(firebaseConfig, null, 2);
-
-        const detailsEl = document.getElementById('cfgFirebaseDetails');
-        if (detailsEl) detailsEl.open = true;
-      }
-
-      document.getElementById('configModal').classList.add('open');
     }
 
     function closeConfigModal() {
-      document.getElementById('configModal').classList.remove('open');
+      const modalEl = document.getElementById('configModal');
+      if (modalEl) modalEl.classList.remove('open');
     }
 
     function parseFirebaseInput(text) {
