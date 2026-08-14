@@ -16,11 +16,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-  <!-- Firebase SDK (Google Cloud - 100% Gratuit & Temps Réel) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
-
   <style>
     /* ==========================================================================
        VARIABLES & DESIGN SYSTEM
@@ -1421,8 +1416,8 @@
       </a>
 
       <div class="header-actions">
-        <!-- Settings & Cloud Config Modal -->
-        <button class="icon-btn" id="btnOpenSettings" title="Paramètres & Photos (ImgBB / Cloud)" onclick="openConfigModal()" aria-label="Paramètres">
+        <!-- Settings & ImgBB Config Modal -->
+        <button class="icon-btn" id="btnOpenSettings" title="Paramètres Photos (ImgBB & Partage)" onclick="openConfigModal()" aria-label="Paramètres">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
 
@@ -1626,21 +1621,25 @@
     </div>
 
     <!-- =========================================================================
-         TAB 3: MUR DE PHOTOS (FIREBASE REAL-TIME MULTI-USER FEED)
+         TAB 3: MUR DE PHOTOS (GALERIE IMGBB & PARTAGE FAMILLE)
          ========================================================================= -->
     <div id="viewWall" class="photo-wall-container">
       <div class="day-stepper-box" style="margin-bottom:16px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
             <h3 style="font-size:16px; font-weight:800; color:var(--text-1); display:flex; align-items:center; gap:6px;">
-              <span>📸</span> Galerie Familiale Temps Réel <span style="font-size:11px; padding:2px 8px; border-radius:999px; background:var(--pos-subtle); color:var(--pos); font-weight:700;">📸 ImgBB & Cloud</span>
+              <span>📸</span> Galerie Familiale & Souvenirs <span style="font-size:11px; padding:2px 8px; border-radius:999px; background:var(--pos-subtle); color:var(--pos); font-weight:700;">📸 ImgBB Illimité</span>
             </h3>
-            <p style="font-size:13px; color:var(--text-3);">Toutes les photos partagées par la famille apparaissent instantanément sur tous les écrans connectés.</p>
+            <p style="font-size:13px; color:var(--text-3);">Toutes les photos partagées par la famille. Hébergement gratuit et illimité via ImgBB.</p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn-upload" onclick="copyShareablePhotoLink()" title="Partager le lien du carnet avec toutes les photos pour vos proches">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Partager Galerie
+            </button>
             <button class="btn-upload" onclick="openConfigModal()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-              Réglages
+              Réglages ImgBB
             </button>
             <button class="btn-upload primary" onclick="triggerGlobalUpload()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -1732,105 +1731,73 @@
   </div>
 
   <!-- =========================================================================
-       MODALS: CONFIGURATION PHOTOS (IMGBB ILLIMITÉ) & SYNCHRONISATION CLOUD
+       MODALS: CONFIGURATION PHOTOS (IMGBB) & SYNCHRONISATION FAMILLE
        ========================================================================= -->
   <div class="modal-backdrop" id="configModal" onclick="if(event.target === this) closeConfigModal()">
     <div class="modal-card" style="max-height:90vh; overflow-y:auto;">
       <div class="modal-header">
         <div class="modal-title">
-          <span>⚙️</span> Photos & Synchronisation Cloud
+          <span>⚙️</span> Paramètres Photos & Partage
         </div>
         <button class="modal-close-btn" onclick="closeConfigModal()">✕</button>
       </div>
 
-      <!-- Live status indicators -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
-        <div id="cfgImgbbStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 12px;">
-          <div style="font-size:10.5px; font-weight:700; color:var(--text-3); text-transform:uppercase;">📸 Photos ImgBB</div>
-          <div id="cfgImgbbStatusText" style="font-weight:800; font-size:12px; color:var(--text-1); margin-top:2px;">⚡ Non configuré</div>
+      <!-- Live status indicator -->
+      <div id="cfgImgbbStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:10.5px; font-weight:700; color:var(--text-3); text-transform:uppercase;">📸 Stockage Photos ImgBB</div>
+          <div id="cfgImgbbStatusText" style="font-weight:800; font-size:13px; color:var(--text-1); margin-top:2px;">⚡ Mode local actif</div>
         </div>
-        <div id="cfgStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 12px;">
-          <div style="font-size:10.5px; font-weight:700; color:var(--text-3); text-transform:uppercase;">🔥 Sync Firestore</div>
-          <div id="cfgStatusText" style="font-weight:800; font-size:12px; color:var(--text-1); margin-top:2px;">⚡ Mode local actif</div>
-        </div>
+        <span style="font-size:11px; padding:3px 8px; border-radius:999px; background:var(--pos-subtle); color:var(--pos); font-weight:700;">Illimité & Gratuit</span>
       </div>
 
-      <!-- Section 1 : ImgBB Photos -->
+      <!-- Section ImgBB Photos -->
       <div style="background:var(--bg); border:1px solid var(--card-border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div style="font-weight:800; font-size:13.5px; color:var(--text-1); display:flex; align-items:center; gap:6px;">
-            <span>📸</span> Stockage Photos ImgBB <span style="font-size:10px; padding:2px 6px; border-radius:999px; background:var(--pos-subtle); color:var(--pos); font-weight:700;">Illimité & Gratuit</span>
-          </div>
-          <a href="https://api.imgbb.com/" target="_blank" style="font-size:11.5px; font-weight:700; color:var(--accent); text-decoration:underline;">Obtenir ma clé ↗</a>
+          <label for="cfgImgbbKey" style="font-weight:800; font-size:13.5px; color:var(--text-1); display:flex; align-items:center; gap:6px; margin-bottom:0;">
+            <span>🔑</span> Clé API ImgBB
+          </label>
+          <a href="https://api.imgbb.com/" target="_blank" style="font-size:11.5px; font-weight:700; color:var(--accent); text-decoration:underline;">Obtenir ma clé gratuite ↗</a>
         </div>
         <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
-          ImgBB héberge toutes vos photos sans limite de 1 Go. Vos images sont compressées automatiquement avant l'envoi pour un chargement instantané.
+          ImgBB héberge toutes vos photos sans limite de stockage. Les photos sont optimisées et compressées automatiquement avant l'envoi.
         </p>
         <div class="form-group" style="margin-bottom:10px;">
-          <label for="cfgImgbbKey">Clé API ImgBB</label>
           <input type="text" id="cfgImgbbKey" placeholder="ex: 4a6c8b9d2e1f0a7b8c9d0e1f2a3b4c5d">
           <div class="form-help">Gratuit en 30 secondes sur <a href="https://api.imgbb.com/" target="_blank" style="color:var(--accent); text-decoration:underline;">api.imgbb.com</a> (cliquez sur "Get API Key", sans carte bancaire).</div>
         </div>
         <div style="display:flex; gap:8px;">
           <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="testImgbbConnection()">
-            <span>🧪</span> Tester l'upload ImgBB
+            <span>🧪</span> Tester la clé ImgBB
           </button>
         </div>
       </div>
 
-      <!-- Section 2 : Firebase Sync Firestore -->
-      <details style="background:var(--bg); border:1px solid var(--card-border); border-radius:var(--radius-md); padding:12px 14px; margin-bottom:14px;" id="cfgFirebaseDetails">
-        <summary style="font-weight:700; color:var(--text-1); cursor:pointer; font-size:13px; display:flex; align-items:center; gap:6px;">
-          <span>🔥</span> Synchronisation Temps Réel (Firebase Firestore - Optionnel)
-        </summary>
-        <div style="margin-top:12px;">
-          <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
-            Permet de synchroniser instantanément les souvenirs et activités cochées sur tous les appareils de la famille en direct.
-          </p>
-
-          <div style="display:flex; gap:6px; margin-bottom:12px;">
-            <button class="wall-filter-pill active" id="btnModeSimple" onclick="switchConfigMode('simple')">✨ 2 Champs Simples</button>
-            <button class="wall-filter-pill" id="btnModeSnippet" onclick="switchConfigMode('snippet')">📋 Coller le code</button>
-          </div>
-
-          <div id="cfgModeSimple">
-            <div class="form-group">
-              <label for="cfgApiKey">Clé API Firebase (API Key)</label>
-              <input type="text" id="cfgApiKey" placeholder="ex: AIzaSyD-xxxxxxxxxxxxxxxxxxxxxxxxxx">
-            </div>
-            <div class="form-group">
-              <label for="cfgProjectId">ID du Projet Firebase</label>
-              <input type="text" id="cfgProjectId" placeholder="ex: canada2026-voyage" oninput="autoFillStorageBucket()">
-            </div>
-            <input type="hidden" id="cfgStorageBucket">
-          </div>
-
-          <div id="cfgModeSnippet" style="display:none;">
-            <div class="form-group">
-              <label for="cfgFirebaseSnippet">Collez le code <code>firebaseConfig</code> entier :</label>
-              <textarea id="cfgFirebaseSnippet" rows="5" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--card-border); background:var(--bg-elevated); color:var(--text-1); font-family:monospace; font-size:11.5px; padding:8px;" placeholder="const firebaseConfig = {
-  apiKey: 'AIzaSy...',
-  projectId: 'canada2026-voyage'
-};"></textarea>
-            </div>
-          </div>
-
-          <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="testFirebaseConnection()">
-            <span>🔍</span> Tester Firestore
-          </button>
+      <!-- Section Synchronisation & Partage Famille -->
+      <div style="background:var(--bg); border:1px solid var(--card-border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
+        <div style="font-weight:800; font-size:13.5px; color:var(--text-1); display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+          <span>👨‍👩‍👧‍👦</span> Partager & Synchroniser avec la Famille
         </div>
-      </details>
-
-      <!-- Share Action -->
-      <div style="margin: 12px 0 16px; border-top: 1px dashed var(--card-border); padding-top: 12px; display: flex; gap: 8px;">
-        <button class="btn-upload" style="width:100%; justify-content:center;" onclick="copyShareableConfigLink()">
-          <span>🔗</span> Copier le lien tout-en-un pour la famille
+        <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
+          Envoyez le lien synchronisé à vos proches (WhatsApp, SMS, Email). Dès qu'ils ouvriront le lien, toutes les photos s'afficheront instantanément sur leurs téléphones.
+        </p>
+        <button class="btn-upload" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="copyShareablePhotoLink()">
+          <span>🔗</span> Copier le lien tout-en-un avec photos
         </button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="btn-upload" style="font-size:11.5px; justify-content:center;" onclick="exportPhotosJson()">
+            <span>📥</span> Exporter (JSON)
+          </button>
+          <button class="btn-upload" style="font-size:11.5px; justify-content:center;" onclick="document.getElementById('importPhotosFileInput').click()">
+            <span>📤</span> Importer (JSON)
+          </button>
+          <input type="file" id="importPhotosFileInput" accept=".json" style="display:none;" onchange="importPhotosJson(this)">
+        </div>
       </div>
 
       <div class="modal-actions">
         <button class="btn-upload" onclick="closeConfigModal()">Fermer</button>
-        <button class="btn-upload primary" onclick="saveAllConfig()">💾 Sauvegarder & Activer</button>
+        <button class="btn-upload primary" onclick="saveAllConfig()">💾 Sauvegarder</button>
       </div>
     </div>
   </div>
@@ -2255,7 +2222,7 @@
     let completedActivities = new Set(JSON.parse(localStorage.getItem('canada2026_done') || '[]'));
     let checkedPackingItems = new Set(JSON.parse(localStorage.getItem('canada2026_packing') || '[]'));
 
-    // Media Catalog (combines ImgBB/Firebase real-time collection + local cache)
+    // Media Catalog (ImgBB photo hosting + local storage)
     let allMediaCatalog = []; 
 
     // ImgBB API Key (Unlimited Free Photo Hosting)
@@ -2273,13 +2240,6 @@
         localStorage.removeItem('canada2026_imgbb_key');
       }
     }
-
-    // Firebase Global Config (Realtime Sync)
-    let firebaseConfig = JSON.parse(localStorage.getItem('canada2026_firebase') || 'null');
-    let firebaseApp = null;
-    let firestoreDb = null;
-    let firebaseStorage = null;
-    let unsubscribeFirestore = null;
 
     // Active Lightbox State
     let lightboxIndex = 0;
@@ -2309,7 +2269,6 @@
       updateGlobalStats();
       renderWallGrid('all');
       checkUrlConfigImport();
-      initFirebase();
 
       // Keyboard navigation for Lightbox & Modals
       document.addEventListener('keydown', (e) => {
@@ -2410,94 +2369,41 @@
     }
 
     function checkUrlConfigImport() {
-      if (window.location.hash.startsWith('#cfg=')) {
+      if (window.location.hash.startsWith('#sync=') || window.location.hash.startsWith('#cfg=')) {
         try {
-          const raw = decodeURIComponent(window.location.hash.replace('#cfg=', ''));
+          const hashStr = window.location.hash.replace(/^#(sync|cfg)=/, '');
+          const raw = decodeURIComponent(hashStr);
           const parsed = JSON.parse(raw);
+
           if (parsed.imgbbKey) {
             setImgbbApiKey(parsed.imgbbKey);
           }
-          if (parsed.firebase && parsed.firebase.apiKey && parsed.firebase.projectId) {
-            firebaseConfig = parsed.firebase;
-            localStorage.setItem('canada2026_firebase', JSON.stringify(firebaseConfig));
-          }
-          history.replaceState(null, document.title, window.location.pathname + window.location.search);
-          showToast('✨ Configuration Photos & Cloud importée avec succès !');
-        } catch (e) {
-          console.warn('Erreur import #cfg=', e);
-        }
-      } else if (window.location.hash.startsWith('#fbConfig=')) {
-        try {
-          const raw = decodeURIComponent(window.location.hash.replace('#fbConfig=', ''));
-          const parsed = JSON.parse(raw);
-          if (parsed && parsed.apiKey && parsed.projectId) {
-            firebaseConfig = parsed;
-            localStorage.setItem('canada2026_firebase', JSON.stringify(firebaseConfig));
-            history.replaceState(null, document.title, window.location.pathname + window.location.search);
-            showToast('🔥 Configuration Firebase importée et activée !');
-          }
-        } catch (e) {
-          console.warn('Erreur import config Firebase URL', e);
-        }
-      }
-    }
-    function initFirebase() {
-      // 1. If no config, load local cache
-      if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId) {
-        console.info('Firebase Firestore non configuré. Mode local actif.');
-        loadLocalFallback();
-        return;
-      }
 
-      try {
-        if (typeof firebase === 'undefined') {
-          console.warn('Firebase SDK non chargé. Mode local actif.');
-          loadLocalFallback();
-          return;
-        }
+          if (Array.isArray(parsed.photos) && parsed.photos.length > 0) {
+            // Merge shared photos without duplicates
+            let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]')
+              .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
 
-        if (!firebase.apps.length) {
-          firebaseApp = firebase.initializeApp(firebaseConfig);
-        } else {
-          firebaseApp = firebase.app();
-        }
-
-        firestoreDb = firebase.firestore();
-        try { firebaseStorage = firebase.storage(); } catch(e){}
-
-        // 2. Real-time Firestore stream (triggers automatically on any phone upload!)
-        if (unsubscribeFirestore) unsubscribeFirestore();
-
-        unsubscribeFirestore = firestoreDb.collection('canada2026_photos')
-          .orderBy('day', 'asc')
-          .onSnapshot((snapshot) => {
-            allMediaCatalog = [];
-            snapshot.forEach((doc) => {
-              const data = doc.data();
-              allMediaCatalog.push({
-                id: doc.id,
-                day: data.day || 1,
-                url: data.url,
-                type: data.type || 'image',
-                caption: data.caption || `Jour ${data.day || 1}`,
-                storagePath: data.storagePath || '',
-                deleteUrl: data.deleteUrl || '',
-                source: data.source || 'imgbb',
-                timestamp: data.timestamp
-              });
+            let addedCount = 0;
+            parsed.photos.forEach(p => {
+              if (p && p.url && !localMedia.find(m => m.url === p.url || m.id === p.id)) {
+                localMedia.push(p);
+                addedCount++;
+              }
             });
 
-            // Cache locally for instant offline display
-            localStorage.setItem('canada2026_local_media', JSON.stringify(allMediaCatalog));
+            localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
+            allMediaCatalog = [...localMedia];
             updateMediaViews();
-          }, (err) => {
-            console.warn('Écoute Firestore en attente ou permission:', err);
-            loadLocalFallback();
-          });
+            showToast(`✨ Galerie synchronisée : ${addedCount} photo(s) ajoutée(s) ! 📸`);
+          } else {
+            showToast('✨ Clé ImgBB importée avec succès !');
+          }
 
-      } catch (err) {
-        console.error('Erreur initialisation Firebase:', err);
-        loadLocalFallback();
+          history.replaceState(null, document.title, window.location.pathname + window.location.search);
+        } catch (e) {
+          console.warn('Erreur import sync URL:', e);
+        }
       }
     }
 
@@ -2505,14 +2411,15 @@
       try {
         const stored = localStorage.getItem('canada2026_local_media');
         if (stored !== null) {
-          allMediaCatalog = JSON.parse(stored || '[]');
+          allMediaCatalog = JSON.parse(stored || '[]')
+            .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
         } else {
-          allMediaCatalog = [...DEFAULT_SAMPLE_MEDIA];
-          localStorage.setItem('canada2026_local_media', JSON.stringify(allMediaCatalog));
+          allMediaCatalog = [];
         }
+        localStorage.setItem('canada2026_local_media', JSON.stringify(allMediaCatalog));
         updateMediaViews();
       } catch(e) {
-        allMediaCatalog = [...DEFAULT_SAMPLE_MEDIA];
+        allMediaCatalog = [];
         updateMediaViews();
       }
     }
@@ -2698,7 +2605,7 @@
             ${m.type === 'video' 
               ? `<video src="${m.url}" muted></video>` 
               : `<img src="${m.url}" alt="${m.caption || 'Souvenir'}">`}
-            <span class="gallery-item-badge">${m.source === 'imgbb' ? '📸 ImgBB' : (m.source === 'firebase' ? '🔥 Firebase' : '📷')}</span>
+            <span class="gallery-item-badge">${m.source === 'imgbb' ? '📸 ImgBB' : '📷 Photo'}</span>
             <button class="btn-delete-media" title="Supprimer" onclick="event.stopPropagation(); deleteMedia('${m.id}')">✕</button>
           </div>
         `).join('') + '</div>';
@@ -2835,7 +2742,7 @@
     }
 
     // --------------------------------------------------------------------------
-    // 9. UPLOAD & FIREBASE REAL-TIME ENGINE
+    // 9. UPLOAD & IMGBB ENGINE
     // --------------------------------------------------------------------------
     function triggerDayUpload(dayNum) {
       document.getElementById(`dayFileInput-${dayNum}`).click();
@@ -2850,47 +2757,26 @@
       box.classList.toggle('open');
     }
 
-    async function addMediaUrl(dayNum) {
+    function addMediaUrl(dayNum) {
       const input = document.getElementById(`urlInput-${dayNum}`);
       const url = input.value.trim();
       if (!url) return;
 
       const isVideo = url.match(/\.(mp4|mov|webm)(\?|$)/i);
-
-      if (firestoreDb) {
-        showToast('Enregistrement du lien sur Firebase... ⏳');
-        try {
-          await firestoreDb.collection('canada2026_photos').add({
-            day: dayNum,
-            url: url,
-            type: isVideo ? 'video' : 'image',
-            caption: `Lien partagé (Jour ${dayNum})`,
-            storagePath: '',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp() || Date.now(),
-            source: 'firebase'
-          });
-          input.value = '';
-          document.getElementById(`urlInputBox-${dayNum}`).classList.remove('open');
-          showToast('Lien photo synchronisé sur Firebase ! 📸🔥');
-          return;
-        } catch (e) {
-          console.error('Erreur ajout URL Firestore', e);
-        }
-      }
-
-      // Fallback local
       const newMedia = {
         id: `url_${Date.now()}`,
         day: dayNum,
         url: url,
         type: isVideo ? 'video' : 'image',
         caption: `Photo ajoutée (Jour ${dayNum})`,
-        source: 'manual'
+        source: 'manual',
+        timestamp: Date.now()
       };
       saveLocalMedia(newMedia);
       input.value = '';
-      document.getElementById(`urlInputBox-${dayNum}`).classList.remove('open');
-      showToast('Lien photo ajouté en local ! 📸');
+      const box = document.getElementById(`urlInputBox-${dayNum}`);
+      if (box) box.classList.remove('open');
+      showToast('Lien photo ajouté ! 📸');
     }
 
     async function handleDayUpload(dayNum, input) {
@@ -2910,7 +2796,7 @@
     }
 
     // --------------------------------------------------------------------------
-    // 9. CLIENT-SIDE COMPRESSION & IMGBB / CLOUD UPLOAD ENGINE
+    // 9. CLIENT-SIDE COMPRESSION & IMGBB UPLOAD ENGINE
     // --------------------------------------------------------------------------
     function compressImageFile(file, maxWidth = 2048, maxHeight = 2048, quality = 0.85) {
       return new Promise((resolve) => {
@@ -2959,9 +2845,12 @@
       });
     }
 
-    async function uploadToImgBB(fileOrBlob, apiKey) {
+    async function uploadToImgBB(fileOrBlob, apiKey, customName = '') {
       const formData = new FormData();
       formData.append('image', fileOrBlob);
+      if (customName) {
+        formData.append('name', customName);
+      }
 
       const response = await fetch(`https://api.imgbb.com/1/upload?key=${encodeURIComponent(apiKey.trim())}`, {
         method: 'POST',
@@ -2985,7 +2874,6 @@
 
     async function uploadMediaFile(file, dayNum) {
       const imgKey = getImgbbApiKey();
-      const hasFirebase = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId;
 
       showToast('Traitement de la photo... ⏳📸');
 
@@ -3000,23 +2888,13 @@
         // A. Primary Cloud: ImgBB Upload (if API key is entered)
         if (imgKey && file.type.startsWith('image/')) {
           showToast('Téléversement vers ImgBB... ☁️📸');
-          const res = await uploadToImgBB(processedFile, imgKey);
+          const photoName = `canada2026_jour_${dayNum}_${Date.now()}`;
+          const res = await uploadToImgBB(processedFile, imgKey, photoName);
           uploadedUrl = res.url;
           deleteUrl = res.deleteUrl;
           uploadSource = 'imgbb';
         }
-        // B. Firebase Storage (if configured)
-        else if (hasFirebase && firebaseStorage) {
-          showToast('Téléversement vers Firebase... 🔥');
-          const storageRef = firebaseStorage.ref();
-          const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-          const filePath = `photos/day_${dayNum}/${Date.now()}_${safeName}`;
-          const fileRef = storageRef.child(filePath);
-          await fileRef.put(processedFile);
-          uploadedUrl = await fileRef.getDownloadURL();
-          uploadSource = 'firebase';
-        }
-        // C. Local storage fallback (Base64)
+        // B. Local storage fallback (Base64)
         else {
           showToast('Enregistrement en local 💾 (Configurez ImgBB ⚙️ pour le cloud)');
           const base64Url = await new Promise((res, rej) => {
@@ -3033,31 +2911,18 @@
 
         const isVideo = file.type.startsWith('video');
         const photoData = {
+          id: `media_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
           day: dayNum,
           url: uploadedUrl,
           deleteUrl: deleteUrl || '',
           type: isVideo ? 'video' : 'image',
           caption: `Jour ${dayNum} : ${DAYS_DATA[dayNum - 1] ? DAYS_DATA[dayNum - 1].title : 'Souvenir'}`,
           source: uploadSource,
-          timestamp: (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue) ? firebase.firestore.FieldValue.serverTimestamp() : Date.now()
+          timestamp: Date.now()
         };
 
-        // 2. Broadcast to all family devices if Firestore is connected
-        if (firestoreDb && uploadSource !== 'local') {
-          await firestoreDb.collection('canada2026_photos').add(photoData);
-          showToast('Photo hébergée sur ImgBB & synchronisée ! 🎉📸');
-          return;
-        }
-
-        // 3. Save locally
-        const newMedia = {
-          id: `media_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-          ...photoData
-        };
-        saveLocalMedia(newMedia);
-        showToast(uploadSource === 'imgbb' ? 'Photo hébergée sur ImgBB ! 📸' : 'Photo ajoutée en local ! 💾 (Configurez ImgBB ⚙️ pour synchroniser)');
-        return;
-
+        saveLocalMedia(photoData);
+        showToast(uploadSource === 'imgbb' ? 'Photo hébergée sur ImgBB ! 📸' : 'Photo ajoutée en local ! 💾 (Ajoutez votre clé ImgBB ⚙️ pour héberger en illimité)');
       } catch (err) {
         console.error('Erreur téléversement:', err);
         alert('Erreur lors du téléversement :\n' + (err.message || err));
@@ -3065,7 +2930,8 @@
     }
 
     function saveLocalMedia(item) {
-      let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
+      let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]')
+        .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
       if (!localMedia.find(m => m.id === item.id || m.url === item.url)) {
         localMedia.push(item);
         localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
@@ -3076,31 +2942,16 @@
       updateMediaViews();
     }
 
-    async function deleteMedia(mediaId) {
+    function deleteMedia(mediaId) {
       if (!confirm('Supprimer cette photo ?')) return;
 
-      const photo = allMediaCatalog.find(m => m.id === mediaId);
-
-      if (firestoreDb && photo && (photo.source === 'firebase' || photo.source === 'imgbb' || photo.source === 'manual')) {
-        try {
-          await firestoreDb.collection('canada2026_photos').doc(mediaId).delete();
-          if (photo.storagePath && firebaseStorage) {
-            await firebaseStorage.ref().child(photo.storagePath).delete().catch(() => {});
-          }
-          showToast('Photo supprimée.');
-          return;
-        } catch (e) {
-          console.error('Erreur suppression Firestore:', e);
-        }
-      }
-
-      // Local removal
-      let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]');
+      let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]')
+        .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
       localMedia = localMedia.filter(m => m.id !== mediaId);
       localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
       allMediaCatalog = allMediaCatalog.filter(m => m.id !== mediaId);
       updateMediaViews();
-      showToast('Photo retirée.');
+      showToast('Photo supprimée.');
     }
 
     // --------------------------------------------------------------------------
@@ -3347,66 +3198,8 @@
     }
 
     // --------------------------------------------------------------------------
-    // 15. CONFIG MODAL & CLOUD PERSISTENCE (IMGBB & FIRESTORE)
+    // 15. CONFIG MODAL & PARTAGE IMGBB
     // --------------------------------------------------------------------------
-    let currentConfigMode = 'simple';
-
-    function switchConfigMode(mode) {
-      currentConfigMode = mode;
-      const btnSimple = document.getElementById('btnModeSimple');
-      const btnSnippet = document.getElementById('btnModeSnippet');
-      const boxSimple = document.getElementById('cfgModeSimple');
-      const boxSnippet = document.getElementById('cfgModeSnippet');
-
-      if (mode === 'simple') {
-        if (btnSimple) btnSimple.classList.add('active');
-        if (btnSnippet) btnSnippet.classList.remove('active');
-        if (boxSimple) boxSimple.style.display = 'block';
-        if (boxSnippet) boxSnippet.style.display = 'none';
-      } else {
-        if (btnSnippet) btnSnippet.classList.add('active');
-        if (btnSimple) btnSimple.classList.remove('active');
-        if (boxSnippet) boxSnippet.style.display = 'block';
-        if (boxSimple) boxSimple.style.display = 'none';
-      }
-    }
-
-    function autoFillStorageBucket() {
-      const pId = document.getElementById('cfgProjectId').value.trim();
-      const bucketInput = document.getElementById('cfgStorageBucket');
-      if (bucketInput && pId) {
-        bucketInput.value = `${pId}.firebasestorage.app`;
-      }
-    }
-
-    function updateConfigModalStatus() {
-      try {
-        const imgbbBoxText = document.getElementById('cfgImgbbStatusText');
-        const key = getImgbbApiKey();
-        if (imgbbBoxText) {
-          if (key && key.length > 5) {
-            imgbbBoxText.innerHTML = `🟢 Configuré (ImgBB Illimité)`;
-            imgbbBoxText.style.color = 'var(--pos)';
-          } else {
-            imgbbBoxText.innerHTML = `⚡ Mode local (clé non saisie)`;
-            imgbbBoxText.style.color = 'var(--text-3)';
-          }
-        }
-
-        const fbBoxText = document.getElementById('cfgStatusText');
-        if (fbBoxText) {
-          if (typeof firebaseConfig !== 'undefined' && firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId) {
-            fbBoxText.innerHTML = `🟢 Connecté (${firebaseConfig.projectId})`;
-            fbBoxText.style.color = 'var(--pos)';
-          } else {
-            fbBoxText.innerHTML = `⚡ Mode local actif`;
-            fbBoxText.style.color = 'var(--text-3)';
-          }
-        }
-      } catch(e) {
-        console.warn('updateConfigModalStatus error', e);
-      }
-    }
 
     function openConfigModal() {
       try {
@@ -3415,19 +3208,6 @@
         const imgInput = document.getElementById('cfgImgbbKey');
         if (imgInput) {
           imgInput.value = getImgbbApiKey() || '';
-        }
-
-        if (typeof firebaseConfig !== 'undefined' && firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId) {
-          const kInput = document.getElementById('cfgApiKey');
-          const pInput = document.getElementById('cfgProjectId');
-          const sInput = document.getElementById('cfgFirebaseSnippet');
-
-          if (kInput) kInput.value = firebaseConfig.apiKey || '';
-          if (pInput) pInput.value = firebaseConfig.projectId || '';
-          if (sInput) sInput.value = JSON.stringify(firebaseConfig, null, 2);
-
-          const detailsEl = document.getElementById('cfgFirebaseDetails');
-          if (detailsEl) detailsEl.open = true;
         }
 
         const modalEl = document.getElementById('configModal');
@@ -3442,59 +3222,22 @@
       if (modalEl) modalEl.classList.remove('open');
     }
 
-    function parseFirebaseInput(text) {
-      if (!text) return null;
-      text = text.trim();
-
-      // Case 1: Pure JSON
-      if (text.startsWith('{') && text.endsWith('}')) {
-        try {
-          return JSON.parse(text);
-        } catch (e) {}
-      }
-
-      // Case 2: JavaScript code snippet (const firebaseConfig = { ... };)
-      const extractField = (name) => {
-        const regex = new RegExp(`${name}\\s*:\\s*['"\`]([^'"\`]+)['"\`]`, 'i');
-        const match = text.match(regex);
-        return match ? match[1] : '';
-      };
-
-      const apiKey = extractField('apiKey');
-      const projectId = extractField('projectId');
-      const authDomain = extractField('authDomain') || `${projectId}.firebaseapp.com`;
-      const storageBucket = extractField('storageBucket') || `${projectId}.firebasestorage.app`;
-      const messagingSenderId = extractField('messagingSenderId');
-      const appId = extractField('appId');
-
-      if (apiKey && projectId) {
-        return { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId };
-      }
-
-      return null;
-    }
-
-    function getFormFirebaseConfig() {
-      if (currentConfigMode === 'simple') {
-        const apiKey = document.getElementById('cfgApiKey').value.trim();
-        const projectId = document.getElementById('cfgProjectId').value.trim();
-        let storageBucket = document.getElementById('cfgStorageBucket').value.trim();
-        if (!storageBucket && projectId) {
-          storageBucket = `${projectId}.firebasestorage.app`;
+    function updateConfigModalStatus() {
+      try {
+        const imgbbBoxText = document.getElementById('cfgImgbbStatusText');
+        const key = getImgbbApiKey();
+        if (imgbbBoxText) {
+          if (key && key.length > 5) {
+            imgbbBoxText.innerHTML = `🟢 Clé active (${key.substring(0, 4)}...${key.substring(key.length - 3)})`;
+            imgbbBoxText.style.color = 'var(--pos)';
+          } else {
+            imgbbBoxText.innerHTML = `⚡ Mode local (clé non saisie)`;
+            imgbbBoxText.style.color = 'var(--text-3)';
+          }
         }
-        if (apiKey && projectId) {
-          return {
-            apiKey,
-            projectId,
-            authDomain: `${projectId}.firebaseapp.com`,
-            storageBucket
-          };
-        }
+      } catch(e) {
+        console.warn('updateConfigModalStatus error', e);
       }
-
-      // Snippet mode
-      const text = document.getElementById('cfgFirebaseSnippet').value.trim();
-      return parseFirebaseInput(text);
     }
 
     async function testImgbbConnection() {
@@ -3517,12 +3260,12 @@
         ctx.fillRect(0, 0, 1, 1);
 
         const testBlob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-        const result = await uploadToImgBB(testBlob, key);
+        const result = await uploadToImgBB(testBlob, key, 'test_ping');
 
         if (result && result.url) {
           setImgbbApiKey(key);
           updateConfigModalStatus();
-          alert("✅ Test ImgBB réussi avec succès !\n\nVotre clé API est valide et prête pour héberger toutes les photos du voyage sans limite de 1 Go.");
+          alert("✅ Test ImgBB réussi avec succès !\n\nVotre clé API est valide et prête pour héberger toutes les photos du voyage sans limite de stockage.");
         } else {
           throw new Error("Réponse inattendue du serveur ImgBB.");
         }
@@ -3532,80 +3275,86 @@
       }
     }
 
-    async function testFirebaseConnection() {
-      const cfg = getFormFirebaseConfig();
-
-      if (!cfg || !cfg.apiKey || !cfg.projectId) {
-        alert("Veuillez renseigner au moins une Clé API et un ID de projet Firebase.");
-        return;
-      }
-
-      showToast('Test de connexion Firebase en cours...');
-      try {
-        let testApp = null;
-        try {
-          testApp = firebase.initializeApp(cfg, 'testApp_' + Date.now());
-        } catch(e) {
-          testApp = firebase.app();
-        }
-
-        const testDb = testApp.firestore();
-        await testDb.collection('_test_ping').doc('ping').set({
-          timestamp: Date.now(),
-          status: 'ok'
-        });
-
-        alert("✅ Connexion Firebase Firestore réussie !\n\nFirestore est accessible en lecture/écriture.\nCliquez sur 'Sauvegarder & Activer' pour synchroniser tous vos appareils.");
-        try { testApp.delete(); } catch(e){}
-      } catch (err) {
-        console.error(err);
-        alert("⚠️ Erreur de connexion Firebase :\n" + (err.message || err) + "\n\nAstuce : Vérifiez que Firestore Database est créé en mode test (lecture/écriture autorisées) dans console.firebase.google.com.");
-      }
-    }
-
     function saveAllConfig() {
-      // 1. Save ImgBB Key
       const keyInput = document.getElementById('cfgImgbbKey');
       if (keyInput) {
         setImgbbApiKey(keyInput.value.trim());
       }
-
-      // 2. Save Firebase Config (if provided)
-      const fbCfg = getFormFirebaseConfig();
-      if (fbCfg && fbCfg.apiKey && fbCfg.projectId) {
-        firebaseConfig = fbCfg;
-        localStorage.setItem('canada2026_firebase', JSON.stringify(firebaseConfig));
-        initFirebase();
-      }
-
       closeConfigModal();
       updateConfigModalStatus();
-      showToast('Configuration enregistrée avec succès ! 🎉');
+      showToast('Paramètres enregistrés ! 🎉');
     }
 
-    function copyShareableConfigLink() {
+    function copyShareablePhotoLink() {
+      const validPhotos = allMediaCatalog.filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
       const payload = {
         imgbbKey: getImgbbApiKey(),
-        firebase: firebaseConfig || null
+        photos: validPhotos
       };
-
-      if (!payload.imgbbKey && (!payload.firebase || !payload.firebase.apiKey)) {
-        showToast('Renseignez d\'abord votre clé ImgBB ou Firebase.');
-        return;
-      }
 
       try {
         const encoded = encodeURIComponent(JSON.stringify(payload));
-        const shareUrl = window.location.origin + window.location.pathname + '#cfg=' + encoded;
+        const shareUrl = window.location.origin + window.location.pathname + '#sync=' + encoded;
         navigator.clipboard.writeText(shareUrl).then(() => {
-          showToast('🔗 Lien copié ! Envoyez-le à vos proches pour configurer tous les téléphones en 1 clic.');
+          showToast(`🔗 Lien copié (${validPhotos.length} photos incluses) ! Envoyez-le par WhatsApp/SMS.`);
         }).catch(() => {
-          prompt('Copiez ce lien pour configurer les téléphones des membres du voyage :', shareUrl);
+          prompt('Copiez ce lien pour synchroniser les téléphones de vos proches :', shareUrl);
         });
       } catch (e) {
         console.error(e);
-        showToast('Erreur génération lien.');
+        showToast('Erreur lors de la génération du lien.');
       }
+    }
+
+    function exportPhotosJson() {
+      try {
+        const validPhotos = allMediaCatalog.filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(validPhotos, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `canada2026_galerie_photos_${Date.now()}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        showToast(`📥 Export de ${validPhotos.length} photo(s) terminé !`);
+      } catch (e) {
+        console.error(e);
+        showToast('Erreur export JSON');
+      }
+    }
+
+    function importPhotosJson(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]')
+              .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
+            
+            let added = 0;
+            imported.forEach(p => {
+              if (p && p.url && !localMedia.find(m => m.url === p.url || m.id === p.id)) {
+                localMedia.push(p);
+                added++;
+              }
+            });
+
+            localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
+            allMediaCatalog = [...localMedia];
+            updateMediaViews();
+            showToast(`✅ ${added} photo(s) importée(s) avec succès !`);
+          } else {
+            alert('Le fichier sélectionné ne contient pas un tableau de photos valide.');
+          }
+        } catch (err) {
+          alert('Erreur lors de la lecture du fichier JSON : ' + err.message);
+        }
+        input.value = '';
+      };
+      reader.readAsText(file);
     }
 
     // --------------------------------------------------------------------------
