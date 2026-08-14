@@ -1633,6 +1633,10 @@
             <p style="font-size:13px; color:var(--text-3);">Toutes les photos partagées par la famille. Hébergement gratuit et illimité via ImgBB.</p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn-upload" onclick="forceRefreshPhotos()" title="Rafraîchir et forcer la relecture de toutes les photos ImgBB">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              🔄 Rafraîchir
+            </button>
             <button class="btn-upload" onclick="copyShareablePhotoLink()" title="Partager le lien du carnet avec toutes les photos pour vos proches">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
               Partager Galerie
@@ -1766,9 +1770,12 @@
           <input type="text" id="cfgImgbbKey" placeholder="ex: 4a6c8b9d2e1f0a7b8c9d0e1f2a3b4c5d">
           <div class="form-help">Gratuit en 30 secondes sur <a href="https://api.imgbb.com/" target="_blank" style="color:var(--accent); text-decoration:underline;">api.imgbb.com</a> (cliquez sur "Get API Key", sans carte bancaire).</div>
         </div>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="testImgbbConnection()">
             <span>🧪</span> Tester la clé ImgBB
+          </button>
+          <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="forceRefreshPhotos()">
+            <span>🔄</span> Rafraîchir les photos
           </button>
         </div>
       </div>
@@ -2668,7 +2675,7 @@
       card.id = `dayCard-${day.dayNum}`;
 
       // Get media for this specific day
-      const dayMedia = allMediaCatalog.filter(m => m.day === day.dayNum);
+      const dayMedia = allMediaCatalog.filter(m => (parseInt(m.day, 10) || 1) === (parseInt(day.dayNum, 10) || 1));
 
       // Activities HTML
       let activitiesHtml = '';
@@ -3058,9 +3065,9 @@
       `;
 
       // Unique days present in media
-      const availableDays = [...new Set(allMediaCatalog.map(m => m.day))].sort((a,b) => a - b);
+      const availableDays = [...new Set(allMediaCatalog.map(m => parseInt(m.day, 10) || 1))].sort((a,b) => a - b);
       availableDays.forEach(dNum => {
-        const count = allMediaCatalog.filter(m => m.day === dNum).length;
+        const count = allMediaCatalog.filter(m => (parseInt(m.day, 10) || 1) === (parseInt(dNum, 10) || 1)).length;
         const btn = document.createElement('button');
         btn.className = `wall-filter-pill ${filterDay === dNum ? 'active' : ''}`;
         btn.textContent = `Jour ${dNum} (${count})`;
@@ -3070,7 +3077,7 @@
 
       const mediaToShow = filterDay === 'all' 
         ? allMediaCatalog 
-        : allMediaCatalog.filter(m => m.day === filterDay);
+        : allMediaCatalog.filter(m => (parseInt(m.day, 10) || 1) === (parseInt(filterDay, 10) || 1));
 
       if (mediaToShow.length === 0) {
         grid.innerHTML = `
@@ -3110,7 +3117,7 @@
     // 11. LIGHTBOX
     // --------------------------------------------------------------------------
     function openLightboxForDay(dayNum, index) {
-      lightboxCurrentList = allMediaCatalog.filter(m => m.day === dayNum);
+      lightboxCurrentList = allMediaCatalog.filter(m => (parseInt(m.day, 10) || 1) === (parseInt(dayNum, 10) || 1));
       lightboxIndex = index;
       showLightboxModal();
     }
@@ -3118,7 +3125,7 @@
     function openLightboxFromWall(index, filterDay) {
       lightboxCurrentList = filterDay === 'all' 
         ? allMediaCatalog 
-        : allMediaCatalog.filter(m => m.day === filterDay);
+        : allMediaCatalog.filter(m => (parseInt(m.day, 10) || 1) === (parseInt(filterDay, 10) || 1));
       lightboxIndex = index;
       showLightboxModal();
     }
@@ -3466,6 +3473,40 @@
         input.value = '';
       };
       reader.readAsText(file);
+    }
+
+    function forceRefreshPhotos() {
+      showToast('Relecture des photos en cours... ⏳');
+      try {
+        // 1. Re-check URL config if any
+        checkUrlConfigImport();
+
+        // 2. Reload local storage catalog and normalize days
+        const stored = localStorage.getItem('canada2026_local_media');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            allMediaCatalog = parsed
+              .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'))
+              .map(m => ({
+                ...m,
+                day: parseInt(m.day, 10) || 1
+              }));
+          }
+        }
+
+        // 3. Save normalized list
+        localStorage.setItem('canada2026_local_media', JSON.stringify(allMediaCatalog));
+
+        // 4. Update all UI views
+        updateMediaViews();
+        updateConfigModalStatus();
+
+        showToast(`🔄 Galerie rafraîchie : ${allMediaCatalog.length} photo(s) chargée(s) ! 📸`);
+      } catch (e) {
+        console.error('Erreur forceRefreshPhotos:', e);
+        showToast('Erreur lors du rafraîchissement.');
+      }
     }
 
     // --------------------------------------------------------------------------
