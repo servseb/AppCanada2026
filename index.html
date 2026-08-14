@@ -1300,9 +1300,11 @@
     }
     .lightbox-media-wrap img, .lightbox-media-wrap video {
       max-width: 100%;
-      max-height: 80vh;
+      max-height: 82vh;
+      object-fit: contain;
+      image-rendering: -webkit-optimize-contrast;
       border-radius: var(--radius-md);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.85);
     }
     .lightbox-caption {
       color: #ffffff;
@@ -1767,13 +1769,43 @@
           <a href="https://api.imgbb.com/" target="_blank" style="font-size:11.5px; font-weight:700; color:var(--accent); text-decoration:underline;">Obtenir ma clé gratuite ↗</a>
         </div>
         <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
-          ImgBB héberge toutes vos photos sans limite de stockage. Les photos sont compressées automatiquement avant l'envoi.
+          ImgBB héberge toutes vos photos sans limite de stockage (jusqu'à 32 Mo par photo).
         </p>
         <div class="form-group" style="margin-bottom:10px;">
           <input type="text" id="cfgImgbbKey" placeholder="ex: 4a6c8b9d2e1f0a7b8c9d0e1f2a3b4c5d">
           <div class="form-help">Gratuit en 30 secondes sur <a href="https://api.imgbb.com/" target="_blank" style="color:var(--accent); text-decoration:underline;">api.imgbb.com</a> (cliquez sur "Get API Key", sans carte bancaire).</div>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--card-border);">
+          <label style="font-size:12px; font-weight:700; color:var(--text-2); margin-bottom:8px; display:flex; align-items:center; gap:5px;">
+            <span>✨</span> Rendu & Qualité d'image à l'envoi :
+          </label>
+          <div style="display:grid; grid-template-columns:1fr; gap:6px;">
+            <label class="quality-radio-option" style="display:flex; align-items:flex-start; gap:10px; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--card-border); background:var(--bg-elevated); cursor:pointer;">
+              <input type="radio" name="photoQualityOpt" id="pq_hd" value="hd" style="margin-top:2px;" onchange="setPhotoQualitySetting('hd')">
+              <div>
+                <div style="font-weight:800; font-size:12.5px; color:var(--text-1);">✨ Haute Définition 3K/4K (Recommandé)</div>
+                <div style="font-size:11px; color:var(--text-3); margin-top:2px;">Conserve les originaux jusqu'à 8 Mo. Au-delà, redimensionnement doux à 2880px et 94% de qualité sans perte visible.</div>
+              </div>
+            </label>
+            <label class="quality-radio-option" style="display:flex; align-items:flex-start; gap:10px; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--card-border); background:var(--bg-elevated); cursor:pointer;">
+              <input type="radio" name="photoQualityOpt" id="pq_original" value="original" style="margin-top:2px;" onchange="setPhotoQualitySetting('original')">
+              <div>
+                <div style="font-weight:800; font-size:12.5px; color:var(--text-1);">💎 Qualité Originale (100% sans compression)</div>
+                <div style="font-size:11px; color:var(--text-3); margin-top:2px;">Envoie le fichier exact de votre appareil photo sans aucun traitement (jusqu'à 32 Mo par photo).</div>
+              </div>
+            </label>
+            <label class="quality-radio-option" style="display:flex; align-items:flex-start; gap:10px; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--card-border); background:var(--bg-elevated); cursor:pointer;">
+              <input type="radio" name="photoQualityOpt" id="pq_eco" value="eco" style="margin-top:2px;" onchange="setPhotoQualitySetting('eco')">
+              <div>
+                <div style="font-weight:800; font-size:12.5px; color:var(--text-1);">⚡ Économique & Rapide (2048px, 85%)</div>
+                <div style="font-size:11px; color:var(--text-3); margin-top:2px;">Optimisé pour les réseaux mobiles très lents.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
           <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="testImgbbConnection()">
             <span>🧪</span> Tester la clé ImgBB
           </button>
@@ -1933,7 +1965,7 @@
         desc: "Immersion dans les montagnes des Laurentides. Randonnée vivifiante du sentier La Roche (5,8 km, 2h30) offrant une vue à couper le souffle sur le lac et le mont Tremblant.",
         activities: [
           "Route panoramique vers le Parc national du Mont-Tremblant (1h30)",
-          "Randonnée sportive du sentier La Roche (6,4 km, dénivelé +760 m)",
+          "Randonnée sportive du sentier La Roche (5,8 km, dénivelé +215 m)",
           "Contemplation du panorama grandiose sur le lac Tremblant et les collines"
         ],
         resto: "🍽️ Beba (3900 rue Éthel, Verdun) — bistronomie argentico-méditerranéenne conviviale"
@@ -2306,6 +2338,18 @@
       jsonbinId = (id || '').trim();
       if (jsonbinId) localStorage.setItem('canada2026_jsonbin_id', jsonbinId);
       else localStorage.removeItem('canada2026_jsonbin_id');
+    }
+
+    // Photo Quality & Optimization Settings ('hd' | 'original' | 'eco')
+    let photoQualitySetting = localStorage.getItem('canada2026_photo_quality') || 'hd';
+
+    function getPhotoQualitySetting() {
+      return photoQualitySetting || localStorage.getItem('canada2026_photo_quality') || 'hd';
+    }
+
+    function setPhotoQualitySetting(val) {
+      photoQualitySetting = val || 'hd';
+      localStorage.setItem('canada2026_photo_quality', photoQualitySetting);
     }
 
     // Active Lightbox State
@@ -2981,51 +3025,81 @@
     // --------------------------------------------------------------------------
     // 9. CLIENT-SIDE COMPRESSION & IMGBB UPLOAD ENGINE
     // --------------------------------------------------------------------------
-    function compressImageFile(file, maxWidth = 2880, maxHeight = 2880, quality = 0.94) {
+    function compressImageFile(file) {
       return new Promise((resolve) => {
         if (!file || !file.type || !file.type.startsWith('image/') || file.type === 'image/gif' || file.type === 'image/svg+xml') {
           return resolve(file);
         }
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            let width = img.naturalWidth || img.width;
-            let height = img.naturalHeight || img.height;
+        const mode = getPhotoQualitySetting();
 
-            if (width > maxWidth || height > maxHeight) {
-              if (width > height) {
-                height = Math.round((height * maxWidth) / width);
-                width = maxWidth;
-              } else {
-                width = Math.round((width * maxHeight) / height);
-                height = maxHeight;
-              }
-            }
+        // Mode 1: 💎 Qualité Originale (100% sans compression, zéro perte)
+        if (mode === 'original') {
+          return resolve(file);
+        }
 
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, 0, 0, width, height);
+        // Mode 2: ✨ Haute Définition 3K/4K (Recommandé)
+        // Si le fichier fait moins de 8 Mo, on le conserve à 100% sans y toucher
+        if (mode === 'hd') {
+          if (file.size < 8 * 1024 * 1024) {
+            return resolve(file);
+          }
+          return runCanvasResize(file, 2880, 2880, 0.94, resolve);
+        }
 
-            canvas.toBlob((blob) => {
-              if (blob && blob.size < file.size) {
-                resolve(blob);
-              } else {
-                resolve(file);
-              }
-            }, 'image/jpeg', quality);
-          };
-          img.onerror = () => resolve(file);
-          img.src = e.target.result;
-        };
-        reader.onerror = () => resolve(file);
-        reader.readAsDataURL(file);
+        // Mode 3: ⚡ Économique & Rapide (2048px, 85%)
+        if (mode === 'eco') {
+          if (file.size < 1.5 * 1024 * 1024) {
+            return resolve(file);
+          }
+          return runCanvasResize(file, 2048, 2048, 0.85, resolve);
+        }
+
+        resolve(file);
       });
+    }
+
+    function runCanvasResize(file, maxWidth, maxHeight, quality, resolve) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.naturalWidth || img.width;
+          let height = img.naturalHeight || img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            if (width > height) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Output high-fidelity WebP if supported by file type, otherwise JPEG
+          const outputMime = (file.type === 'image/webp') ? 'image/webp' : 'image/jpeg';
+          canvas.toBlob((blob) => {
+            if (blob && blob.size < file.size) {
+              resolve(blob);
+            } else {
+              resolve(file);
+            }
+          }, outputMime, quality);
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
     }
 
     async function uploadToImgBB(fileOrBlob, apiKey, customName = '') {
@@ -3061,8 +3135,8 @@
       showToast('Traitement de la photo... ⏳📸');
 
       try {
-        // 1. Client-side compression to make uploads ultra fast & light
-        const processedFile = await compressImageFile(file, 2048, 2048, 0.85);
+        // 1. Client-side smart optimization according to user settings
+        const processedFile = await compressImageFile(file);
 
         let uploadedUrl = '';
         let deleteUrl = '';
@@ -3386,27 +3460,6 @@
     // 15. CONFIG MODAL & PARTAGE IMGBB
     // --------------------------------------------------------------------------
 
-    function openConfigModal() {
-      try {
-        updateConfigModalStatus();
-
-        const imgInput = document.getElementById('cfgImgbbKey');
-        if (imgInput) {
-          imgInput.value = getImgbbApiKey() || '';
-        }
-
-        const modalEl = document.getElementById('configModal');
-        if (modalEl) modalEl.classList.add('open');
-      } catch (err) {
-        console.error('Erreur ouverture modal config:', err);
-      }
-    }
-
-    function closeConfigModal() {
-      const modalEl = document.getElementById('configModal');
-      if (modalEl) modalEl.classList.remove('open');
-    }
-
     function updateConfigModalStatus() {
       try {
         const imgbbBoxText = document.getElementById('cfgImgbbStatusText');
@@ -3449,6 +3502,10 @@
 
         const jIdInput = document.getElementById('cfgJsonbinId');
         if (jIdInput) jIdInput.value = getJsonbinId() || '';
+
+        const qSetting = getPhotoQualitySetting();
+        const radEl = document.querySelector(`input[name="photoQualityOpt"][value="${qSetting}"]`);
+        if (radEl) radEl.checked = true;
 
         const modalEl = document.getElementById('configModal');
         if (modalEl) modalEl.classList.add('open');
@@ -3674,6 +3731,9 @@
 
       const jIdInput = document.getElementById('cfgJsonbinId');
       if (jIdInput) setJsonbinId(jIdInput.value.trim());
+
+      const selQuality = document.querySelector('input[name="photoQualityOpt"]:checked');
+      if (selQuality) setPhotoQualitySetting(selQuality.value);
 
       closeConfigModal();
       updateConfigModalStatus();
