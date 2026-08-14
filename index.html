@@ -2255,6 +2255,11 @@
       }
     }
 
+    function getBasePageUrl() {
+      const full = window.location.href;
+      return full.split('#')[0].split('?')[0];
+    }
+
     // --------------------------------------------------------------------------
     // 3. INITIALIZATION & REAL-TIME ENGINE
     // --------------------------------------------------------------------------
@@ -2264,11 +2269,16 @@
       initCountdown();
       initPackingView();
       loadLocalFallback();
+      checkUrlConfigImport();
       renderTrackGrid();
       renderDaysCards();
       updateGlobalStats();
       renderWallGrid('all');
-      checkUrlConfigImport();
+
+      // Listen for dynamic hash navigation or updates
+      window.addEventListener('hashchange', () => {
+        checkUrlConfigImport();
+      });
 
       // Keyboard navigation for Lightbox & Modals
       document.addEventListener('keydown', (e) => {
@@ -2369,41 +2379,119 @@
     }
 
     function checkUrlConfigImport() {
-      if (window.location.hash.startsWith('#sync=') || window.location.hash.startsWith('#cfg=')) {
-        try {
-          const hashStr = window.location.hash.replace(/^#(sync|cfg)=/, '');
-          const raw = decodeURIComponent(hashStr);
-          const parsed = JSON.parse(raw);
+      const rawHash = window.location.hash || '';
+      const rawSearch = window.location.search || '';
+      let syncPayload = '';
 
-          if (parsed.imgbbKey) {
-            setImgbbApiKey(parsed.imgbbKey);
-          }
+      if (rawHash.includes('sync=')) {
+        syncPayload = rawHash.split('sync=')[1];
+      } else if (rawHash.includes('photos=')) {
+        syncPayload = rawHash.split('photos=')[1];
+      } else if (rawHash.includes('cfg=')) {
+        syncPayload = rawHash.split('cfg=')[1];
+      } else if (rawSearch.includes('sync=')) {
+        syncPayload = new URLSearchParams(rawSearch).get('sync') || '';
+      } else if (rawSearch.includes('photos=')) {
+        syncPayload = new URLSearchParams(rawSearch).get('photos') || '';
+      }
 
-          if (Array.isArray(parsed.photos) && parsed.photos.length > 0) {
-            // Merge shared photos without duplicates
-            let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]')
-              .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
+      if (!syncPayload) return;
 
-            let addedCount = 0;
-            parsed.photos.forEach(p => {
-              if (p && p.url && !localMedia.find(m => m.url === p.url || m.id === p.id)) {
-                localMedia.push(p);
-                addedCount++;
+      try {
+        const decoded = decodeURIComponent(syncPayload);
+        let importedPhotos = [];
+        let importedKey = '';
+
+        // Case 1: Compact parameters format "k=...&p=..."
+        if (decoded.includes('p=') || decoded.includes('k=')) {
+          const urlParams = new URLSearchParams(decoded);
+          importedKey = urlParams.get('k') || '';
+          const pRaw = urlParams.get('p') || '';
+          if (pRaw) {
+            const photoItems = pRaw.split('|');
+            photoItems.forEach(item => {
+              if (!item.trim()) return;
+              const sub = item.split('~');
+              if (sub.length >= 2) {
+                const day = parseInt(sub[0], 10) || 1;
+                const url = decodeURIComponent(sub[1] || '');
+                const caption = decodeURIComponent(sub[2] || `Jour ${day}`);
+                if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:'))) {
+                  importedPhotos.push({
+                    id: `sync_${day}_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+                    day: day,
+                    url: url,
+                    type: url.match(/\.(mp4|mov|webm)(\?|$)/i) ? 'video' : 'image',
+                    caption: caption,
+                    source: 'imgbb',
+                    timestamp: Date.now()
+                  });
+                }
               }
             });
-
-            localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
-            allMediaCatalog = [...localMedia];
-            updateMediaViews();
-            showToast(`✨ Galerie synchronisée : ${addedCount} photo(s) ajoutée(s) ! 📸`);
-          } else {
-            showToast('✨ Clé ImgBB importée avec succès !');
           }
-
-          history.replaceState(null, document.title, window.location.pathname + window.location.search);
-        } catch (e) {
-          console.warn('Erreur import sync URL:', e);
         }
+        // Case 2: JSON payload format
+        else if (decoded.startsWith('{')) {
+          const parsed = JSON.parse(decoded);
+          if (parsed.imgbbKey) importedKey = parsed.imgbbKey;
+          if (Array.isArray(parsed.photos)) {
+            parsed.photos.forEach(p => {
+              if (p && p.url) {
+                importedPhotos.push({
+                  id: p.id || `sync_${p.day || 1}_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+                  day: p.day || 1,
+                  url: p.url,
+                  type: p.type || (p.url.match(/\.(mp4|mov|webm)(\?|$)/i) ? 'video' : 'image'),
+                  caption: p.caption || `Jour ${p.day || 1}`,
+                  source: p.source || 'imgbb',
+                  timestamp: p.timestamp || Date.now()
+                });
+              }
+            });
+          }
+        }
+
+        if (importedKey) {
+          setImgbbApiKey(importedKey);
+          const kInput = document.getElementById('cfgImgbbKey');
+          if (kInput) kInput.value = importedKey;
+        }
+
+        if (importedPhotos.length > 0) {
+          let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]')
+            .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
+
+          let addedCount = 0;
+          importedPhotos.forEach(p => {
+            if (p && p.url && !localMedia.find(m => m.url === p.url)) {
+              localMedia.push(p);
+              addedCount++;
+            }
+          });
+
+          localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
+          allMediaCatalog = [...localMedia];
+          updateMediaViews();
+          showToast(`✨ Galerie synchronisée : ${importedPhotos.length} photo(s) chargée(s) ! 📸`);
+          
+          // Switch to gallery view automatically so recipient sees the photos immediately
+          if (rawHash.includes('wall') || rawHash.includes('gallery') || rawHash.includes('sync=')) {
+            switchTab('wall');
+          }
+        } else if (importedKey) {
+          showToast('✨ Clé ImgBB importée avec succès !');
+        }
+
+        // Clean URL safely without breaking file:// protocol
+        try {
+          if (window.history && window.history.replaceState && window.location.protocol.startsWith('http')) {
+            window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+          }
+        } catch (e) {}
+
+      } catch (err) {
+        console.warn('Erreur décodage lien sync:', err);
       }
     }
 
@@ -3287,21 +3375,44 @@
 
     function copyShareablePhotoLink() {
       const validPhotos = allMediaCatalog.filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
-      const payload = {
-        imgbbKey: getImgbbApiKey(),
-        photos: validPhotos
-      };
+      const key = getImgbbApiKey();
 
       try {
-        const encoded = encodeURIComponent(JSON.stringify(payload));
-        const shareUrl = window.location.origin + window.location.pathname + '#sync=' + encoded;
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          showToast(`🔗 Lien copié (${validPhotos.length} photos incluses) ! Envoyez-le par WhatsApp/SMS.`);
-        }).catch(() => {
-          prompt('Copiez ce lien pour synchroniser les téléphones de vos proches :', shareUrl);
+        const baseUrl = getBasePageUrl();
+        let shareUrl = baseUrl;
+
+        // Build compact parameter: k=KEY&p=DAY~URL~CAPTION|...
+        const photoItems = validPhotos.map(p => {
+          const d = p.day || 1;
+          const u = encodeURIComponent(p.url || '');
+          const c = encodeURIComponent(p.caption || `Jour ${d}`);
+          return `${d}~${u}~${c}`;
         });
+
+        const params = [];
+        if (key) params.push(`k=${encodeURIComponent(key)}`);
+        if (photoItems.length > 0) params.push(`p=${photoItems.join('|')}`);
+
+        if (params.length > 0) {
+          const syncStr = encodeURIComponent(params.join('&'));
+          shareUrl += `#sync=${syncStr}`;
+        } else {
+          shareUrl += '#wall';
+        }
+
+        const copySuccess = () => {
+          showToast(`🔗 Lien copié (${validPhotos.length} photos incluses) ! Prêt à envoyer.`);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareUrl).then(copySuccess).catch(() => {
+            prompt('Copiez ce lien pour synchroniser les téléphones de vos proches :', shareUrl);
+          });
+        } else {
+          prompt('Copiez ce lien pour synchroniser les téléphones de vos proches :', shareUrl);
+        }
       } catch (e) {
-        console.error(e);
+        console.error('Erreur génération lien partage:', e);
         showToast('Erreur lors de la génération du lien.');
       }
     }
