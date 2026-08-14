@@ -1735,36 +1735,39 @@
   </div>
 
   <!-- =========================================================================
-       MODALS: CONFIGURATION PHOTOS (IMGBB) & SYNCHRONISATION FAMILLE
+       MODALS: CONFIGURATION PHOTOS (IMGBB) & SYNCHRONISATION DIRECTE
        ========================================================================= -->
   <div class="modal-backdrop" id="configModal" onclick="if(event.target === this) closeConfigModal()">
     <div class="modal-card" style="max-height:90vh; overflow-y:auto;">
       <div class="modal-header">
         <div class="modal-title">
-          <span>⚙️</span> Paramètres Photos & Partage
+          <span>⚙️</span> Paramètres Photos & Synchronisation
         </div>
         <button class="modal-close-btn" onclick="closeConfigModal()">✕</button>
       </div>
 
       <!-- Live status indicator -->
-      <div id="cfgImgbbStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-size:10.5px; font-weight:700; color:var(--text-3); text-transform:uppercase;">📸 Stockage Photos ImgBB</div>
-          <div id="cfgImgbbStatusText" style="font-weight:800; font-size:13px; color:var(--text-1); margin-top:2px;">⚡ Mode local actif</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+        <div id="cfgImgbbStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 12px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">📸 Stockage ImgBB</div>
+          <div id="cfgImgbbStatusText" style="font-weight:800; font-size:12px; color:var(--text-1); margin-top:2px;">⚡ Non configuré</div>
         </div>
-        <span style="font-size:11px; padding:3px 8px; border-radius:999px; background:var(--pos-subtle); color:var(--pos); font-weight:700;">Illimité & Gratuit</span>
+        <div id="cfgCloudStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 12px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">☁️ Sync Cloud Directe</div>
+          <div id="cfgCloudStatusText" style="font-weight:800; font-size:12px; color:var(--text-1); margin-top:2px;">⚡ Mode autonome</div>
+        </div>
       </div>
 
-      <!-- Section ImgBB Photos -->
+      <!-- Section 1 : ImgBB Photos (Stockage) -->
       <div style="background:var(--bg); border:1px solid var(--card-border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <label for="cfgImgbbKey" style="font-weight:800; font-size:13.5px; color:var(--text-1); display:flex; align-items:center; gap:6px; margin-bottom:0;">
-            <span>🔑</span> Clé API ImgBB
+            <span>📸</span> 1. Clé API ImgBB (Hébergement Photos)
           </label>
           <a href="https://api.imgbb.com/" target="_blank" style="font-size:11.5px; font-weight:700; color:var(--accent); text-decoration:underline;">Obtenir ma clé gratuite ↗</a>
         </div>
         <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
-          ImgBB héberge toutes vos photos sans limite de stockage. Les photos sont optimisées et compressées automatiquement avant l'envoi.
+          ImgBB héberge toutes vos photos sans limite de stockage. Les photos sont compressées automatiquement avant l'envoi.
         </p>
         <div class="form-group" style="margin-bottom:10px;">
           <input type="text" id="cfgImgbbKey" placeholder="ex: 4a6c8b9d2e1f0a7b8c9d0e1f2a3b4c5d">
@@ -1774,22 +1777,55 @@
           <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="testImgbbConnection()">
             <span>🧪</span> Tester la clé ImgBB
           </button>
+        </div>
+      </div>
+
+      <!-- Section 2 : Synchronisation Cloud Directe (JSONBin) -->
+      <div style="background:var(--bg); border:1px solid var(--card-border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-weight:800; font-size:13.5px; color:var(--text-1); display:flex; align-items:center; gap:6px;">
+            <span>☁️</span> 2. Synchronisation Directe de la Famille
+          </div>
+          <a href="https://jsonbin.io/" target="_blank" style="font-size:11.5px; font-weight:700; color:var(--accent); text-decoration:underline;">jsonbin.io ↗</a>
+        </div>
+        <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
+          Permet au bouton <strong>« 🔄 Rafraîchir »</strong> de charger automatiquement toutes les photos envoyées par toute la famille en direct.
+        </p>
+
+        <div class="form-group" style="margin-bottom:8px;">
+          <label for="cfgJsonbinKey" style="font-size:12px; font-weight:700; color:var(--text-2); margin-bottom:4px;">Master Key JSONBin (Gratuit)</label>
+          <input type="text" id="cfgJsonbinKey" placeholder="ex: $2a$10$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX">
+          <div class="form-help">Disponible gratuitement sur <a href="https://jsonbin.io/" target="_blank" style="color:var(--accent); text-decoration:underline;">jsonbin.io</a> (Account > API Keys > Master Key).</div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:10px;">
+          <label for="cfgJsonbinId" style="font-size:12px; font-weight:700; color:var(--text-2); margin-bottom:4px;">ID de l'espace partagé (Bin ID)</label>
+          <input type="text" id="cfgJsonbinId" placeholder="ex: 66bc1234438830417fbxxxxx">
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-upload" style="font-size:12px; padding:6px 12px; background:var(--accent-subtle); color:var(--accent); font-weight:700;" onclick="createJsonBinSpace()">
+            <span>✨</span> 1 Clic : Créer l'espace partagé
+          </button>
+          <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="testJsonBinConnection()">
+            <span>🧪</span> Tester la connexion
+          </button>
           <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="forceRefreshPhotos()">
-            <span>🔄</span> Rafraîchir les photos
+            <span>🔄</span> Rafraîchir en direct
           </button>
         </div>
       </div>
 
-      <!-- Section Synchronisation & Partage Famille -->
+      <!-- Section 3 : Partage Rapide & Sauvegarde -->
       <div style="background:var(--bg); border:1px solid var(--card-border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
         <div style="font-weight:800; font-size:13.5px; color:var(--text-1); display:flex; align-items:center; gap:6px; margin-bottom:6px;">
-          <span>👨‍👩‍👧‍👦</span> Partager & Synchroniser avec la Famille
+          <span>👨‍👩‍👧‍👦</span> 3. Partage & Sauvegarde Locale
         </div>
         <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
-          Envoyez le lien synchronisé à vos proches (WhatsApp, SMS, Email). Dès qu'ils ouvriront le lien, toutes les photos s'afficheront instantanément sur leurs téléphones.
+          Copiez ce lien pour configurer en 1 clic les téléphones de vos proches avec l'accès direct aux photos.
         </p>
         <button class="btn-upload" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="copyShareablePhotoLink()">
-          <span>🔗</span> Copier le lien tout-en-un avec photos
+          <span>🔗</span> Copier le lien tout-en-un pour la famille
         </button>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
           <button class="btn-upload" style="font-size:11.5px; justify-content:center;" onclick="exportPhotosJson()">
@@ -2248,6 +2284,30 @@
       }
     }
 
+    // JSONBin Direct Cloud Synchronization
+    let jsonbinKey = localStorage.getItem('canada2026_jsonbin_key') || '';
+    let jsonbinId = localStorage.getItem('canada2026_jsonbin_id') || '';
+
+    function getJsonbinKey() {
+      return jsonbinKey || localStorage.getItem('canada2026_jsonbin_key') || '';
+    }
+
+    function setJsonbinKey(key) {
+      jsonbinKey = (key || '').trim();
+      if (jsonbinKey) localStorage.setItem('canada2026_jsonbin_key', jsonbinKey);
+      else localStorage.removeItem('canada2026_jsonbin_key');
+    }
+
+    function getJsonbinId() {
+      return jsonbinId || localStorage.getItem('canada2026_jsonbin_id') || '';
+    }
+
+    function setJsonbinId(id) {
+      jsonbinId = (id || '').trim();
+      if (jsonbinId) localStorage.setItem('canada2026_jsonbin_id', jsonbinId);
+      else localStorage.removeItem('canada2026_jsonbin_id');
+    }
+
     // Active Lightbox State
     let lightboxIndex = 0;
     let lightboxCurrentList = [];
@@ -2281,6 +2341,11 @@
       renderDaysCards();
       updateGlobalStats();
       renderWallGrid('all');
+
+      // Auto-fetch from shared cloud in background if configured
+      if (getJsonbinId()) {
+        fetchPhotosFromCloud(false);
+      }
 
       // Listen for dynamic hash navigation or updates
       window.addEventListener('hashchange', () => {
@@ -2408,11 +2473,15 @@
         const decoded = decodeURIComponent(syncPayload);
         let importedPhotos = [];
         let importedKey = '';
+        let importedJsonbinKey = '';
+        let importedJsonbinId = '';
 
-        // Case 1: Compact parameters format "k=...&p=..."
-        if (decoded.includes('p=') || decoded.includes('k=')) {
+        // Case 1: Compact parameters format "k=...&bk=...&bid=...&p=..."
+        if (decoded.includes('p=') || decoded.includes('k=') || decoded.includes('bid=')) {
           const urlParams = new URLSearchParams(decoded);
           importedKey = urlParams.get('k') || '';
+          importedJsonbinKey = urlParams.get('bk') || '';
+          importedJsonbinId = urlParams.get('bid') || '';
           const pRaw = urlParams.get('p') || '';
           if (pRaw) {
             const photoItems = pRaw.split('|');
@@ -2442,12 +2511,14 @@
         else if (decoded.startsWith('{')) {
           const parsed = JSON.parse(decoded);
           if (parsed.imgbbKey) importedKey = parsed.imgbbKey;
+          if (parsed.jsonbinKey) importedJsonbinKey = parsed.jsonbinKey;
+          if (parsed.jsonbinId) importedJsonbinId = parsed.jsonbinId;
           if (Array.isArray(parsed.photos)) {
             parsed.photos.forEach(p => {
               if (p && p.url) {
                 importedPhotos.push({
                   id: p.id || `sync_${p.day || 1}_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
-                  day: p.day || 1,
+                  day: parseInt(p.day, 10) || 1,
                   url: p.url,
                   type: p.type || (p.url.match(/\.(mp4|mov|webm)(\?|$)/i) ? 'video' : 'image'),
                   caption: p.caption || `Jour ${p.day || 1}`,
@@ -2463,6 +2534,18 @@
           setImgbbApiKey(importedKey);
           const kInput = document.getElementById('cfgImgbbKey');
           if (kInput) kInput.value = importedKey;
+        }
+
+        if (importedJsonbinKey) {
+          setJsonbinKey(importedJsonbinKey);
+          const jKeyInput = document.getElementById('cfgJsonbinKey');
+          if (jKeyInput) jKeyInput.value = importedJsonbinKey;
+        }
+
+        if (importedJsonbinId) {
+          setJsonbinId(importedJsonbinId);
+          const jIdInput = document.getElementById('cfgJsonbinId');
+          if (jIdInput) jIdInput.value = importedJsonbinId;
         }
 
         if (importedPhotos.length > 0) {
@@ -2486,8 +2569,13 @@
           if (rawHash.includes('wall') || rawHash.includes('gallery') || rawHash.includes('sync=')) {
             switchTab('wall');
           }
-        } else if (importedKey) {
-          showToast('✨ Clé ImgBB importée avec succès !');
+        } else if (importedKey || importedJsonbinId) {
+          showToast('✨ Configuration Cloud importée avec succès !');
+        }
+
+        // If a Cloud Bin ID was provided, trigger live cloud sync to get all photos
+        if (importedJsonbinId || getJsonbinId()) {
+          setTimeout(() => fetchPhotosFromCloud(false), 300);
         }
 
         // Clean URL safely without breaking file:// protocol
@@ -3035,6 +3123,7 @@
         allMediaCatalog.push(item);
       }
       updateMediaViews();
+      pushPhotosToCloud();
     }
 
     function deleteMedia(mediaId) {
@@ -3046,6 +3135,7 @@
       localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
       allMediaCatalog = allMediaCatalog.filter(m => m.id !== mediaId);
       updateMediaViews();
+      pushPhotosToCloud();
       showToast('Photo supprimée.');
     }
 
@@ -3330,9 +3420,46 @@
             imgbbBoxText.style.color = 'var(--text-3)';
           }
         }
+
+        const cloudBoxText = document.getElementById('cfgCloudStatusText');
+        const bId = getJsonbinId();
+        if (cloudBoxText) {
+          if (bId && bId.length > 5) {
+            cloudBoxText.innerHTML = `🟢 Connecté (${bId.substring(0, 6)}...)`;
+            cloudBoxText.style.color = 'var(--pos)';
+          } else {
+            cloudBoxText.innerHTML = `⚡ Mode autonome`;
+            cloudBoxText.style.color = 'var(--text-3)';
+          }
+        }
       } catch(e) {
         console.warn('updateConfigModalStatus error', e);
       }
+    }
+
+    function openConfigModal() {
+      try {
+        updateConfigModalStatus();
+
+        const imgInput = document.getElementById('cfgImgbbKey');
+        if (imgInput) imgInput.value = getImgbbApiKey() || '';
+
+        const jKeyInput = document.getElementById('cfgJsonbinKey');
+        if (jKeyInput) jKeyInput.value = getJsonbinKey() || '';
+
+        const jIdInput = document.getElementById('cfgJsonbinId');
+        if (jIdInput) jIdInput.value = getJsonbinId() || '';
+
+        const modalEl = document.getElementById('configModal');
+        if (modalEl) modalEl.classList.add('open');
+      } catch (err) {
+        console.error('Erreur ouverture modal config:', err);
+      }
+    }
+
+    function closeConfigModal() {
+      const modalEl = document.getElementById('configModal');
+      if (modalEl) modalEl.classList.remove('open');
     }
 
     async function testImgbbConnection() {
@@ -3346,7 +3473,6 @@
 
       showToast("Test d'upload ImgBB en cours... ⏳");
       try {
-        // Create 1x1 test pixel
         const canvas = document.createElement('canvas');
         canvas.width = 1;
         canvas.height = 1;
@@ -3370,27 +3496,207 @@
       }
     }
 
+    async function createJsonBinSpace() {
+      const keyInput = document.getElementById('cfgJsonbinKey');
+      const key = (keyInput ? keyInput.value : getJsonbinKey()).trim();
+
+      if (!key) {
+        alert("Veuillez d'abord renseigner votre Master Key JSONBin.\n\nVous pouvez l'obtenir gratuitement en 30 secondes sur https://jsonbin.io/ (Account > API Keys).");
+        return;
+      }
+
+      showToast('Création de votre espace Cloud partagé... ⏳');
+      try {
+        const validPhotos = allMediaCatalog.filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
+        const res = await fetch('https://api.jsonbin.io/v3/b', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': key,
+            'X-Bin-Name': 'canada2026_voyage',
+            'X-Bin-Private': 'false'
+          },
+          body: JSON.stringify({ photos: validPhotos })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data || !data.metadata || !data.metadata.id) {
+          throw new Error((data && data.message) || `Code HTTP ${res.status}`);
+        }
+
+        const newBinId = data.metadata.id;
+        setJsonbinKey(key);
+        setJsonbinId(newBinId);
+
+        const idInput = document.getElementById('cfgJsonbinId');
+        if (idInput) idInput.value = newBinId;
+
+        updateConfigModalStatus();
+        alert(`✅ Espace Cloud partagé créé avec succès !\n\nID du Bin : ${newBinId}\n\nToutes les photos du voyage seront maintenant synchronisées en direct sur tous les téléphones via le bouton 🔄 Rafraîchir.`);
+        showToast('✨ Espace Cloud partagé activé !');
+      } catch (err) {
+        console.error('Erreur création JSONBin:', err);
+        alert('⚠️ Impossible de créer l\'espace Cloud :\n' + err.message + '\n\nVérifiez que votre Master Key est valide sur jsonbin.io.');
+      }
+    }
+
+    async function testJsonBinConnection() {
+      const keyInput = document.getElementById('cfgJsonbinKey');
+      const idInput = document.getElementById('cfgJsonbinId');
+      const key = (keyInput ? keyInput.value : getJsonbinKey()).trim();
+      const binId = (idInput ? idInput.value : getJsonbinId()).trim();
+
+      if (!binId) {
+        alert('Veuillez renseigner un ID de Bin ou cliquer sur "✨ 1 Clic : Créer l\'espace partagé".');
+        return;
+      }
+
+      showToast('Test de connexion Cloud... ⏳');
+      try {
+        const headers = {};
+        if (key) headers['X-Master-Key'] = key;
+
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, { headers });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error((data && data.message) || `Erreur HTTP ${res.status}`);
+        }
+
+        setJsonbinKey(key);
+        setJsonbinId(binId);
+        updateConfigModalStatus();
+
+        const count = (data.record && Array.isArray(data.record.photos)) ? data.record.photos.length : 0;
+        alert(`✅ Connexion Cloud réussie !\n\nL'espace partagé est accessible en direct (${count} photo(s) répertoriée(s)).\nCliquez sur "Sauvegarder" pour activer la synchronisation permanente.`);
+      } catch (err) {
+        console.error('Erreur test JSONBin:', err);
+        alert('⚠️ Échec de connexion Cloud :\n' + err.message);
+      }
+    }
+
+    async function pushPhotosToCloud() {
+      const bId = getJsonbinId();
+      const bKey = getJsonbinKey();
+      if (!bId) return;
+
+      try {
+        const validPhotos = allMediaCatalog.filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        if (bKey) headers['X-Master-Key'] = bKey;
+
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${bId}`, {
+          method: 'PUT',
+          headers: headers,
+          body: JSON.stringify({ photos: validPhotos })
+        });
+        if (!res.ok) {
+          console.warn('JSONBin push status:', res.status);
+        }
+      } catch (e) {
+        console.warn('Erreur push cloud:', e);
+      }
+    }
+
+    async function fetchPhotosFromCloud(isManual = false) {
+      const bId = getJsonbinId();
+      const bKey = getJsonbinKey();
+      if (!bId) {
+        if (isManual) {
+          showToast('⚡ Aucun espace Cloud configuré. Cliquez sur ⚙️ Réglages pour l\'activer.');
+        }
+        return false;
+      }
+
+      try {
+        const headers = {};
+        if (bKey) headers['X-Master-Key'] = bKey;
+
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${bId}/latest`, {
+          headers: headers
+        });
+        if (!res.ok) throw new Error(`Erreur serveur (HTTP ${res.status})`);
+
+        const data = await res.json();
+        const remotePhotos = (data && data.record && Array.isArray(data.record.photos)) 
+          ? data.record.photos 
+          : ((data && Array.isArray(data.photos)) ? data.photos : []);
+
+        let localMedia = JSON.parse(localStorage.getItem('canada2026_local_media') || '[]')
+          .filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
+
+        let added = 0;
+        remotePhotos.forEach(p => {
+          if (p && p.url) {
+            const normalized = {
+              id: p.id || `sync_${p.day || 1}_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+              day: parseInt(p.day, 10) || 1,
+              url: p.url,
+              type: p.type || (p.url.match(/\.(mp4|mov|webm)(\?|$)/i) ? 'video' : 'image'),
+              caption: p.caption || `Jour ${p.day || 1}`,
+              source: p.source || 'imgbb',
+              timestamp: p.timestamp || Date.now()
+            };
+            const existing = localMedia.find(m => m.url === normalized.url);
+            if (!existing) {
+              localMedia.push(normalized);
+              added++;
+            }
+          }
+        });
+
+        localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
+        allMediaCatalog = [...localMedia];
+        updateMediaViews();
+        updateConfigModalStatus();
+
+        if (isManual) {
+          showToast(`🔄 Synchronisation Cloud réussie : ${allMediaCatalog.length} photos chargées (+${added} nouvelle(s)) ! 📸`);
+        }
+        return true;
+      } catch (err) {
+        console.error('Erreur fetch cloud:', err);
+        if (isManual) {
+          alert('⚠️ Erreur lors de la récupération Cloud :\n' + err.message);
+        }
+        return false;
+      }
+    }
+
     function saveAllConfig() {
       const keyInput = document.getElementById('cfgImgbbKey');
-      if (keyInput) {
-        setImgbbApiKey(keyInput.value.trim());
-      }
+      if (keyInput) setImgbbApiKey(keyInput.value.trim());
+
+      const jKeyInput = document.getElementById('cfgJsonbinKey');
+      if (jKeyInput) setJsonbinKey(jKeyInput.value.trim());
+
+      const jIdInput = document.getElementById('cfgJsonbinId');
+      if (jIdInput) setJsonbinId(jIdInput.value.trim());
+
       closeConfigModal();
       updateConfigModalStatus();
       showToast('Paramètres enregistrés ! 🎉');
+
+      if (getJsonbinId()) {
+        fetchPhotosFromCloud(false);
+      }
     }
 
     function copyShareablePhotoLink() {
       const validPhotos = allMediaCatalog.filter(m => m && m.source !== 'sample' && !String(m.id || '').startsWith('sample_'));
       const key = getImgbbApiKey();
+      const bKey = getJsonbinKey();
+      const bId = getJsonbinId();
 
       try {
         const baseUrl = getBasePageUrl();
         let shareUrl = baseUrl;
 
-        // Build compact parameter: k=KEY&p=DAY~URL~CAPTION|...
+        // Build compact parameter: k=KEY&bk=JSONBINKEY&bid=JSONBINID&p=DAY~URL~CAPTION|...
         const photoItems = validPhotos.map(p => {
-          const d = p.day || 1;
+          const d = parseInt(p.day, 10) || 1;
           const u = encodeURIComponent(p.url || '');
           const c = encodeURIComponent(p.caption || `Jour ${d}`);
           return `${d}~${u}~${c}`;
@@ -3398,6 +3704,8 @@
 
         const params = [];
         if (key) params.push(`k=${encodeURIComponent(key)}`);
+        if (bKey) params.push(`bk=${encodeURIComponent(bKey)}`);
+        if (bId) params.push(`bid=${encodeURIComponent(bId)}`);
         if (photoItems.length > 0) params.push(`p=${photoItems.join('|')}`);
 
         if (params.length > 0) {
@@ -3408,7 +3716,7 @@
         }
 
         const copySuccess = () => {
-          showToast(`🔗 Lien copié (${validPhotos.length} photos incluses) ! Prêt à envoyer.`);
+          showToast(`🔗 Lien copié (${validPhotos.length} photos & config incluses) ! Prêt à envoyer.`);
         };
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -3455,7 +3763,10 @@
             let added = 0;
             imported.forEach(p => {
               if (p && p.url && !localMedia.find(m => m.url === p.url || m.id === p.id)) {
-                localMedia.push(p);
+                localMedia.push({
+                  ...p,
+                  day: parseInt(p.day, 10) || 1
+                });
                 added++;
               }
             });
@@ -3463,6 +3774,7 @@
             localStorage.setItem('canada2026_local_media', JSON.stringify(localMedia));
             allMediaCatalog = [...localMedia];
             updateMediaViews();
+            pushPhotosToCloud();
             showToast(`✅ ${added} photo(s) importée(s) avec succès !`);
           } else {
             alert('Le fichier sélectionné ne contient pas un tableau de photos valide.');
@@ -3475,13 +3787,19 @@
       reader.readAsText(file);
     }
 
-    function forceRefreshPhotos() {
+    async function forceRefreshPhotos() {
       showToast('Relecture des photos en cours... ⏳');
       try {
         // 1. Re-check URL config if any
         checkUrlConfigImport();
 
-        // 2. Reload local storage catalog and normalize days
+        // 2. If Cloud Bin is configured, fetch in real time
+        let cloudSuccess = false;
+        if (getJsonbinId()) {
+          cloudSuccess = await fetchPhotosFromCloud(true);
+        }
+
+        // 3. Reload local storage catalog and normalize days
         const stored = localStorage.getItem('canada2026_local_media');
         if (stored) {
           const parsed = JSON.parse(stored);
@@ -3495,14 +3813,16 @@
           }
         }
 
-        // 3. Save normalized list
+        // 4. Save normalized list
         localStorage.setItem('canada2026_local_media', JSON.stringify(allMediaCatalog));
 
-        // 4. Update all UI views
+        // 5. Update all UI views
         updateMediaViews();
         updateConfigModalStatus();
 
-        showToast(`🔄 Galerie rafraîchie : ${allMediaCatalog.length} photo(s) chargée(s) ! 📸`);
+        if (!getJsonbinId()) {
+          showToast(`🔄 Galerie rafraîchie : ${allMediaCatalog.length} photo(s) chargée(s) en local. (Ajoutez un Bin Cloud dans ⚙️ pour synchroniser en direct)`);
+        }
       } catch (e) {
         console.error('Erreur forceRefreshPhotos:', e);
         showToast('Erreur lors du rafraîchissement.');
