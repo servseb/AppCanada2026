@@ -2229,336 +2229,393 @@
     // --------------------------------------------------------------------------
     const INITIAL_DAYS_DATA = [
       {
-        dayNum: 1,
-        date: "11 août",
-        region: "montreal",
-        badge: "Montréal",
-        title: "Arrivée à Montréal & Rosemont",
-        coords: [45.5412, -73.5786],
-        km: 15,
-        budget: 150,
-        desc: "Récupération de la voiture de location à l'aéroport Trudeau, installation dans la maison échangée au 4289 rue Parthenais. Première soirée détente et balade dans le quartier Rosemont/Petite-Patrie.",
-        activities: [
-          "Récupérer le véhicule de location à l'aéroport YUL",
-          "S'installer confortablement au 4289 rue Parthenais",
-          "Explorer les rues animées et ruelles vertes de Rosemont à pied"
-        ],
-        resto: "🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine du terroir & vins vivants"
+            "dayNum": 1,
+            "date": "11 août",
+            "region": "montreal",
+            "badge": "Montréal",
+            "title": "Arrivée à Montréal & Rosemont",
+            "coords": [
+                  45.5412,
+                  -73.5786
+            ],
+            "km": 15,
+            "budget": 150,
+            "desc": "Récupération de la voiture de location à l'aéroport Trudeau, installation dans la maison échangée au 4289 rue Parthenais. Première soirée détente et balade dans le quartier Rosemont/Petite-Patrie.",
+            "activities": [
+                  "Récupérer le véhicule de location à l'aéroport YUL",
+                  "S'installer confortablement au 4289 rue Parthenais",
+                  "Explorer les rues animées et ruelles vertes de Rosemont à pied"
+            ],
+            "resto": "🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine du terroir & vins vivants"
       },
       {
-        dayNum: 2,
-        date: "12 août",
-        region: "montreal",
-        badge: "Montréal",
-        title: "Montréal Authentique & Vieux-Port",
-        coords: [45.5017, -73.5673],
-        km: 25,
-        budget: 100,
-        desc: "Matin gourmand au Marché Jean-Talon. Après-midi historique dans le Vieux-Montréal, Basilique Notre-Dame et Vieux-Port au bord du Saint-Laurent. Duel mythique des bagels en soirée !",
-        activities: [
-          "Marché Jean-Talon — dégustation de fromages fins, fruits & sirop d'érable",
-          "Basilique Notre-Dame & ruelles pavées du Vieux-Port de Montréal",
-          "Dégustation comparée : St-Viateur Bagel vs Fairmount Bagel dans le Mile End"
-        ],
-        resto: "🍽️ La Banquise (994 rue Rachel E.) — l'incontournable poutine québécoise 24h/24"
+            "dayNum": 2,
+            "date": "12 août",
+            "region": "montreal",
+            "badge": "Montréal",
+            "title": "Montréal Authentique & Vieux-Port",
+            "coords": [
+                  45.5017,
+                  -73.5673
+            ],
+            "km": 25,
+            "budget": 100,
+            "desc": "Matin gourmand au Marché Jean-Talon. Après-midi historique dans le Vieux-Montréal, Basilique Notre-Dame et Vieux-Port au bord du Saint-Laurent. Duel mythique des bagels en soirée !",
+            "activities": [
+                  "Marché Jean-Talon — dégustation de fromages fins, fruits & sirop d'érable",
+                  "Basilique Notre-Dame & ruelles pavées du Vieux-Port de Montréal",
+                  "Dégustation comparée : St-Viateur Bagel vs Fairmount Bagel dans le Mile End"
+            ],
+            "resto": "🍽️ La Banquise (994 rue Rachel E.) — l'incontournable poutine québécoise 24h/24"
       },
       {
-        dayNum: 3,
-        date: "13 août",
-        region: "montreal",
-        badge: "Montréal",
-        title: "Mont-Royal, Belvédère & Shopping Mirabel",
-        coords: [45.5088, -73.5878],
-        km: 80,
-        budget: 200,
-        desc: "Randonnée matinale au Mont-Royal par le sentier Olmsted jusqu'au majestueux belvédère Kondiaronk. Après-midi shopping aux Premium Outlets de Mirabel pour dénicher des marques locales.",
-        activities: [
-          "Randonnée au cœur du Mont-Royal sur le sentier historique Olmsted",
-          "Vue panoramique spectaculaire depuis le Belvédère Kondiaronk",
-          "Escapade shopping aux Premium Outlets Montréal (Mirabel)"
-        ],
-        resto: "🍽️ Montréal Plaza (4720 rue Marquette) — gastronomie festive & inventive"
+            "dayNum": 3,
+            "date": "13 août",
+            "region": "montreal",
+            "badge": "Montréal",
+            "title": "Mont-Royal, Belvédère & Shopping Mirabel",
+            "coords": [
+                  45.5088,
+                  -73.5878
+            ],
+            "km": 80,
+            "budget": 200,
+            "desc": "Randonnée matinale au Mont-Royal par le sentier Olmsted jusqu'au majestueux belvédère Kondiaronk. Après-midi shopping aux Premium Outlets de Mirabel pour dénicher des marques locales.",
+            "activities": [
+                  "Randonnée au cœur du Mont-Royal sur le sentier historique Olmsted",
+                  "Vue panoramique spectaculaire depuis le Belvédère Kondiaronk",
+                  "Escapade shopping aux Premium Outlets Montréal (Mirabel)"
+            ],
+            "resto": "🍽️ Montréal Plaza (4720 rue Marquette) — gastronomie festive & inventive"
       },
       {
-        dayNum: 4,
-        date: "14 août",
-        region: "laurentides",
-        badge: "Laurentides",
-        title: "Excursion Grandeur Nature à Mont-Tremblant",
-        coords: [46.1185, -74.5962],
-        km: 280,
-        budget: 120,
-        desc: "Immersion dans les montagnes des Laurentides. Randonnée vivifiante du sentier La Roche (5,8 km, 2h30) offrant une vue à couper le souffle sur le lac et le mont Tremblant.",
-        activities: [
-          "Route panoramique vers le Parc national du Mont-Tremblant (1h30)",
-          "Randonnée sportive du sentier La Roche (5,8 km, dénivelé +215 m)",
-          "Contemplation du panorama grandiose sur le lac Tremblant et les collines"
-        ],
-        resto: "🍽️ Beba (3900 rue Éthel, Verdun) — bistronomie argentico-méditerranéenne conviviale"
+            "dayNum": 4,
+            "date": "14 août",
+            "region": "laurentides",
+            "badge": "Laurentides",
+            "title": "Excursion Grandeur Nature à Mont-Tremblant",
+            "coords": [
+                  46.1185,
+                  -74.5962
+            ],
+            "km": 280,
+            "budget": 120,
+            "desc": "Immersion dans les montagnes des Laurentides. Randonnée vivifiante du sentier La Roche (5,8 km, 2h30) offrant une vue à couper le souffle sur le lac et le mont Tremblant.",
+            "activities": [
+                  "Route panoramique vers le Parc national du Mont-Tremblant (1h30)",
+                  "Randonnée sportive du sentier La Roche (5,8 km, dénivelé +215 m)",
+                  "Contemplation du panorama grandiose sur le lac Tremblant et les collines"
+            ],
+            "resto": "🍽️ Beba (3900 rue Éthel, Verdun) — bistronomie argentico-méditerranéenne conviviale"
       },
       {
-        dayNum: 5,
-        date: "15 août",
-        region: "montreal",
-        badge: "Montréal",
-        title: "Montréal Gourmand, Canal Lachine & Détente",
-        coords: [45.4795, -73.5772],
-        km: 15,
-        budget: 130,
-        desc: "Matinée au marché Atwater au bord du canal de Lachine. Après-midi détente sur l'eau au Bota Bota (spa sur bateau) ou visite de la Biosphère au Parc Jean-Drapeau.",
-        activities: [
-          "Marché Atwater — fromagerie de renommée et pique-nique au canal",
-          "Balade le long des berges du Canal de Lachine à vélo ou à pied",
-          "Détente au spa sur l'eau Bota Bota au Vieux-Port ou visite de la Biosphère"
-        ],
-        resto: "🍽️ Le Violon (Plateau-Mont-Royal) — fine dining intimiste design Zébulon Perron"
+            "dayNum": 5,
+            "date": "15 août",
+            "region": "montreal",
+            "badge": "Montréal",
+            "title": "Marche Street View - RESO - Poutine - Montreal by Night",
+            "coords": [
+                  45.4795,
+                  -73.5772
+            ],
+            "km": 15,
+            "budget": 130,
+            "desc": "Matinée au marché Atwater au bord du canal de Lachine. Après-midi détente sur l'eau au Bota Bota (spa sur bateau) ou visite de la Biosphère au Parc Jean-Drapeau.",
+            "activities": [
+                  "Marché Atwater — fromagerie de renommée et pique-nique au canal",
+                  "Balade le long des berges du Canal de Lachine à vélo ou à pied",
+                  "Détente au spa sur l'eau Bota Bota au Vieux-Port ou visite de la Biosphère"
+            ],
+            "resto": "🍽️ La Banquise - Restaurant Poutine"
       },
       {
-        dayNum: 6,
-        date: "16 août",
-        region: "outaouais",
-        badge: "Outaouais",
-        title: "Cap vers l'Outaouais & Château Montebello",
-        coords: [45.6515, -74.9416],
-        km: 140,
-        budget: 140,
-        desc: "Départ pour la région de l'Outaouais. Visite du Fairmont Le Château Montebello, le plus grand hôtel en rondins de bois du monde, et arrêt à la fromagerie artisanale.",
-        activities: [
-          "Route le long de la rivière des Outaouais vers Montebello (1h30)",
-          "Visite et promenade dans les jardins du mythique Château Montebello",
-          "Dégustation à la Fromagerie Montebello (la fameuse Tête à Papineau)"
-        ],
-        resto: "🍽️ Bistro La Seigneurie (Château Montebello) — terrasse avec vue sur la rivière"
+            "dayNum": 6,
+            "date": "16 août",
+            "region": "outaouais",
+            "badge": "Outaouais",
+            "title": "Cap vers l'Outaouais & Château Montebello",
+            "coords": [
+                  45.6515,
+                  -74.9416
+            ],
+            "km": 140,
+            "budget": 140,
+            "desc": "Départ pour la région de l'Outaouais. Visite du Fairmont Le Château Montebello, le plus grand hôtel en rondins de bois du monde, et arrêt à la fromagerie artisanale.",
+            "activities": [
+                  "Route le long de la rivière des Outaouais vers Montebello (1h30)",
+                  "Visite et promenade dans les jardins du mythique Château Montebello",
+                  "Dégustation à la Fromagerie Montebello (la fameuse Tête à Papineau)"
+            ],
+            "resto": "🍽️ Bistro La Seigneurie (Château Montebello) — terrasse avec vue sur la rivière"
       },
       {
-        dayNum: 7,
-        date: "17 août",
-        region: "outaouais",
-        badge: "Outaouais",
-        title: "🐻 Safari Sauvage au Parc Oméga & Nuit en Lodge",
-        coords: [45.6844, -74.9472],
-        km: 10,
-        budget: 0,
-        desc: "Journée safari extraordinaire en immersion totale : cerfs, ours noirs, loups, bisons et orignaux au plus près. Nuit magique dans un lodge au cœur du parc (réservé).",
-        activities: [
-          "Safari en voiture au Parc Oméga avec distribution de carottes aux cervidés",
-          "Observation des ours noirs, meutes de loups et bisons d'Amérique",
-          "Visite de la ferme d'antan et sentiers pédestres des Premières Nations",
-          "Nuit immersive en hébergement insolite/lodge au cœur de la faune"
-        ],
-        resto: "🍽️ Restaurant du Parc Oméga — spécialités québécoises du terroir"
+            "dayNum": 7,
+            "date": "17 août",
+            "region": "outaouais",
+            "badge": "Outaouais",
+            "title": "🐻 Safari Sauvage au Parc Oméga & Nuit en Lodge",
+            "coords": [
+                  45.6844,
+                  -74.9472
+            ],
+            "km": 10,
+            "budget": 0,
+            "desc": "Journée safari extraordinaire en immersion totale : cerfs, ours noirs, loups, bisons et orignaux au plus près. Nuit magique dans un lodge au cœur du parc (réservé).",
+            "activities": [
+                  "Safari en voiture au Parc Oméga avec distribution de carottes aux cervidés",
+                  "Observation des ours noirs, meutes de loups et bisons d'Amérique",
+                  "Visite de la ferme d'antan et sentiers pédestres des Premières Nations",
+                  "Nuit immersive en hébergement insolite/lodge au cœur de la faune"
+            ],
+            "resto": "🍽️ Restaurant du Parc Oméga — spécialités québécoises du terroir"
       },
       {
-        dayNum: 8,
-        date: "18 août",
-        region: "ottawa",
-        badge: "Ottawa",
-        title: "Capitale Fédérale : Ottawa & Canal Rideau",
-        coords: [45.4215, -75.6972],
-        km: 290,
-        budget: 135,
-        desc: "Route vers la capitale du Canada. Découverte de la colline du Parlement, balade sur les écluses du Canal Rideau (UNESCO) et gourmandise Queue de Castor au Marché ByWard.",
-        activities: [
-          "Visite extérieure de la Colline du Parlement et de la Flamme du Centenaire",
-          "Balade le long des 8 écluses historiques du Canal Rideau",
-          "Marché ByWard — dégustation de la légendaire pâtisserie Queue de Castor (BeaverTails)",
-          "Retour à Montréal en fin de journée"
-        ],
-        resto: "🍽️ Pichai ou Limbo — cuisine thaï/bistronomique primée Bib Gourmand"
+            "dayNum": 8,
+            "date": "18 août",
+            "region": "ottawa",
+            "badge": "Ottawa",
+            "title": "Capitale Fédérale : Ottawa & Canal Rideau",
+            "coords": [
+                  45.4215,
+                  -75.6972
+            ],
+            "km": 290,
+            "budget": 135,
+            "desc": "Route vers la capitale du Canada. Découverte de la colline du Parlement, balade sur les écluses du Canal Rideau (UNESCO) et gourmandise Queue de Castor au Marché ByWard.",
+            "activities": [
+                  "Visite extérieure de la Colline du Parlement et de la Flamme du Centenaire",
+                  "Balade le long des 8 écluses historiques du Canal Rideau",
+                  "Marché ByWard — dégustation de la légendaire pâtisserie Queue de Castor (BeaverTails)",
+                  "Retour à Montréal en fin de journée"
+            ],
+            "resto": "🍽️ Pichai ou Limbo — cuisine thaï/bistronomique primée Bib Gourmand"
       },
       {
-        dayNum: 9,
-        date: "19 août",
-        region: "montreal",
-        badge: "Montréal",
-        title: "Montréal Insolite, Street Art & Cité Mémoire",
-        coords: [45.4924, -73.6178],
-        km: 20,
-        budget: 75,
-        desc: "Découverte des fresques monumentales de street art sur le boulevard Saint-Laurent, montée à l'Oratoire Saint-Joseph et parcours multimédia nocturne Cité Mémoire.",
-        activities: [
-          "Chasse aux murales géantes de Street Art dans le Plateau et Mile End",
-          "Visite de l'Oratoire Saint-Joseph et panorama coucher de soleil sur l'ouest",
-          "Parcours nocturne Cité Mémoire avec projections d'histoires sur les murs en pierre"
-        ],
-        resto: "🍽️ Dobe & Andy (Quartier Chinois) — institution réputée de barbecue cantonais"
+            "dayNum": 9,
+            "date": "19 août",
+            "region": "montreal",
+            "badge": "Montréal",
+            "title": "Montréal Insolite, Street Art & Cité Mémoire",
+            "coords": [
+                  45.4924,
+                  -73.6178
+            ],
+            "km": 20,
+            "budget": 75,
+            "desc": "Découverte des fresques monumentales de street art sur le boulevard Saint-Laurent, montée à l'Oratoire Saint-Joseph et parcours multimédia nocturne Cité Mémoire.",
+            "activities": [
+                  "Chasse aux murales géantes de Street Art dans le Plateau et Mile End",
+                  "Visite de l'Oratoire Saint-Joseph et panorama coucher de soleil sur l'ouest",
+                  "Parcours nocturne Cité Mémoire avec projections d'histoires sur les murs en pierre"
+            ],
+            "resto": "🍽️ Dobe & Andy (Quartier Chinois) — institution réputée de barbecue cantonais"
       },
       {
-        dayNum: 10,
-        date: "20 août",
-        region: "estrie",
-        badge: "Estrie",
-        title: "Cantons-de-l'Est, Magog & Mont Orford",
-        coords: [45.2676, -72.1528],
-        km: 260,
-        budget: 100,
-        desc: "Échappée champêtre en Estrie. Randonnée panoramique au Parc national du Mont-Orford (8 km, 3h) avec vue à 360° sur les lacs Memphrémagog et les collines verdoyantes.",
-        activities: [
-          "Route des vins vers Magog et le village loyaliste de Knowlton",
-          "Randonnée au sommet du Mont Orford (sentier Le Mont-Orford, 8 km)",
-          "Baignade ou promenade sur la rive du majestueux lac Memphrémagog"
-        ],
-        resto: "🍽️ Auberge Knowlton — pub anglo-québécois historique et convivial"
+            "dayNum": 10,
+            "date": "20 août",
+            "region": "estrie",
+            "badge": "Estrie",
+            "title": "Cantons-de-l'Est, Magog & Mont Orford",
+            "coords": [
+                  45.2676,
+                  -72.1528
+            ],
+            "km": 260,
+            "budget": 100,
+            "desc": "Échappée champêtre en Estrie. Randonnée panoramique au Parc national du Mont-Orford (8 km, 3h) avec vue à 360° sur les lacs Memphrémagog et les collines verdoyantes.",
+            "activities": [
+                  "Route des vins vers Magog et le village loyaliste de Knowlton",
+                  "Randonnée au sommet du Mont Orford (sentier Le Mont-Orford, 8 km)",
+                  "Baignade ou promenade sur la rive du majestueux lac Memphrémagog"
+            ],
+            "resto": "🍽️ Auberge Knowlton — pub anglo-québécois historique et convivial"
       },
       {
-        dayNum: 11,
-        date: "21 août",
-        region: "montreal",
-        badge: "Montréal",
-        title: "Dernière Soirée Montréalaise & Festin du Terroir",
-        coords: [45.5205, -73.5750],
-        km: 10,
-        budget: 215,
-        desc: "Derniers achats souvenirs et artisanat dans les boutiques indépendantes du Plateau. Préparation des bagages avant le grand départ vers la Mauricie et Québec.",
-        activities: [
-          "Flânerie et magasinage sur l'avenue du Mont-Royal et rue Saint-Denis",
-          "Derniers trésors d'épicerie fine québécoise et cidres de glace",
-          "Préparation des valises pour le départ de demain matin"
-        ],
-        resto: "🍽️ Au Pied de Cochon (536 av. Duluth E.) — le temple mythique du canard et du foie gras"
+            "dayNum": 11,
+            "date": "21 août",
+            "region": "montreal",
+            "badge": "Montréal",
+            "title": "Dernière Soirée Montréalaise & Festin du Terroir",
+            "coords": [
+                  45.5205,
+                  -73.575
+            ],
+            "km": 10,
+            "budget": 215,
+            "desc": "Derniers achats souvenirs et artisanat dans les boutiques indépendantes du Plateau. Préparation des bagages avant le grand départ vers la Mauricie et Québec.",
+            "activities": [
+                  "Flânerie et magasinage sur l'avenue du Mont-Royal et rue Saint-Denis",
+                  "Derniers trésors d'épicerie fine québécoise et cidres de glace",
+                  "Préparation des valises pour le départ de demain matin"
+            ],
+            "resto": "🍽️ Au Pied de Cochon (536 av. Duluth E.) — le temple mythique du canard et du foie gras"
       },
       {
-        dayNum: 12,
-        date: "22 août",
-        region: "mauricie",
-        badge: "Mauricie",
-        title: "Trois-Rivières, Boréalis & Vieille Prison",
-        coords: [46.3432, -72.5421],
-        km: 140,
-        budget: 100,
-        desc: "Route vers la Mauricie au bord du Saint-Laurent. Visite interactive du musée Boréalis sur l'histoire des papetières, puis expérience captivante à la Vieille Prison.",
-        activities: [
-          "Musée Boréalis — atelier interactif de fabrication de papier artisanal",
-          "Visite guidée théâtralisée de la Vieille Prison de Trois-Rivières (1822)",
-          "Promenade dans le quartier historique de Trois-Rivières et rue des Forges"
-        ],
-        resto: "🍽️ Le Poivre Noir — gastronomie créative face au port et au fleuve Saint-Laurent"
+            "dayNum": 12,
+            "date": "22 août",
+            "region": "mauricie",
+            "badge": "Mauricie",
+            "title": "Trois-Rivières, Boréalis & Vieille Prison",
+            "coords": [
+                  46.3432,
+                  -72.5421
+            ],
+            "km": 140,
+            "budget": 100,
+            "desc": "Route vers la Mauricie au bord du Saint-Laurent. Visite interactive du musée Boréalis sur l'histoire des papetières, puis expérience captivante à la Vieille Prison.",
+            "activities": [
+                  "Musée Boréalis — atelier interactif de fabrication de papier artisanal",
+                  "Visite guidée théâtralisée de la Vieille Prison de Trois-Rivières (1822)",
+                  "Promenade dans le quartier historique de Trois-Rivières et rue des Forges"
+            ],
+            "resto": "🍽️ Le Poivre Noir — gastronomie créative face au port et au fleuve Saint-Laurent"
       },
       {
-        dayNum: 13,
-        date: "23 août",
-        region: "centre",
-        badge: "Centre / Lévis",
-        title: "Sanctuaire Notre-Dame-du-Cap ➔ Installation à Lévis",
-        coords: [46.8033, -71.1779],
-        km: 120,
-        budget: 80,
-        desc: "Arrêt au splendide Sanctuaire Notre-Dame-du-Cap et ses jardins apaisants. Route vers Lévis et installation chez votre amie, notre camp de base pour la semaine québécoise.",
-        activities: [
-          "Découverte de la basilique moderne et des jardins du Sanctuaire",
-          "Traversée panoramique vers Lévis au bord du fleuve (1h30 de route)",
-          "Installation chaleureuse chez votre copine à Lévis pour la semaine"
-        ],
-        resto: "🍽️ Cochon Dingue Lévis (1170 rue de Courchevel) — vue imprenable sur le fleuve"
+            "dayNum": 13,
+            "date": "23 août",
+            "region": "centre",
+            "badge": "Centre / Lévis",
+            "title": "Sanctuaire Notre-Dame-du-Cap ➔ Installation à Lévis",
+            "coords": [
+                  46.8033,
+                  -71.1779
+            ],
+            "km": 120,
+            "budget": 80,
+            "desc": "Arrêt au splendide Sanctuaire Notre-Dame-du-Cap et ses jardins apaisants. Route vers Lévis et installation chez votre amie, notre camp de base pour la semaine québécoise.",
+            "activities": [
+                  "Découverte de la basilique moderne et des jardins du Sanctuaire",
+                  "Traversée panoramique vers Lévis au bord du fleuve (1h30 de route)",
+                  "Installation chaleureuse chez votre copine à Lévis pour la semaine"
+            ],
+            "resto": "🍽️ Cochon Dingue Lévis (1170 rue de Courchevel) — vue imprenable sur le fleuve"
       },
       {
-        dayNum: 14,
-        date: "24 août",
-        region: "quebec",
-        badge: "Québec",
-        title: "🌊 Chutes Montmorency & 🧀 Tour de l'Île d'Orléans",
-        coords: [46.8906, -71.1472],
-        km: 90,
-        budget: 220,
-        desc: "Journée spectaculaire et gourmande. Chutes Montmorency (83 m de haut, 30 m de plus que Niagara !) suivies du tour complet de l'Île d'Orléans et de ses producteurs.",
-        activities: [
-          "Parc de la Chute-Montmorency — passerelle suspendue au-dessus du gouffre",
-          "Tour de l'Île d'Orléans : Fromagerie Ferme Audet & Fromage Paillasson",
-          "Dégustation chez Cassis Monna & Filles et chocolaterie artisanale",
-          "Savoureux beignes de patate chauds à la boulangerie locale"
-        ],
-        resto: "🍽️ La Goéliche (Sainte-Pétronille) — terrasse raffinée au bout de l'île sur le fleuve"
+            "dayNum": 14,
+            "date": "24 août",
+            "region": "quebec",
+            "badge": "Québec",
+            "title": "🌊 Chutes Montmorency & 🧀 Tour de l'Île d'Orléans",
+            "coords": [
+                  46.8906,
+                  -71.1472
+            ],
+            "km": 90,
+            "budget": 220,
+            "desc": "Journée spectaculaire et gourmande. Chutes Montmorency (83 m de haut, 30 m de plus que Niagara !) suivies du tour complet de l'Île d'Orléans et de ses producteurs.",
+            "activities": [
+                  "Parc de la Chute-Montmorency — passerelle suspendue au-dessus du gouffre",
+                  "Tour de l'Île d'Orléans : Fromagerie Ferme Audet & Fromage Paillasson",
+                  "Dégustation chez Cassis Monna & Filles et chocolaterie artisanale",
+                  "Savoureux beignes de patate chauds à la boulangerie locale"
+            ],
+            "resto": "🍽️ La Goéliche (Sainte-Pétronille) — terrasse raffinée au bout de l'île sur le fleuve"
       },
       {
-        dayNum: 15,
-        date: "25 août",
-        region: "quebec",
-        badge: "Québec",
-        title: "🚣 Rafting Eaux Vives & Parc Jacques-Cartier",
-        coords: [47.1083, -71.3583],
-        km: 120,
-        budget: 480,
-        desc: "Journée adrénaline et nature sauvage ! Descente exaltante en rafting sur les rapides de la rivière Jacques-Cartier, puis randonnée du sentier Les Loups ou L'Éperon.",
-        activities: [
-          "Descente guidée en rafting sur la rivière Jacques-Cartier (eaux vives)",
-          "Randonnée du Sentier Les Loups (11 km) ou Sentier L'Éperon (5 km)",
-          "Vue vertigineuse sur la vallée glaciaire de la Jacques-Cartier",
-          "Baignade rafraîchissante dans les bassins naturels de la rivière"
-        ],
-        resto: "🍽️ L'Atelier (Lévis) — cuisine québécoise contemporaine et tartares réputés"
+            "dayNum": 15,
+            "date": "25 août",
+            "region": "quebec",
+            "badge": "Québec",
+            "title": "🚣 Rafting Eaux Vives & Parc Jacques-Cartier",
+            "coords": [
+                  47.1083,
+                  -71.3583
+            ],
+            "km": 120,
+            "budget": 480,
+            "desc": "Journée adrénaline et nature sauvage ! Descente exaltante en rafting sur les rapides de la rivière Jacques-Cartier, puis randonnée du sentier Les Loups ou L'Éperon.",
+            "activities": [
+                  "Descente guidée en rafting sur la rivière Jacques-Cartier (eaux vives)",
+                  "Randonnée du Sentier Les Loups (11 km) ou Sentier L'Éperon (5 km)",
+                  "Vue vertigineuse sur la vallée glaciaire de la Jacques-Cartier",
+                  "Baignade rafraîchissante dans les bassins naturels de la rivière"
+            ],
+            "resto": "🍽️ L'Atelier (Lévis) — cuisine québécoise contemporaine et tartares réputés"
       },
       {
-        dayNum: 16,
-        date: "26 août",
-        region: "charlevoix",
-        badge: "Charlevoix",
-        title: "Canyon Sainte-Anne & Charlevoix Pittoresque",
-        coords: [47.4417, -70.5056],
-        km: 220,
-        budget: 140,
-        desc: "Traversée des ponts suspendus vertigineux du Canyon Sainte-Anne et ses chutes rugissantes. Après-midi artistique dans les galeries de Baie-Saint-Paul.",
-        activities: [
-          "Canyon Sainte-Anne — franchir les 3 ponts suspendus à 60 m au-dessus du gouffre",
-          "Sentiers en forêt le long des cascades millénaires",
-          "Baie-Saint-Paul — ruelles pittoresques bordées de galeries d'art et artisans"
-        ],
-        resto: "🍽️ Le Mouton Noir (Baie-Saint-Paul) — bistro de terroir au bord de la rivière du Gouffre"
+            "dayNum": 16,
+            "date": "26 août",
+            "region": "charlevoix",
+            "badge": "Charlevoix",
+            "title": "Canyon Sainte-Anne & Charlevoix Pittoresque",
+            "coords": [
+                  47.4417,
+                  -70.5056
+            ],
+            "km": 220,
+            "budget": 140,
+            "desc": "Traversée des ponts suspendus vertigineux du Canyon Sainte-Anne et ses chutes rugissantes. Après-midi artistique dans les galeries de Baie-Saint-Paul.",
+            "activities": [
+                  "Canyon Sainte-Anne — franchir les 3 ponts suspendus à 60 m au-dessus du gouffre",
+                  "Sentiers en forêt le long des cascades millénaires",
+                  "Baie-Saint-Paul — ruelles pittoresques bordées de galeries d'art et artisans"
+            ],
+            "resto": "🍽️ Le Mouton Noir (Baie-Saint-Paul) — bistro de terroir au bord de la rivière du Gouffre"
       },
       {
-        dayNum: 17,
-        date: "27 août",
-        region: "tadoussac",
-        badge: "Tadoussac",
-        title: "🐋 Croisière aux Baleines à Tadoussac & Fjord",
-        coords: [48.1436, -69.7153],
-        km: 420,
-        budget: 580,
-        desc: "Le point d'orgue du voyage ! Départ tôt pour Tadoussac et embarquement à 13h00 sur la croisière AML aux baleines. Rorquals géants, baleines à bosse et bélugas dans l'embouchure du Saguenay.",
-        activities: [
-          "Route côtière spectaculaire vers Tadoussac avec traversier gratuit",
-          "Croisière d'observation des baleines AML à 13h00 (3h d'émotions intenses)",
-          "Rencontre avec les rorquals, baleines à bosse, phoques et bélugas blancs",
-          "Contemplation des falaises colossales du Fjord du Saguenay"
-        ],
-        resto: "🍽️ Resto Pub Le Pêcheur (Tadoussac) — généreux fish & chips frais du Saint-Laurent"
+            "dayNum": 17,
+            "date": "27 août",
+            "region": "tadoussac",
+            "badge": "Tadoussac",
+            "title": "🐋 Croisière aux Baleines à Tadoussac & Fjord",
+            "coords": [
+                  48.1436,
+                  -69.7153
+            ],
+            "km": 420,
+            "budget": 580,
+            "desc": "Le point d'orgue du voyage ! Départ tôt pour Tadoussac et embarquement à 13h00 sur la croisière AML aux baleines. Rorquals géants, baleines à bosse et bélugas dans l'embouchure du Saguenay.",
+            "activities": [
+                  "Route côtière spectaculaire vers Tadoussac avec traversier gratuit",
+                  "Croisière d'observation des baleines AML à 13h00 (3h d'émotions intenses)",
+                  "Rencontre avec les rorquals, baleines à bosse, phoques et bélugas blancs",
+                  "Contemplation des falaises colossales du Fjord du Saguenay"
+            ],
+            "resto": "🍽️ Resto Pub Le Pêcheur (Tadoussac) — généreux fish & chips frais du Saint-Laurent"
       },
       {
-        dayNum: 18,
-        date: "28 août",
-        region: "quebec",
-        badge: "Québec",
-        title: "Vieux-Québec Historique & Culture Huronne Wendake",
-        coords: [46.8139, -71.2080],
-        km: 50,
-        budget: 120,
-        desc: "Immersion autochtone au Village des Hurons Wendake et Hôtel-Musée Premières Nations. Après-midi dans les ruelles fortifiées du Petit Champlain et Plaines d'Abraham.",
-        activities: [
-          "Village traditionnel Huron Wendake — danses, mythes et artisanat amérindien",
-          "Quartier historique du Petit Champlain, Place Royale et Funiculaire",
-          "Château Frontenac et promenade sur la terrasse Dufferin",
-          "Balade panoramique sur les Plaines d'Abraham face au fleuve"
-        ],
-        resto: "🍽️ Le Continental (26 rue Saint-Louis) — service au guéridon & flambages traditionnels"
+            "dayNum": 18,
+            "date": "28 août",
+            "region": "quebec",
+            "badge": "Québec",
+            "title": "Vieux-Québec Historique & Culture Huronne Wendake",
+            "coords": [
+                  46.8139,
+                  -71.208
+            ],
+            "km": 50,
+            "budget": 120,
+            "desc": "Immersion autochtone au Village des Hurons Wendake et Hôtel-Musée Premières Nations. Après-midi dans les ruelles fortifiées du Petit Champlain et Plaines d'Abraham.",
+            "activities": [
+                  "Village traditionnel Huron Wendake — danses, mythes et artisanat amérindien",
+                  "Quartier historique du Petit Champlain, Place Royale et Funiculaire",
+                  "Château Frontenac et promenade sur la terrasse Dufferin",
+                  "Balade panoramique sur les Plaines d'Abraham face au fleuve"
+            ],
+            "resto": "🍽️ Le Continental (26 rue Saint-Louis) — service au guéridon & flambages traditionnels"
       },
       {
-        dayNum: 19,
-        date: "29 août",
-        region: "montreal",
-        badge: "Montréal",
-        title: "Derniers Souvenirs & Vol Retour vers la France",
-        coords: [45.4705, -73.7408],
-        km: 280,
-        budget: 50,
-        desc: "Derniers au revoir chaleureux à Lévis. Route retour directe vers l'aéroport Montréal-Trudeau (2h45). Restitution du véhicule et embarquement vol de nuit à 23h50. Merci le Québec !",
-        activities: [
-          "Derniers bagages et achats gourmands de sirop d'érable",
-          "Route fluide vers l'aéroport Pierre-Elliott-Trudeau de Montréal (2h45)",
-          "Restitution du véhicule de location sans encombre",
-          "Embarquement sur le vol retour de 23h50 ✈️ — Des souvenirs inoubliables !"
-        ],
-        resto: "🍽️ St-Hubert — poulet rôti réconfortant ou dernier café Tim Hortons à l'aéroport"
+            "dayNum": 19,
+            "date": "29 août",
+            "region": "montreal",
+            "badge": "Montréal",
+            "title": "Derniers Souvenirs & Vol Retour vers la France",
+            "coords": [
+                  45.4705,
+                  -73.7408
+            ],
+            "km": 280,
+            "budget": 50,
+            "desc": "Derniers au revoir chaleureux à Lévis. Route retour directe vers l'aéroport Montréal-Trudeau (2h45). Restitution du véhicule et embarquement vol de nuit à 23h50. Merci le Québec !",
+            "activities": [
+                  "Derniers bagages et achats gourmands de sirop d'érable",
+                  "Route fluide vers l'aéroport Pierre-Elliott-Trudeau de Montréal (2h45)",
+                  "Restitution du véhicule de location sans encombre",
+                  "Embarquement sur le vol retour de 23h50 ✈️ — Des souvenirs inoubliables !"
+            ],
+            "resto": "🍽️ St-Hubert — poulet rôti réconfortant ou dernier café Tim Hortons à l'aéroport"
       }
-    ];
+];
 
     function loadCustomDaysData() {
       try {
@@ -4240,8 +4297,8 @@
         }
 
         // Clean active classes from modals in output HTML
-        fullHtml = fullHtml.replace(/<div class="modal-backdrop open"/g, '<div class="modal-backdrop"');
-        fullHtml = fullHtml.replace(/<div class="lightbox-modal active"/g, '<div class="lightbox-modal"');
+        fullHtml = fullHtml.replace(/<div class="modal-backdrop"/g, '<div class="modal-backdrop"');
+        fullHtml = fullHtml.replace(/<div class="lightbox-modal"/g, '<div class="lightbox-modal"');
 
         // A. If File System Access API is supported (Chrome / Edge on Mac & PC)
         if ('showSaveFilePicker' in window) {
@@ -4384,8 +4441,8 @@
         }
 
         // Clean active classes
-        fullHtml = fullHtml.replace(/<div class="modal-backdrop open"/g, '<div class="modal-backdrop"');
-        fullHtml = fullHtml.replace(/<div class="lightbox-modal active"/g, '<div class="lightbox-modal"');
+        fullHtml = fullHtml.replace(/<div class="modal-backdrop"/g, '<div class="modal-backdrop"');
+        fullHtml = fullHtml.replace(/<div class="lightbox-modal"/g, '<div class="lightbox-modal"');
 
         // 2. Fetch current file SHA from GitHub
         let sha = '';
