@@ -1091,6 +1091,184 @@
     .wall-card-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* ==========================================================================
+       PROGRAM LIVE EDITOR SECTION
+       ========================================================================== */
+    .editor-section {
+      display: none;
+    }
+    .editor-section.active { display: block; }
+
+    .editor-container {
+      background: var(--card-bg);
+      backdrop-filter: var(--backdrop);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .editor-title {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .editor-day-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      scrollbar-width: thin;
+    }
+    .editor-day-pills::-webkit-scrollbar { height: 4px; }
+    .editor-day-pills::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .editor-pill {
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-2);
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .editor-pill:hover {
+      border-color: var(--accent);
+      color: var(--text-1);
+      transform: translateY(-2px);
+    }
+    .editor-pill.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .editor-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .editor-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .editor-field label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .editor-field input, .editor-field select, .editor-field textarea {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--bg-elevated);
+      color: var(--text-1);
+      font-size: 13.5px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .editor-field input:focus, .editor-field select:focus, .editor-field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-subtle);
+    }
+    .editor-field textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    .editor-activities-box {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .editor-act-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-1);
+    }
+    .editor-act-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .editor-act-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+    }
+    .editor-act-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent);
+      min-width: 22px;
+    }
+    .editor-act-row input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-1);
+      font-size: 13px;
+      outline: none;
+    }
+    .editor-act-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-3);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .editor-act-btn:hover {
+      color: var(--text-1);
+      background: var(--card-border);
+    }
+    .editor-act-btn.delete:hover {
+      color: var(--neg);
+    }
+
+    /* ==========================================================================
        VALISE & PRÉPARATIFS (INTERACTIVE PACKING LIST)
        ========================================================================== */
     .packing-section {
@@ -1577,6 +1755,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Mur de Photos (<span id="totalMediaCount">0</span>)
       </button>
+      <button class="tab-btn" id="tabBtnEditor" onclick="switchTab('editor')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Modifier Programme ✏️
+      </button>
       <button class="tab-btn" id="tabBtnPacking" onclick="switchTab('packing')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         Valise & Checklist
@@ -1701,7 +1883,46 @@
     </div>
 
     <!-- =========================================================================
-         TAB 4: VALISE & CHECKLIST INTERACTIVE
+         TAB 4: PROGRAM LIVE EDITOR (MODIFIER LES PROGRAMMES EN DIRECT)
+         ========================================================================= -->
+    <div id="viewEditor" class="editor-section">
+      <div class="editor-container">
+        <div class="editor-header">
+          <div>
+            <h2 class="editor-title">
+              <span>✏️</span> Modification des Programmes en Direct
+            </h2>
+            <p style="font-size:13px; color:var(--text-3); margin-top:4px;">
+              Personnalisez les étapes, activités, distances, budgets et adresses. Tout est synchronisé instantanément avec l'itinéraire et la carte.
+            </p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn-upload" onclick="exportCustomProgramJson()">
+              <span>📥</span> Exporter Programme (JSON)
+            </button>
+            <button class="btn-upload" onclick="document.getElementById('importProgramFileInput').click()">
+              <span>📤</span> Importer (JSON)
+            </button>
+            <input type="file" id="importProgramFileInput" accept=".json" style="display:none;" onchange="importCustomProgramJson(this)">
+            <button class="btn-upload" onclick="resetAllProgramToDefault()" style="color:var(--neg); border-color:rgba(225,29,72,0.3);">
+              <span>🔄</span> Tout Réinitialiser
+            </button>
+          </div>
+        </div>
+
+        <!-- Day Selection Pills -->
+        <div style="font-size:11.5px; font-weight:800; color:var(--text-3); text-transform:uppercase; margin-bottom:8px; letter-spacing:0.5px;">Sélectionnez le jour à modifier :</div>
+        <div class="editor-day-pills" id="editorDayPills"></div>
+
+        <!-- Editor Form -->
+        <div id="editorFormWrap" style="margin-top:10px;">
+          <!-- Loaded dynamically by renderProgramEditor() -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         TAB 5: VALISE & CHECKLIST INTERACTIVE
          ========================================================================= -->
     <div id="viewPacking" class="packing-section">
       <div class="packing-grid" id="packingGrid"></div>
@@ -1938,7 +2159,7 @@
     // --------------------------------------------------------------------------
     // 1. DATA: 19-DAY COMPREHENSIVE ROAD TRIP ITINERARY WITH GPS COORDINATES
     // --------------------------------------------------------------------------
-    const DAYS_DATA = [
+    const INITIAL_DAYS_DATA = [
       {
         dayNum: 1,
         date: "11 août",
@@ -1969,7 +2190,7 @@
         activities: [
           "Marché Jean-Talon — dégustation de fromages fins, fruits & sirop d'érable",
           "Basilique Notre-Dame & ruelles pavées du Vieux-Port de Montréal",
-          "Premium Outlet - Cassage de Portefeuille"
+          "Dégustation comparée : St-Viateur Bagel vs Fairmount Bagel dans le Mile End"
         ],
         resto: "🍽️ La Banquise (994 rue Rachel E.) — l'incontournable poutine québécoise 24h/24"
       },
@@ -1982,11 +2203,13 @@
         coords: [45.5088, -73.5878],
         km: 80,
         budget: 200,
-        desc: "Randonnée matinale au Mont-Royal par le sentier Olmsted jusqu'au majestueux belvédère Kondiaronk. Après-midi Long Sault Parkway.",
+        desc: "Randonnée matinale au Mont-Royal par le sentier Olmsted jusqu'au majestueux belvédère Kondiaronk. Après-midi shopping aux Premium Outlets de Mirabel pour dénicher des marques locales.",
         activities: [
           "Randonnée au cœur du Mont-Royal sur le sentier historique Olmsted",
           "Vue panoramique spectaculaire depuis le Belvédère Kondiaronk",
-          "Long Sault Parkway - Hamburger - National Historic Site Battle of Crysler's Farm)"
+          "Escapade shopping aux Premium Outlets Montréal (Mirabel)"
+        ],
+        resto: "🍽️ Montréal Plaza (4720 rue Marquette) — gastronomie festive & inventive"
       },
       {
         dayNum: 4,
@@ -2000,10 +2223,10 @@
         desc: "Immersion dans les montagnes des Laurentides. Randonnée vivifiante du sentier La Roche (5,8 km, 2h30) offrant une vue à couper le souffle sur le lac et le mont Tremblant.",
         activities: [
           "Route panoramique vers le Parc national du Mont-Tremblant (1h30)",
-          "Randonnée sportive du sentier - "Vertigo" (6,4 km, dénivelé +615 m)",
+          "Randonnée sportive du sentier La Roche (5,8 km, dénivelé +215 m)",
           "Contemplation du panorama grandiose sur le lac Tremblant et les collines"
         ],
-        resto: "Sandwich au sommet - Queue de Castor - Cookies "
+        resto: "🍽️ Beba (3900 rue Éthel, Verdun) — bistronomie argentico-méditerranéenne conviviale"
       },
       {
         dayNum: 5,
@@ -2014,13 +2237,13 @@
         coords: [45.4795, -73.5772],
         km: 15,
         budget: 130,
-        desc: "Marche street View Boulevard Saint Laurent - RESO Complexe Desjardins - Poutine "La Banquise" - Night Montreal,
+        desc: "Matinée au marché Atwater au bord du canal de Lachine. Après-midi détente sur l'eau au Bota Bota (spa sur bateau) ou visite de la Biosphère au Parc Jean-Drapeau.",
         activities: [
-          "Marche Street View Boulevard Saint Laurent - Complexe Deshardins - RESO",
-          "Poutine "La banquise",
-          "Soiréee Night Montreal"
+          "Marché Atwater — fromagerie de renommée et pique-nique au canal",
+          "Balade le long des berges du Canal de Lachine à vélo ou à pied",
+          "Détente au spa sur l'eau Bota Bota au Vieux-Port ou visite de la Biosphère"
         ],
-        resto: "🍽️ La Banquise - Poutine"
+        resto: "🍽️ Le Violon (Plateau-Mont-Royal) — fine dining intimiste design Zébulon Perron"
       },
       {
         dayNum: 6,
@@ -2269,6 +2492,23 @@
       }
     ];
 
+    function loadCustomDaysData() {
+      try {
+        const saved = localStorage.getItem('canada2026_custom_days');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.warn('Erreur chargement custom days', e);
+      }
+      return JSON.parse(JSON.stringify(INITIAL_DAYS_DATA));
+    }
+
+    let DAYS_DATA = loadCustomDaysData();
+
     // Checklist categories for the interactive packing list
     const PACKING_CATEGORIES = [
       {
@@ -2420,6 +2660,7 @@
       renderDaysCards();
       updateGlobalStats();
       renderWallGrid('all');
+      renderProgramEditor();
 
       // Auto-fetch from shared cloud in background if configured
       if (getJsonbinId()) {
@@ -2706,7 +2947,7 @@
     // --------------------------------------------------------------------------
     function switchTab(tabId) {
       currentTab = tabId;
-      const tabs = ['itinerary', 'map', 'wall', 'packing', 'guide'];
+      const tabs = ['itinerary', 'map', 'wall', 'editor', 'packing', 'guide'];
       tabs.forEach(t => {
         const viewEl = document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`);
         const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -2733,6 +2974,9 @@
       }
       if (tabId === 'wall') {
         renderWallGrid('all');
+      }
+      if (tabId === 'editor') {
+        renderProgramEditor();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2882,9 +3126,14 @@
             <h2 class="day-main-title">${day.title}</h2>
             <p class="day-description">${day.desc}</p>
           </div>
-          <span class="region-badge badge-${day.region}">
-            <span>📍</span> ${day.badge}
-          </span>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+            <span class="region-badge badge-${day.region}">
+              <span>📍</span> ${day.badge}
+            </span>
+            <button class="btn-upload" style="font-size:11px; padding:4px 8px; background:var(--bg-elevated); border:1px solid var(--card-border); color:var(--text-2);" onclick="openEditorForDay(${day.dayNum})" title="Modifier cette journée en direct">
+              <span>✏️</span> Modifier en live
+            </button>
+          </div>
         </div>
 
         <div class="activity-container">
@@ -2981,18 +3230,20 @@
       if (pointsPct) pointsPct.textContent = `${pct}%`;
 
       // Km & Budget progress based on current day
-      const kmUpToCurrent = DAYS_DATA.slice(0, currentDayIndex + 1).reduce((s, d) => s + d.km, 0);
-      const budgetUpToCurrent = DAYS_DATA.slice(0, currentDayIndex + 1).reduce((s, d) => s + d.budget, 0);
+      const kmUpToCurrent = DAYS_DATA.slice(0, currentDayIndex + 1).reduce((s, d) => s + (Number(d.km) || 0), 0);
+      const budgetUpToCurrent = DAYS_DATA.slice(0, currentDayIndex + 1).reduce((s, d) => s + (Number(d.budget) || 0), 0);
+      const totalKm = DAYS_DATA.reduce((s, d) => s + (Number(d.km) || 0), 0) || 1;
+      const totalBudget = DAYS_DATA.reduce((s, d) => s + (Number(d.budget) || 0), 0) || 1;
 
       const kmVal = document.getElementById('kmVal');
       const kmBar = document.getElementById('kmBar');
       if (kmVal) kmVal.textContent = kmUpToCurrent;
-      if (kmBar) kmBar.style.width = `${Math.min(100, Math.round((kmUpToCurrent / TOTAL_KM) * 100))}%`;
+      if (kmBar) kmBar.style.width = `${Math.min(100, Math.round((kmUpToCurrent / totalKm) * 100))}%`;
 
       const budgetVal = document.getElementById('budgetVal');
       const budgetBar = document.getElementById('budgetBar');
       if (budgetVal) budgetVal.textContent = `${budgetUpToCurrent} $`;
-      if (budgetBar) budgetBar.style.width = `${Math.min(100, Math.round((budgetUpToCurrent / TOTAL_BUDGET) * 100))}%`;
+      if (budgetBar) budgetBar.style.width = `${Math.min(100, Math.round((budgetUpToCurrent / totalBudget) * 100))}%`;
     }
 
     function handleSearch() {
@@ -3507,7 +3758,380 @@
     }
 
     // --------------------------------------------------------------------------
-    // 13. VALISE & CHECKLIST INTERACTIVE
+    // 13. PROGRAM LIVE EDITOR ENGINE (MODIFICATION EN DIRECT)
+    // --------------------------------------------------------------------------
+    let editingDayIndex = 0;
+
+    function openEditorForDay(dayNum) {
+      editingDayIndex = Math.max(0, Math.min(DAYS_DATA.length - 1, (parseInt(dayNum, 10) || 1) - 1));
+      switchTab('editor');
+    }
+
+    function renderProgramEditor() {
+      const pillsContainer = document.getElementById('editorDayPills');
+      const formWrap = document.getElementById('editorFormWrap');
+      if (!pillsContainer || !formWrap) return;
+
+      // 1. Render day selector pills
+      pillsContainer.innerHTML = DAYS_DATA.map((d, i) => `
+        <button class="editor-pill ${i === editingDayIndex ? 'active' : ''}" onclick="selectEditorDay(${i})">
+          <span>Jour ${d.dayNum}</span>
+          <span style="opacity:0.8; font-size:11px;">(${d.date})</span>
+        </button>
+      `).join('');
+
+      // Scroll active pill into view smoothly
+      const activePill = pillsContainer.children[editingDayIndex];
+      if (activePill) {
+        activePill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+
+      // 2. Render editor form for current day
+      const day = DAYS_DATA[editingDayIndex];
+      if (!day) return;
+
+      const regions = [
+        { val: 'montreal', label: 'Montréal & Environs' },
+        { val: 'laurentides', label: 'Laurentides / Mont-Tremblant' },
+        { val: 'outaouais', label: 'Outaouais / Montebello / Oméga' },
+        { val: 'ottawa', label: 'Ottawa (Capitale Fédérale)' },
+        { val: 'estrie', label: 'Estrie / Cantons-de-l\'Est' },
+        { val: 'mauricie', label: 'Mauricie / Trois-Rivières' },
+        { val: 'centre', label: 'Centre-du-Québec / Lévis' },
+        { val: 'quebec', label: 'Région de Québec & Île d\'Orléans' },
+        { val: 'charlevoix', label: 'Charlevoix' },
+        { val: 'tadoussac', label: 'Tadoussac & Saguenay / Fjord' }
+      ];
+
+      const regionOptionsHtml = regions.map(r => `
+        <option value="${r.val}" ${day.region === r.val ? 'selected' : ''}>${r.label}</option>
+      `).join('');
+
+      formWrap.innerHTML = `
+        <div style="background:var(--bg-elevated); border:1px solid var(--card-border); border-radius:var(--radius-lg); padding:20px;">
+          <!-- Top Header for Day -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--card-border);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="region-badge badge-${day.region}" style="font-size:12px;">Jour ${day.dayNum}</span>
+              <span style="font-size:16px; font-weight:800; color:var(--text-1);">${day.title}</span>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-upload" style="font-size:11.5px; padding:4px 10px;" onclick="selectEditorDay(${Math.max(0, editingDayIndex - 1)})" ${editingDayIndex === 0 ? 'disabled' : ''}>‹ Jour précédent</button>
+              <button class="btn-upload" style="font-size:11.5px; padding:4px 10px;" onclick="selectEditorDay(${Math.min(DAYS_DATA.length - 1, editingDayIndex + 1)})" ${editingDayIndex === DAYS_DATA.length - 1 ? 'disabled' : ''}>Jour suivant ›</button>
+            </div>
+          </div>
+
+          <!-- Main Fields Grid -->
+          <div class="editor-form-grid">
+            <div class="editor-field" style="grid-column: 1 / -1;">
+              <label for="ed_title">Titre principal de la journée</label>
+              <input type="text" id="ed_title" value="${escapeHtmlAttr(day.title)}" placeholder="Ex: Arrivée à Montréal & Rosemont">
+            </div>
+
+            <div class="editor-field">
+              <label for="ed_date">Date de l'étape</label>
+              <input type="text" id="ed_date" value="${escapeHtmlAttr(day.date)}" placeholder="Ex: 11 août">
+            </div>
+
+            <div class="editor-field">
+              <label for="ed_region">Région (Thème visuel)</label>
+              <select id="ed_region">
+                ${regionOptionsHtml}
+              </select>
+            </div>
+
+            <div class="editor-field">
+              <label for="ed_badge">Badge Localisation (Ville / Secteur)</label>
+              <input type="text" id="ed_badge" value="${escapeHtmlAttr(day.badge || '')}" placeholder="Ex: Montréal">
+            </div>
+
+            <div class="editor-field">
+              <label for="ed_km">Distance estimée (km)</label>
+              <input type="number" id="ed_km" value="${day.km || 0}" min="0">
+            </div>
+
+            <div class="editor-field">
+              <label for="ed_budget">Budget estimé ($ CAD)</label>
+              <input type="number" id="ed_budget" value="${day.budget || 0}" min="0">
+            </div>
+
+            <div class="editor-field">
+              <label>Coordonnées GPS (Carte)</label>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                <input type="number" step="0.0001" id="ed_lat" value="${day.coords ? day.coords[0] : 45.5}" placeholder="Lat (ex: 45.50)">
+                <input type="number" step="0.0001" id="ed_lng" value="${day.coords ? day.coords[1] : -73.5}" placeholder="Lng (ex: -73.56)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Description & Resto -->
+          <div class="editor-field" style="margin-bottom:16px;">
+            <label for="ed_desc">Description générale & Déroulement de la journée</label>
+            <textarea id="ed_desc" rows="3" placeholder="Résumez le fil conducteur et les conseils pratiques de cette journée...">${escapeHtmlAttr(day.desc || '')}</textarea>
+          </div>
+
+          <div class="editor-field" style="margin-bottom:20px;">
+            <label for="ed_resto">🍽️ Bonnes Adresses, Restaurants & Pauses Gourmandes</label>
+            <input type="text" id="ed_resto" value="${escapeHtmlAttr(day.resto || '')}" placeholder="Ex: 🍽️ Mon Lapin (150 rue Saint-Zotique E.) — cuisine du terroir">
+          </div>
+
+          <!-- Detailed Activities List -->
+          <div class="editor-activities-box">
+            <div class="editor-act-header">
+              <span>📋 Activités & Programme Détaillé (${day.activities ? day.activities.length : 0})</span>
+              <button class="btn-upload primary" style="font-size:11.5px; padding:4px 10px;" onclick="addEditorActivity()">
+                <span>➕</span> Ajouter une activité
+              </button>
+            </div>
+            <div class="editor-act-list" id="editorActivitiesList">
+              ${(day.activities || []).map((act, actIdx) => `
+                <div class="editor-act-row" id="editorActRow_${actIdx}">
+                  <span class="editor-act-num">#${actIdx + 1}</span>
+                  <input type="text" class="ed-activity-input" value="${escapeHtmlAttr(act)}" placeholder="Description de l'activité...">
+                  <button class="editor-act-btn" title="Monter" onclick="moveEditorActivity(${actIdx}, -1)">▲</button>
+                  <button class="editor-act-btn" title="Descendre" onclick="moveEditorActivity(${actIdx}, 1)">▼</button>
+                  <button class="editor-act-btn delete" title="Supprimer" onclick="removeEditorActivity(${actIdx})">✕</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--card-border);">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn-upload primary" style="font-size:13px; font-weight:800; padding:10px 18px;" onclick="saveCurrentEditingDay()">
+                <span>💾</span> Enregistrer le Jour ${day.dayNum}
+              </button>
+              <button class="btn-upload" style="font-size:13px; padding:10px 14px;" onclick="viewDayOnItinerary(${day.dayNum})">
+                <span>👁️</span> Voir sur l'itinéraire
+              </button>
+            </div>
+            <button class="btn-upload" style="font-size:12px; color:var(--text-3);" onclick="resetCurrentDayToDefault()">
+              <span>🔄</span> Réinitialiser ce jour à l'original
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtmlAttr(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function selectEditorDay(index) {
+      editingDayIndex = Math.max(0, Math.min(DAYS_DATA.length - 1, index));
+      renderProgramEditor();
+    }
+
+    function addEditorActivity() {
+      const list = document.getElementById('editorActivitiesList');
+      if (!list) return;
+      const count = list.children.length;
+      const row = document.createElement('div');
+      row.className = 'editor-act-row';
+      row.id = `editorActRow_${count}`;
+      row.innerHTML = `
+        <span class="editor-act-num">#${count + 1}</span>
+        <input type="text" class="ed-activity-input" value="" placeholder="Nouvelle activité...">
+        <button class="editor-act-btn" title="Monter" onclick="moveEditorActivity(${count}, -1)">▲</button>
+        <button class="editor-act-btn" title="Descendre" onclick="moveEditorActivity(${count}, 1)">▼</button>
+        <button class="editor-act-btn delete" title="Supprimer" onclick="removeEditorActivity(${count})">✕</button>
+      `;
+      list.appendChild(row);
+      const input = row.querySelector('input');
+      if (input) input.focus();
+    }
+
+    function removeEditorActivity(actIndex) {
+      const day = DAYS_DATA[editingDayIndex];
+      if (!day) return;
+      const inputs = document.querySelectorAll('.ed-activity-input');
+      const activities = Array.from(inputs).map(inp => inp.value);
+      activities.splice(actIndex, 1);
+      day.activities = activities;
+      renderProgramEditor();
+    }
+
+    function moveEditorActivity(actIndex, direction) {
+      const targetIndex = actIndex + direction;
+      const inputs = document.querySelectorAll('.ed-activity-input');
+      const activities = Array.from(inputs).map(inp => inp.value);
+      if (targetIndex < 0 || targetIndex >= activities.length) return;
+      
+      const temp = activities[actIndex];
+      activities[actIndex] = activities[targetIndex];
+      activities[targetIndex] = temp;
+      
+      DAYS_DATA[editingDayIndex].activities = activities;
+      renderProgramEditor();
+    }
+
+    function saveCurrentEditingDay() {
+      const day = DAYS_DATA[editingDayIndex];
+      if (!day) return;
+
+      const title = document.getElementById('ed_title').value.trim() || day.title;
+      const date = document.getElementById('ed_date').value.trim() || day.date;
+      const region = document.getElementById('ed_region').value;
+      const badge = document.getElementById('ed_badge').value.trim() || day.badge;
+      const km = parseInt(document.getElementById('ed_km').value, 10) || 0;
+      const budget = parseInt(document.getElementById('ed_budget').value, 10) || 0;
+      const lat = parseFloat(document.getElementById('ed_lat').value) || (day.coords ? day.coords[0] : 45.5);
+      const lng = parseFloat(document.getElementById('ed_lng').value) || (day.coords ? day.coords[1] : -73.5);
+      const desc = document.getElementById('ed_desc').value.trim();
+      const resto = document.getElementById('ed_resto').value.trim();
+
+      // Gather activities
+      const actInputs = document.querySelectorAll('.ed-activity-input');
+      const activities = Array.from(actInputs).map(inp => inp.value.trim()).filter(v => v.length > 0);
+
+      // Update in memory
+      day.title = title;
+      day.date = date;
+      day.region = region;
+      day.badge = badge;
+      day.km = km;
+      day.budget = budget;
+      day.coords = [lat, lng];
+      day.desc = desc;
+      day.resto = resto;
+      day.activities = activities;
+
+      // Save to localStorage
+      saveCustomDaysToStorage();
+
+      // Refresh other app views
+      refreshAllAppViews();
+
+      renderProgramEditor();
+      showToast(`✅ Jour ${day.dayNum} enregistré et synchronisé ! 🎉`);
+    }
+
+    function saveCustomDaysToStorage() {
+      try {
+        localStorage.setItem('canada2026_custom_days', JSON.stringify(DAYS_DATA));
+      } catch (e) {
+        console.error('Erreur sauvegarde localStorage', e);
+      }
+    }
+
+    function refreshAllAppViews() {
+      renderDaysCards();
+      renderTrackGrid();
+      updateGlobalStats();
+      refreshLeafletMapMarkers();
+    }
+
+    function refreshLeafletMapMarkers() {
+      if (!leafletMap) return;
+      mapMarkers.forEach(m => leafletMap.removeLayer(m));
+      mapMarkers = [];
+      if (mapRouteLine) leafletMap.removeLayer(mapRouteLine);
+
+      const latLngs = [];
+      DAYS_DATA.forEach((day, i) => {
+        if (day.coords && Array.isArray(day.coords)) {
+          latLngs.push(day.coords);
+          const customIcon = L.divIcon({
+            className: 'custom-map-pin-container',
+            html: `<div class="custom-map-pin" title="Jour ${day.dayNum} : ${day.title}">${day.dayNum}</div>`,
+            iconSize: [26, 26],
+            iconAnchor: [13, 13]
+          });
+          const marker = L.marker(day.coords, { icon: customIcon }).addTo(leafletMap);
+          marker.bindPopup(`
+            <div style="font-family:var(--font-main); min-width:180px;">
+              <div style="font-size:11px;font-weight:700;color:var(--accent);">Jour ${day.dayNum} · ${day.date}</div>
+              <div style="font-size:14px;font-weight:800;margin:3px 0 6px;">${day.title}</div>
+              <div style="font-size:12px;color:#555;margin-bottom:8px;">${day.km} km · ${day.badge}</div>
+              <button onclick="goToDayFromMap(${i})" style="width:100%;padding:6px;border-radius:6px;background:var(--accent);color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;">
+                Voir les détails ➔
+              </button>
+            </div>
+          `);
+          mapMarkers.push(marker);
+        }
+      });
+
+      if (latLngs.length > 0) {
+        mapRouteLine = L.polyline(latLngs, {
+          color: '#0284c7',
+          weight: 4,
+          opacity: 0.8,
+          dashArray: '8, 8',
+          lineCap: 'round'
+        }).addTo(leafletMap);
+      }
+    }
+
+    function viewDayOnItinerary(dayNum) {
+      currentDayIndex = Math.max(0, Math.min(DAYS_DATA.length - 1, (parseInt(dayNum, 10) || 1) - 1));
+      switchTab('itinerary');
+      renderDaysCards();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetCurrentDayToDefault() {
+      if (!confirm(`Réinitialiser le Jour ${DAYS_DATA[editingDayIndex].dayNum} aux valeurs initiales du programme ?`)) return;
+      DAYS_DATA[editingDayIndex] = JSON.parse(JSON.stringify(INITIAL_DAYS_DATA[editingDayIndex]));
+      saveCustomDaysToStorage();
+      refreshAllAppViews();
+      renderProgramEditor();
+      showToast(`🔄 Jour ${DAYS_DATA[editingDayIndex].dayNum} réinitialisé.`);
+    }
+
+    function resetAllProgramToDefault() {
+      if (!confirm('Voulez-vous vraiment réinitialiser les programmes des 19 jours aux valeurs d\'origine ?\n\n(Toutes vos modifications de texte et d\'activités seront réinitialisées)')) return;
+      DAYS_DATA = JSON.parse(JSON.stringify(INITIAL_DAYS_DATA));
+      localStorage.removeItem('canada2026_custom_days');
+      refreshAllAppViews();
+      renderProgramEditor();
+      showToast('🔄 Programme complet réinitialisé aux valeurs d\'origine !');
+    }
+
+    function exportCustomProgramJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(DAYS_DATA, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `canada2026_programme_personnalise_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('📥 Programme exporté en fichier JSON !');
+    }
+
+    function importCustomProgramJson(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!Array.isArray(imported) || imported.length === 0 || !imported[0].dayNum) {
+            throw new Error('Format JSON invalide. Le fichier doit être une liste de 19 étapes.');
+          }
+          DAYS_DATA = imported;
+          saveCustomDaysToStorage();
+          refreshAllAppViews();
+          renderProgramEditor();
+          showToast(`🎉 Programme importé avec succès (${imported.length} jours) !`);
+        } catch (err) {
+          alert('Erreur lors de l\'importation : ' + err.message);
+        }
+        input.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    // --------------------------------------------------------------------------
+    // 14. VALISE & CHECKLIST INTERACTIVE
     // --------------------------------------------------------------------------
     function initPackingView() {
       const grid = document.getElementById('packingGrid');
