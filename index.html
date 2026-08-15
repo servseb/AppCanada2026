@@ -1897,15 +1897,21 @@
             </p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn-upload primary" style="font-weight:800;" onclick="saveUpdatedIndexHtmlFile()" title="Met à jour directement le fichier index.html avec le nouveau programme">
+              <span>💾</span> Enregistrer dans index.html
+            </button>
+            <button class="btn-upload" style="font-weight:800; background:#24292f; color:#fff; border-color:#24292f;" onclick="commitIndexHtmlToGitHub()" title="Pousse les modifications directement sur votre dépôt GitHub">
+              <span>🐙</span> Pousser sur GitHub
+            </button>
             <button class="btn-upload" onclick="exportCustomProgramJson()">
-              <span>📥</span> Exporter Programme (JSON)
+              <span>📥</span> Exporter (JSON)
             </button>
             <button class="btn-upload" onclick="document.getElementById('importProgramFileInput').click()">
               <span>📤</span> Importer (JSON)
             </button>
             <input type="file" id="importProgramFileInput" accept=".json" style="display:none;" onchange="importCustomProgramJson(this)">
             <button class="btn-upload" onclick="resetAllProgramToDefault()" style="color:var(--neg); border-color:rgba(225,29,72,0.3);">
-              <span>🔄</span> Tout Réinitialiser
+              <span>🔄</span> Réinitialiser
             </button>
           </div>
         </div>
@@ -2007,14 +2013,18 @@
       </div>
 
       <!-- Live status indicator -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
-        <div id="cfgImgbbStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 12px;">
-          <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">📸 Stockage ImgBB</div>
-          <div id="cfgImgbbStatusText" style="font-weight:800; font-size:12px; color:var(--text-1); margin-top:2px;">⚡ Non configuré</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px;">
+        <div id="cfgImgbbStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:8px 10px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">📸 ImgBB</div>
+          <div id="cfgImgbbStatusText" style="font-weight:800; font-size:11.5px; color:var(--text-1); margin-top:2px;">⚡ Non configuré</div>
         </div>
-        <div id="cfgCloudStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:10px 12px;">
-          <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">☁️ Sync Cloud Directe</div>
-          <div id="cfgCloudStatusText" style="font-weight:800; font-size:12px; color:var(--text-1); margin-top:2px;">⚡ Mode autonome</div>
+        <div id="cfgCloudStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:8px 10px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">☁️ JSONBin</div>
+          <div id="cfgCloudStatusText" style="font-weight:800; font-size:11.5px; color:var(--text-1); margin-top:2px;">⚡ Autonome</div>
+        </div>
+        <div id="cfgGitHubStatusBox" style="background:var(--accent-subtle); border:1px solid rgba(2, 132, 199, 0.3); border-radius:var(--radius-md); padding:8px 10px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">🐙 GitHub</div>
+          <div id="cfgGitHubStatusText" style="font-weight:800; font-size:11.5px; color:var(--text-1); margin-top:2px;">⚡ Déconnecté</div>
         </div>
       </div>
 
@@ -2117,14 +2127,72 @@
         <button class="btn-upload" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="copyShareablePhotoLink()">
           <span>🔗</span> Copier le lien tout-en-un pour la famille
         </button>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
           <button class="btn-upload" style="font-size:11.5px; justify-content:center;" onclick="exportPhotosJson()">
-            <span>📥</span> Exporter (JSON)
+            <span>📥</span> Exporter Photos (JSON)
           </button>
           <button class="btn-upload" style="font-size:11.5px; justify-content:center;" onclick="document.getElementById('importPhotosFileInput').click()">
-            <span>📤</span> Importer (JSON)
+            <span>📤</span> Importer Photos (JSON)
           </button>
           <input type="file" id="importPhotosFileInput" accept=".json" style="display:none;" onchange="importPhotosJson(this)">
+        </div>
+        <button class="btn-upload primary" style="width:100%; justify-content:center; font-weight:800;" onclick="saveUpdatedIndexHtmlFile()">
+          <span>💾</span> Enregistrer index.html à jour sur le disque
+        </button>
+      </div>
+
+      <!-- Section 4 : Connexion & Déploiement GitHub (via Google / GitHub PAT) -->
+      <div style="background:var(--bg); border:1px solid var(--card-border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-weight:800; font-size:13.5px; color:var(--text-1); display:flex; align-items:center; gap:6px;">
+            <span>🐙</span> 4. Déploiement & Synchronisation GitHub
+          </div>
+          <a href="https://github.com/settings/tokens?type=beta" target="_blank" style="font-size:11.5px; font-weight:700; color:var(--accent); text-decoration:underline;">Générer un jeton GitHub ↗</a>
+        </div>
+        <p style="font-size:12px; color:var(--text-2); margin-bottom:10px; line-height:1.4;">
+          Connectez votre dépôt GitHub (associé à votre compte Google) pour pousser automatiquement vos modifications de <code>index.html</code> directement en ligne.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="cfgGhOwner" style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:3px;">Utilisateur / Organisation</label>
+            <input type="text" id="cfgGhOwner" placeholder="ex: votre-pseudo-github">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="cfgGhRepo" style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:3px;">Nom du Dépôt</label>
+            <input type="text" id="cfgGhRepo" placeholder="ex: Canada2026">
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="cfgGhBranch" style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:3px;">Branche</label>
+            <input type="text" id="cfgGhBranch" placeholder="main" value="main">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="cfgGhPath" style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:3px;">Chemin du fichier</label>
+            <input type="text" id="cfgGhPath" placeholder="index.html" value="index.html">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:10px;">
+          <label for="cfgGhToken" style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:3px;">Jeton d'accès GitHub (Token PAT)</label>
+          <input type="password" id="cfgGhToken" placeholder="ex: ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ou github_pat_XXX">
+          <div class="form-help">
+            <strong>💡 Connexion avec compte Google :</strong><br>
+            1. Connectez-vous à <a href="https://github.com/login" target="_blank" style="color:var(--accent); text-decoration:underline;">github.com</a> via <em>"Sign in with Google"</em>.<br>
+            2. Ouvrez <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--accent); text-decoration:underline;">GitHub &gt; Settings &gt; Developer Settings &gt; Personal Access Tokens</a>.<br>
+            3. Créez un jeton avec la permission <strong>repo</strong> (ou <strong>Contents: Read &amp; Write</strong>) et collez-le ici.
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-upload" style="font-size:12px; padding:6px 12px;" onclick="testGitHubConnection()">
+            <span>🧪</span> Tester la connexion GitHub
+          </button>
+          <button class="btn-upload primary" style="font-size:12px; padding:6px 12px; font-weight:800; background:#24292f; color:#fff;" onclick="commitIndexHtmlToGitHub()">
+            <span>🚀</span> Commiter & Déployer index.html
+          </button>
         </div>
       </div>
 
@@ -3899,15 +3967,21 @@
           <!-- Bottom Action Buttons -->
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--card-border);">
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="btn-upload primary" style="font-size:13px; font-weight:800; padding:10px 18px;" onclick="saveCurrentEditingDay()">
-                <span>💾</span> Enregistrer le Jour ${day.dayNum}
+              <button class="btn-upload primary" style="font-size:13px; font-weight:800; padding:10px 16px;" onclick="saveCurrentEditingDay(false)">
+                <span>💾</span> Enregistrer Jour ${day.dayNum}
+              </button>
+              <button class="btn-upload primary" style="font-size:13px; font-weight:800; padding:10px 16px; background:#0284c7; color:#fff;" onclick="saveCurrentEditingDay('file')">
+                <span>💾</span> Sauvegarder dans index.html
+              </button>
+              <button class="btn-upload primary" style="font-size:13px; font-weight:800; padding:10px 16px; background:#24292f; color:#fff; border-color:#24292f;" onclick="saveCurrentEditingDay('github')">
+                <span>🐙</span> Pousser sur GitHub
               </button>
               <button class="btn-upload" style="font-size:13px; padding:10px 14px;" onclick="viewDayOnItinerary(${day.dayNum})">
                 <span>👁️</span> Voir sur l'itinéraire
               </button>
             </div>
             <button class="btn-upload" style="font-size:12px; color:var(--text-3);" onclick="resetCurrentDayToDefault()">
-              <span>🔄</span> Réinitialiser ce jour à l'original
+              <span>🔄</span> Réinitialiser ce jour
             </button>
           </div>
         </div>
@@ -3972,7 +4046,7 @@
       renderProgramEditor();
     }
 
-    function saveCurrentEditingDay() {
+    function saveCurrentEditingDay(andSaveFile = false) {
       const day = DAYS_DATA[editingDayIndex];
       if (!day) return;
 
@@ -4011,6 +4085,12 @@
 
       renderProgramEditor();
       showToast(`✅ Jour ${day.dayNum} enregistré et synchronisé ! 🎉`);
+
+      if (andSaveFile === 'github') {
+        setTimeout(commitIndexHtmlToGitHub, 300);
+      } else if (andSaveFile === 'file' || andSaveFile === true) {
+        setTimeout(saveUpdatedIndexHtmlFile, 300);
+      }
     }
 
     function saveCustomDaysToStorage() {
@@ -4130,6 +4210,237 @@
       reader.readAsText(file);
     }
 
+    async function saveUpdatedIndexHtmlFile() {
+      showToast('Génération du fichier index.html à jour... ⏳');
+
+      try {
+        let fullHtml = '';
+        
+        // 1. Try reading the active document source
+        try {
+          const res = await fetch(window.location.href);
+          if (res.ok) {
+            fullHtml = await res.text();
+          }
+        } catch (e) {
+          console.warn('Fetch fallback to outerHTML', e);
+        }
+
+        if (!fullHtml || !fullHtml.includes('const INITIAL_DAYS_DATA')) {
+          fullHtml = '<!DOCTYPE html>\n<html lang="fr">\n' + document.documentElement.innerHTML + '\n</html>';
+        }
+
+        // Format DAYS_DATA
+        const jsonFormatted = JSON.stringify(DAYS_DATA, null, 6);
+
+        // Replace INITIAL_DAYS_DATA in fullHtml
+        const regex = /const INITIAL_DAYS_DATA = \[[\s\S]*?\n\s*\];/;
+        if (regex.test(fullHtml)) {
+          fullHtml = fullHtml.replace(regex, `const INITIAL_DAYS_DATA = ${jsonFormatted};`);
+        }
+
+        // Clean active classes from modals in output HTML
+        fullHtml = fullHtml.replace(/<div class="modal-backdrop open"/g, '<div class="modal-backdrop"');
+        fullHtml = fullHtml.replace(/<div class="lightbox-modal active"/g, '<div class="lightbox-modal"');
+
+        // A. If File System Access API is supported (Chrome / Edge on Mac & PC)
+        if ('showSaveFilePicker' in window) {
+          try {
+            const fileHandle = await window.showSaveFilePicker({
+              suggestedName: 'index.html',
+              types: [{
+                description: 'Fichier Web (index.html)',
+                accept: { 'text/html': ['.html', '.htm'] }
+              }]
+            });
+            const writable = await fileHandle.createWritable();
+            await writable.write(fullHtml);
+            await writable.close();
+            showToast('✅ Fichier index.html mis à jour et enregistré directement sur le disque ! 🎉');
+            return;
+          } catch (filePickerErr) {
+            if (filePickerErr.name === 'AbortError') return;
+            console.warn('showSaveFilePicker error, falling back to download', filePickerErr);
+          }
+        }
+
+        // B. Fallback: Direct download
+        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        const blobUrl = URL.createObjectURL(blob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = 'index.html';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
+
+        showToast('✅ Fichier index.html généré & téléchargé ! Remplacez le fichier existant.');
+      } catch (err) {
+        console.error('Erreur lors de la sauvegarde de index.html:', err);
+        alert('Impossible de générer le fichier index.html : ' + err.message);
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // GITHUB SYNCHRONISATION & DIRECT COMMIT ENGINE (AVEC COMPTE GOOGLE / PAT)
+    // --------------------------------------------------------------------------
+    function getGitHubConfig() {
+      return {
+        owner: (localStorage.getItem('canada2026_gh_owner') || '').trim(),
+        repo: (localStorage.getItem('canada2026_gh_repo') || '').trim(),
+        branch: (localStorage.getItem('canada2026_gh_branch') || 'main').trim(),
+        path: (localStorage.getItem('canada2026_gh_path') || 'index.html').trim(),
+        token: (localStorage.getItem('canada2026_gh_token') || '').trim()
+      };
+    }
+
+    function saveGitHubConfig(owner, repo, branch, path, token) {
+      if (owner !== undefined) localStorage.setItem('canada2026_gh_owner', owner.trim());
+      if (repo !== undefined) localStorage.setItem('canada2026_gh_repo', repo.trim());
+      if (branch !== undefined) localStorage.setItem('canada2026_gh_branch', (branch.trim() || 'main'));
+      if (path !== undefined) localStorage.setItem('canada2026_gh_path', (path.trim() || 'index.html'));
+      if (token !== undefined) localStorage.setItem('canada2026_gh_token', token.trim());
+      updateConfigModalStatus();
+    }
+
+    async function testGitHubConnection() {
+      const owner = (document.getElementById('cfgGhOwner') ? document.getElementById('cfgGhOwner').value : getGitHubConfig().owner).trim();
+      const repo = (document.getElementById('cfgGhRepo') ? document.getElementById('cfgGhRepo').value : getGitHubConfig().repo).trim();
+      const token = (document.getElementById('cfgGhToken') ? document.getElementById('cfgGhToken').value : getGitHubConfig().token).trim();
+      const branch = (document.getElementById('cfgGhBranch') ? document.getElementById('cfgGhBranch').value : getGitHubConfig().branch).trim() || 'main';
+
+      if (!owner || !repo || !token) {
+        alert("Veuillez renseigner votre utilisateur GitHub, nom du dépôt et jeton d'accès (PAT).");
+        return;
+      }
+
+      showToast('Test de connexion GitHub en cours... ⏳🐙');
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || `Erreur HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        saveGitHubConfig(owner, repo, branch, 'index.html', token);
+        showToast(`✅ Connecté avec succès au dépôt GitHub "${data.full_name}" ! 🎉`);
+      } catch (err) {
+        console.error('Erreur testGitHubConnection:', err);
+        alert(`Échec de connexion GitHub : ${err.message}\n\nVérifiez votre token, le nom du dépôt et les droits d'accès.`);
+      }
+    }
+
+    function utf8ToBase64(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode('0x' + p1);
+      }));
+    }
+
+    async function commitIndexHtmlToGitHub(customCommitMessage = '') {
+      const cfg = getGitHubConfig();
+
+      if (!cfg.owner || !cfg.repo || !cfg.token) {
+        openConfigModal();
+        alert('Configuration GitHub requise :\n\nVeuillez renseigner votre nom d\'utilisateur GitHub, nom du dépôt et Token PAT dans la section 4.');
+        const tokenInput = document.getElementById('cfgGhToken');
+        if (tokenInput) tokenInput.focus();
+        return;
+      }
+
+      showToast('Préparation et envoi du commit vers GitHub... ⏳🐙');
+
+      try {
+        // 1. Generate updated HTML
+        let fullHtml = '';
+        try {
+          const res = await fetch(window.location.href);
+          if (res.ok) {
+            fullHtml = await res.text();
+          }
+        } catch (e) {
+          console.warn('Fetch fallback to outerHTML', e);
+        }
+
+        if (!fullHtml || !fullHtml.includes('const INITIAL_DAYS_DATA')) {
+          fullHtml = '<!DOCTYPE html>\n<html lang="fr">\n' + document.documentElement.innerHTML + '\n</html>';
+        }
+
+        // Format DAYS_DATA
+        const jsonFormatted = JSON.stringify(DAYS_DATA, null, 6);
+
+        // Replace INITIAL_DAYS_DATA
+        const regex = /const INITIAL_DAYS_DATA = \[[\s\S]*?\n\s*\];/;
+        if (regex.test(fullHtml)) {
+          fullHtml = fullHtml.replace(regex, `const INITIAL_DAYS_DATA = ${jsonFormatted};`);
+        }
+
+        // Clean active classes
+        fullHtml = fullHtml.replace(/<div class="modal-backdrop open"/g, '<div class="modal-backdrop"');
+        fullHtml = fullHtml.replace(/<div class="lightbox-modal active"/g, '<div class="lightbox-modal"');
+
+        // 2. Fetch current file SHA from GitHub
+        let sha = '';
+        try {
+          const checkRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
+            headers: {
+              'Authorization': `Bearer ${cfg.token}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+          if (checkRes.ok) {
+            const checkData = await checkRes.json();
+            sha = checkData.sha;
+          }
+        } catch (e) {
+          console.warn('Fichier non existant sur GitHub, création directe.', e);
+        }
+
+        // 3. Encode content to Base64 (UTF-8 safe)
+        const base64Content = utf8ToBase64(fullHtml);
+
+        const commitMsg = customCommitMessage || `Mise à jour du programme Canada 2026 (${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')})`;
+
+        // 4. Send PUT request to GitHub Contents API
+        const putRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${cfg.token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: commitMsg,
+            content: base64Content,
+            sha: sha || undefined,
+            branch: cfg.branch
+          })
+        });
+
+        if (!putRes.ok) {
+          const errData = await putRes.json().catch(() => ({}));
+          throw new Error(errData.message || `Erreur GitHub HTTP ${putRes.status}`);
+        }
+
+        const resData = await putRes.json();
+        const commitUrl = (resData.commit && resData.commit.html_url) ? resData.commit.html_url : `https://github.com/${cfg.owner}/${cfg.repo}`;
+
+        showToast('🚀 index.html commité et déployé sur GitHub avec succès ! 🎉');
+        console.log('GitHub commit successful:', commitUrl);
+      } catch (err) {
+        console.error('Erreur commitIndexHtmlToGitHub:', err);
+        alert(`Erreur lors de l'envoi sur GitHub : ${err.message}\n\nVérifiez que votre jeton GitHub possède bien les droits en écriture ("repo" ou "contents: write").`);
+      }
+    }
+
     // --------------------------------------------------------------------------
     // 14. VALISE & CHECKLIST INTERACTIVE
     // --------------------------------------------------------------------------
@@ -4213,6 +4524,18 @@
             cloudBoxText.style.color = 'var(--text-3)';
           }
         }
+
+        const ghBoxText = document.getElementById('cfgGitHubStatusText');
+        const ghCfg = getGitHubConfig();
+        if (ghBoxText) {
+          if (ghCfg.token && ghCfg.repo) {
+            ghBoxText.innerHTML = `🟢 Connecté (${ghCfg.owner}/${ghCfg.repo})`;
+            ghBoxText.style.color = 'var(--pos)';
+          } else {
+            ghBoxText.innerHTML = `⚡ Non connecté`;
+            ghBoxText.style.color = 'var(--text-3)';
+          }
+        }
       } catch(e) {
         console.warn('updateConfigModalStatus error', e);
       }
@@ -4234,6 +4557,19 @@
         const qSetting = getPhotoQualitySetting();
         const radEl = document.querySelector(`input[name="photoQualityOpt"][value="${qSetting}"]`);
         if (radEl) radEl.checked = true;
+
+        const ghOwnerInput = document.getElementById('cfgGhOwner');
+        const ghRepoInput = document.getElementById('cfgGhRepo');
+        const ghBranchInput = document.getElementById('cfgGhBranch');
+        const ghPathInput = document.getElementById('cfgGhPath');
+        const ghTokenInput = document.getElementById('cfgGhToken');
+        const ghCfg = getGitHubConfig();
+
+        if (ghOwnerInput) ghOwnerInput.value = ghCfg.owner || '';
+        if (ghRepoInput) ghRepoInput.value = ghCfg.repo || '';
+        if (ghBranchInput) ghBranchInput.value = ghCfg.branch || 'main';
+        if (ghPathInput) ghPathInput.value = ghCfg.path || 'index.html';
+        if (ghTokenInput) ghTokenInput.value = ghCfg.token || '';
 
         const modalEl = document.getElementById('configModal');
         if (modalEl) modalEl.classList.add('open');
@@ -4462,6 +4798,22 @@
 
       const selQuality = document.querySelector('input[name="photoQualityOpt"]:checked');
       if (selQuality) setPhotoQualitySetting(selQuality.value);
+
+      const ghOwnerInput = document.getElementById('cfgGhOwner');
+      const ghRepoInput = document.getElementById('cfgGhRepo');
+      const ghBranchInput = document.getElementById('cfgGhBranch');
+      const ghPathInput = document.getElementById('cfgGhPath');
+      const ghTokenInput = document.getElementById('cfgGhToken');
+
+      if (ghOwnerInput && ghRepoInput && ghTokenInput) {
+        saveGitHubConfig(
+          ghOwnerInput.value,
+          ghRepoInput.value,
+          ghBranchInput ? ghBranchInput.value : 'main',
+          ghPathInput ? ghPathInput.value : 'index.html',
+          ghTokenInput.value
+        );
+      }
 
       closeConfigModal();
       updateConfigModalStatus();
