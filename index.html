@@ -1686,7 +1686,7 @@
             </button>
             <button class="btn-upload primary" onclick="triggerGlobalUpload()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              Ajouter une Photo
+              Ajouter des Photos (max 10)
             </button>
           </div>
         </div>
@@ -1697,7 +1697,7 @@
       </div>
 
       <div class="wall-grid" id="wallGrid"></div>
-      <input type="file" id="globalUploadInput" class="upload-input-file" accept="image/*,video/*" onchange="handleGlobalFileUpload(this)">
+      <input type="file" id="globalUploadInput" class="upload-input-file" accept="image/*,video/*" multiple onchange="handleGlobalFileUpload(this)">
     </div>
 
     <!-- =========================================================================
@@ -1969,7 +1969,7 @@
         activities: [
           "Marché Jean-Talon — dégustation de fromages fins, fruits & sirop d'érable",
           "Basilique Notre-Dame & ruelles pavées du Vieux-Port de Montréal",
-          "Premium Outlet - Cassage de Portefeuille"
+          "Dégustation comparée : St-Viateur Bagel vs Fairmount Bagel dans le Mile End"
         ],
         resto: "🍽️ La Banquise (994 rue Rachel E.) — l'incontournable poutine québécoise 24h/24"
       },
@@ -1982,11 +1982,11 @@
         coords: [45.5088, -73.5878],
         km: 80,
         budget: 200,
-        desc: "Randonnée matinale au Mont-Royal par le sentier Olmsted jusqu'au majestueux belvédère Kondiaronk. Après-midi Long Sault Parkway.",
+        desc: "Randonnée matinale au Mont-Royal par le sentier Olmsted jusqu'au majestueux belvédère Kondiaronk. Après-midi shopping aux Premium Outlets de Mirabel pour dénicher des marques locales.",
         activities: [
           "Randonnée au cœur du Mont-Royal sur le sentier historique Olmsted",
           "Vue panoramique spectaculaire depuis le Belvédère Kondiaronk",
-          "Long Sault Parkway - Hamburger - National Historic Site Battle of Crysler's Farm)"
+          "Escapade shopping aux Premium Outlets Montréal (Mirabel)"
         ],
         resto: "🍽️ Montréal Plaza (4720 rue Marquette) — gastronomie festive & inventive"
       },
@@ -2914,7 +2914,7 @@
           <div class="upload-action-row">
             <button class="btn-upload" onclick="triggerDayUpload(${day.dayNum})">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              Ajouter Photo 📸
+              Ajouter Photos 📸 (max 10)
             </button>
             <button class="btn-upload" onclick="toggleUrlRow(${day.dayNum})">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -2922,7 +2922,7 @@
             </button>
           </div>
 
-          <input type="file" id="dayFileInput-${day.dayNum}" class="upload-input-file" accept="image/*,video/*" onchange="handleDayUpload(${day.dayNum}, this)">
+          <input type="file" id="dayFileInput-${day.dayNum}" class="upload-input-file" accept="image/*,video/*" multiple onchange="handleDayUpload(${day.dayNum}, this)">
           
           <div class="url-input-box" id="urlInputBox-${day.dayNum}">
             <input type="text" id="urlInput-${day.dayNum}" placeholder="Collez l'URL de l'image (https://...)">
@@ -3045,18 +3045,43 @@
 
     async function handleDayUpload(dayNum, input) {
       if (!input.files || input.files.length === 0) return;
-      for (let i = 0; i < input.files.length; i++) {
-        await uploadMediaFile(input.files[i], dayNum);
+      const fileList = Array.from(input.files);
+      
+      if (fileList.length > 10) {
+        alert(`Vous avez sélectionné ${fileList.length} fichiers.\n\nSeules les 10 premières photos seront téléversées dans cet envoi.`);
       }
+
+      const toUpload = fileList.slice(0, 10);
+      const total = toUpload.length;
+
+      for (let i = 0; i < total; i++) {
+        showToast(`Téléversement de la photo ${i + 1}/${total} (Jour ${dayNum})... ⏳📸`);
+        await uploadMediaFile(toUpload[i], dayNum);
+      }
+
       input.value = '';
+      showToast(`🎉 ${total} photo(s) ajoutée(s) avec succès pour le Jour ${dayNum} !`);
     }
 
     async function handleGlobalFileUpload(input) {
       if (!input.files || input.files.length === 0) return;
-      for (let i = 0; i < input.files.length; i++) {
-        await uploadMediaFile(input.files[i], currentDayIndex + 1);
+      const fileList = Array.from(input.files);
+      
+      if (fileList.length > 10) {
+        alert(`Vous avez sélectionné ${fileList.length} fichiers.\n\nSeules les 10 premières photos seront téléversées dans cet envoi.`);
       }
+
+      const toUpload = fileList.slice(0, 10);
+      const total = toUpload.length;
+      const targetDay = currentDayIndex + 1;
+
+      for (let i = 0; i < total; i++) {
+        showToast(`Téléversement de la photo ${i + 1}/${total}... ⏳📸`);
+        await uploadMediaFile(toUpload[i], targetDay);
+      }
+
       input.value = '';
+      showToast(`🎉 ${total} photo(s) ajoutée(s) avec succès dans la galerie !`);
     }
 
     // --------------------------------------------------------------------------
@@ -3292,7 +3317,7 @@
             </p>
             <button class="btn-upload primary" onclick="triggerGlobalUpload()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              Ajouter une photo
+              Ajouter des photos (max 10)
             </button>
           </div>
         `;
