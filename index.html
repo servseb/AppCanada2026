@@ -819,10 +819,14 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: high-quality;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .gallery-item:hover img {
-      transform: scale(1.08);
+      transform: scale(1.06) translateZ(0);
     }
 
     .gallery-item-badge {
@@ -1064,6 +1068,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: high-quality;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .wall-card-overlay {
       position: absolute;
@@ -1292,26 +1301,54 @@
 
     .lightbox-container {
       position: relative;
-      max-width: 92vw;
-      max-height: 88vh;
+      max-width: 95vw;
+      max-height: 90vh;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+    .lightbox-media-wrap {
+      position: relative;
+      max-width: 92vw;
+      max-height: 80vh;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: var(--radius-md);
+      transition: all 0.25s ease;
+    }
+    .lightbox-media-wrap.zoomed {
+      max-width: 96vw;
+      max-height: 82vh;
+      cursor: grab;
+    }
     .lightbox-media-wrap img, .lightbox-media-wrap video {
       max-width: 100%;
-      max-height: 82vh;
+      max-height: 80vh;
       object-fit: contain;
       image-rendering: -webkit-optimize-contrast;
+      image-rendering: high-quality;
       border-radius: var(--radius-md);
       box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+      cursor: zoom-in;
+      transition: transform 0.2s ease, max-height 0.2s ease, max-width 0.2s ease;
+    }
+    .lightbox-media-wrap.zoomed img {
+      max-width: none;
+      max-height: none;
+      width: auto;
+      height: auto;
+      cursor: zoom-out;
+      border-radius: var(--radius-sm);
     }
     .lightbox-caption {
       color: #ffffff;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       margin-top: 12px;
-      text-align: center;
+      width: 100%;
+      max-width: 90vw;
     }
     .lightbox-nav-btn {
       position: absolute;
@@ -3120,11 +3157,13 @@
         throw new Error(errMsg);
       }
 
+      const rawFullUrl = (data.data.image && data.data.image.url) || data.data.url || data.data.display_url;
       return {
         id: data.data.id,
-        url: data.data.display_url || data.data.url,
+        url: rawFullUrl,
+        displayUrl: data.data.display_url || rawFullUrl,
         deleteUrl: data.data.delete_url || '',
-        thumbUrl: (data.data.thumb && data.data.thumb.url) || data.data.display_url || data.data.url,
+        thumbUrl: (data.data.thumb && data.data.thumb.url) || data.data.display_url || rawFullUrl,
         title: data.data.title || ''
       };
     }
@@ -3294,6 +3333,8 @@
       showLightboxModal();
     }
 
+    let isLightboxZoomed = false;
+
     function showLightboxModal() {
       const item = lightboxCurrentList[lightboxIndex];
       if (!item) return;
@@ -3302,17 +3343,57 @@
       const wrap = document.getElementById('lightboxMediaWrap');
       const caption = document.getElementById('lightboxCaption');
 
+      isLightboxZoomed = false;
+      if (wrap) wrap.classList.remove('zoomed');
+
       wrap.innerHTML = item.type === 'video'
         ? `<video src="${item.url}" controls autoplay></video>`
-        : `<img src="${item.url}" alt="${item.caption}">`;
+        : `<img src="${item.url}" alt="${item.caption}" onclick="toggleLightboxZoom()" title="Cliquez pour zoomer à 100% (taille réelle)">`;
 
-      caption.innerHTML = `<strong>Jour ${item.day}</strong> — ${item.caption || 'Souvenir du voyage'} (${lightboxIndex + 1}/${lightboxCurrentList.length})`;
+      caption.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <strong>Jour ${item.day}</strong> — ${item.caption || 'Souvenir du voyage'} (${lightboxIndex + 1}/${lightboxCurrentList.length})
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${item.type !== 'video' ? `
+              <button class="btn-upload" style="font-size:11px; padding:4px 10px; background:rgba(255,255,255,0.18); color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:var(--radius-sm);" onclick="toggleLightboxZoom()">
+                <span id="lightboxZoomBtnText">🔍 Zoom 100%</span>
+              </button>
+            ` : ''}
+            <a href="${item.url}" target="_blank" class="btn-upload" style="font-size:11px; padding:4px 10px; background:rgba(255,255,255,0.18); color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:var(--radius-sm); text-decoration:none;">
+              ↗ Ouvrir original
+            </a>
+          </div>
+        </div>
+      `;
       modal.classList.add('active');
     }
 
+    function toggleLightboxZoom() {
+      const wrap = document.getElementById('lightboxMediaWrap');
+      const btnText = document.getElementById('lightboxZoomBtnText');
+      if (!wrap) return;
+
+      isLightboxZoomed = !isLightboxZoomed;
+      if (isLightboxZoomed) {
+        wrap.classList.add('zoomed');
+        if (btnText) btnText.textContent = '🔎 Ajuster à l\'écran';
+      } else {
+        wrap.classList.remove('zoomed');
+        if (btnText) btnText.textContent = '🔍 Zoom 100%';
+      }
+    }
+
     function closeLightbox() {
-      document.getElementById('lightboxModal').classList.remove('active');
-      document.getElementById('lightboxMediaWrap').innerHTML = '';
+      const modal = document.getElementById('lightboxModal');
+      const wrap = document.getElementById('lightboxMediaWrap');
+      if (modal) modal.classList.remove('active');
+      if (wrap) {
+        wrap.innerHTML = '';
+        wrap.classList.remove('zoomed');
+      }
+      isLightboxZoomed = false;
     }
 
     function prevLightbox() {
